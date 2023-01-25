@@ -1,0 +1,51 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<DMSScript options="272" xmlns="http://www.skyline.be/automation">
+	<Name>NimbraVisionVlanCircuitCreation</Name>
+	<Description></Description>
+	<Type>Automation</Type>
+	<Author>SKYLINE2\JoaoSV</Author>
+	<CheckSets>FALSE</CheckSets>
+	<Folder></Folder>
+
+	<Protocols>
+	</Protocols>
+
+	<Memory>
+	</Memory>
+
+	<Parameters>
+		<ScriptParameter id="2" type="string" values="">
+			<Description>Service ID</Description>
+		</ScriptParameter>
+		<ScriptParameter id="3" type="string" values="">
+			<Description>Start Time</Description>
+		</ScriptParameter>
+		<ScriptParameter id="4" type="string" values="">
+			<Description>End Time</Description>
+		</ScriptParameter>
+		<ScriptParameter id="5" type="string" values="">
+			<Description>Source</Description>
+		</ScriptParameter>
+		<ScriptParameter id="6" type="string" values="">
+			<Description>Destination</Description>
+		</ScriptParameter>
+		<ScriptParameter id="7" type="string" values="">
+			<Description>Capacity</Description>
+		</ScriptParameter>
+		<ScriptParameter id="8" type="string" values="">
+			<Description>VLAN</Description>
+		</ScriptParameter>
+		<ScriptParameter id="9" type="string" values="">
+			<Description>Form Name</Description>
+		</ScriptParameter>
+	</Parameters>
+
+
+	<Script>
+		<Exe id="1" type="csharp">
+			<Value><![CDATA[[Project:NimbraVisionVlanCircuitCreation_1]]]></Value>
+			<!--<Param type="debug">true</Param>-->
+			<Message></Message>
+		</Exe>
+	</Script>
+</DMSScript>
