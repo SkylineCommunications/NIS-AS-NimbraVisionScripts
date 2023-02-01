@@ -53,6 +53,7 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Text;
+using Newtonsoft.Json;
 using Skyline.DataMiner.Automation;
 using Skyline.DataMiner.Net.Messages.SLDataGateway;
 
@@ -95,7 +96,7 @@ public class Script
 		var destination = engine.GetScriptParam("Destination").Value;
 		var capacity = engine.GetScriptParam("Capacity").Value;
 
-		var dataContent = "{";
+		var fields = new CreateFields();
 
 		if (String.IsNullOrEmpty(serviceId) || String.IsNullOrWhiteSpace(serviceId))
 		{
@@ -103,7 +104,7 @@ public class Script
 			return;
 		}
 
-		dataContent += "\"serviceId\": \"" + serviceId + "\",";
+		fields.ServiceId = serviceId;
 
 		if (String.IsNullOrEmpty(source) || String.IsNullOrWhiteSpace(source))
 		{
@@ -111,7 +112,7 @@ public class Script
 			return;
 		}
 
-		dataContent += "\"source\": \"" + source + "\",";
+		fields.Source = source;
 
 		if (String.IsNullOrEmpty(destination) || String.IsNullOrWhiteSpace(destination))
 		{
@@ -119,7 +120,7 @@ public class Script
 			return;
 		}
 
-		dataContent += "\"destination\": \"" + destination + "\",";
+		fields.Destination = destination;
 
 		if (!Int32.TryParse(capacity, out var integerCapcity))
 		{
@@ -127,26 +128,57 @@ public class Script
 			return;
 		}
 
-		dataContent += "\"capacity\": " + capacity + ",";
+		fields.Capacity = integerCapcity;
 
-		if (!DateTime.TryParseExact(startTime, "yyyy-MM-ddTHH:mm:ssZ", CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTime startTimeDate))
+		if (startTime != "-1" && !DateTime.TryParseExact(startTime, "yyyy-MM-ddTHH:mm:ssZ", CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTime startTimeDate))
 		{
 			engine.ExitFail("Start Time isn't in the supported format - yyyy-MM-ddTHH:mm:ssZ");
 			return;
 		}
 
-		dataContent += "\"startTime\": \"" + startTime + "\",";
+		fields.StartTime = startTime;
 
-		if (!DateTime.TryParseExact(endTime, "yyyy-MM-ddTHH:mm:ssZ", CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTime stopTimeDate))
+		if (endTime != "-1" && !DateTime.TryParseExact(endTime, "yyyy-MM-ddTHH:mm:ssZ", CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTime stopTimeDate))
 		{
 			engine.ExitFail("Stop Time isn't in the supported format - yyyy-MM-ddTHH:mm:ssZ");
 			return;
 		}
 
-		dataContent += "\"endTime\": \"" + endTime + "\"}";
+		fields.EndTime = endTime;
 
-		ValidateAndReturnElement(engine, "Nimbra Vision").SetParameter(125, dataContent);
+		ValidateAndReturnElement(engine, "Nimbra Vision").SetParameter(125, JsonConvert.SerializeObject(fields));
 
 		engine.ExitSuccess("Sent request to Nimbra Vision element.");
+	}
+
+	public class CreateFields
+	{
+		[JsonProperty("serviceId")]
+		public string ServiceId { get; set; }
+
+		[JsonProperty("source")]
+		public string Source { get; set; }
+
+		[JsonProperty("destination")]
+		public string Destination { get; set; }
+
+		[JsonProperty("capacity")]
+		public int Capacity { get; set; }
+
+		[JsonProperty("startTime")]
+		public string StartTime { get; set; }
+
+		[JsonProperty("endTime")]
+		public string EndTime { get; set; }
+
+		public bool ShouldSerializeStartTime()
+		{
+			return StartTime != "-1";
+		}
+
+		public bool ShouldSerializeEndTime()
+		{
+			return EndTime != "-1";
+		}
 	}
 }

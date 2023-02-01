@@ -45,7 +45,7 @@ Revision History:
 
 DATE		VERSION		AUTHOR			COMMENTS
 
-dd/mm/2023	1.0.0.1		XXX, Skyline	Initial version
+01/02/2023	1.0.0.1		JSV, Skyline	Initial version
 ****************************************************************************
 */
 
@@ -53,7 +53,9 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Text;
+using Newtonsoft.Json;
 using Skyline.DataMiner.Automation;
+using Skyline.DataMiner.Net.Messages;
 
 /// <summary>
 /// DataMiner Script Class.
@@ -66,6 +68,152 @@ public class Script
 	/// <param name="engine">Link with SLAutomation process.</param>
 	public void Run(Engine engine)
 	{
+		var serviceId = engine.GetScriptParam("Service ID").Value;
+		var startTime = engine.GetScriptParam("Start Time").Value;
+		var endTime = engine.GetScriptParam("End Time").Value;
+		var source = engine.GetScriptParam("Source").Value;
+		var destination = engine.GetScriptParam("Destination").Value;
+		var capacity = engine.GetScriptParam("Capacity").Value;
+		var vlan = engine.GetScriptParam("VLAN").Value;
+		var formName = engine.GetScriptParam("Form Name").Value;
 
+		var fields = new CreateFields();
+
+		if (String.IsNullOrEmpty(serviceId) || String.IsNullOrWhiteSpace(serviceId))
+		{
+			engine.ExitFail("Service ID is null or empty. Can't create circuit.");
+			return;
+		}
+
+		fields.ServiceId = serviceId;
+
+		if (String.IsNullOrEmpty(source) || String.IsNullOrWhiteSpace(source))
+		{
+			engine.ExitFail("Source is null or empty. Can't create circuit.");
+			return;
+		}
+
+		fields.Source = source;
+
+		if (String.IsNullOrEmpty(destination) || String.IsNullOrWhiteSpace(destination))
+		{
+			engine.ExitFail("Destination is null or empty. Can't create circuit.");
+			return;
+		}
+
+		fields.Destination = destination;
+
+		if (!Int32.TryParse(capacity, out var integerCapcity))
+		{
+			engine.ExitFail("Capcity isn't an integer. Can't create circuit.");
+			return;
+		}
+
+		fields.Capacity = integerCapcity;
+
+		if (!DateTime.TryParseExact(startTime, "yyyy-MM-ddTHH:mm:ssZ", CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTime startTimeDate) && startTime != "-1")
+		{
+			engine.ExitFail("Start Time isn't in the supported format - yyyy-MM-ddTHH:mm:ssZ");
+			return;
+		}
+
+		fields.StartTime = startTime;
+
+		if (!DateTime.TryParseExact(endTime, "yyyy-MM-ddTHH:mm:ssZ", CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTime stopTimeDate) && endTime != "-1")
+		{
+			engine.ExitFail("End Time isn't in the supported format - yyyy-MM-ddTHH:mm:ssZ");
+			return;
+		}
+
+		fields.EndTime = endTime;
+
+		engine.GenerateInformation("Here");
+
+		if (!Int32.TryParse(vlan, out var integerVlan))
+		{
+			engine.ExitFail("VLAN isn't an integer. Can't create circuit.");
+			return;
+		}
+
+		fields.ExtraInfo = new CreateFields.Extra();
+		fields.ExtraInfo.Common = new CreateFields.Common();
+		fields.ExtraInfo.Common.VLAN = integerVlan;
+
+		if (String.IsNullOrEmpty(formName) || String.IsNullOrWhiteSpace(formName))
+		{
+			engine.ExitFail("Form Name is null or empty. Can't create circuit.");
+			return;
+		}
+
+		fields.ExtraInfo.Common.FormName = formName;
+
+		ValidateAndReturnElement(engine, "Nimbra Vision").SetParameter(125, JsonConvert.SerializeObject(fields));
+
+		engine.ExitSuccess("Sent request to Nimbra Vision element.");
+	}
+
+	public static Element ValidateAndReturnElement(Engine engine, string elementName)
+	{
+		var element = engine.FindElement("Nimbra Vision");
+
+		if (element == null)
+		{
+			engine.ExitFail("Element Nimbra Vision does not exist!");
+			return null;
+		}
+
+		if (element.ElementInfo.State != Skyline.DataMiner.Net.Messages.ElementState.Active)
+		{
+			engine.ExitFail("Element Nimbra Vision is not in Active state");
+			return null;
+		}
+
+		return element;
+	}
+
+	public class CreateFields
+	{
+		[JsonProperty("serviceId")]
+		public string ServiceId { get; set; }
+
+		[JsonProperty("source")]
+		public string Source { get; set; }
+
+		[JsonProperty("destination")]
+		public string Destination { get; set; }
+
+		[JsonProperty("capacity")]
+		public int Capacity { get; set; }
+
+		[JsonProperty("startTime")]
+		public string StartTime { get; set; }
+
+		[JsonProperty("endTime")]
+		public string EndTime { get; set; }
+
+		[JsonProperty("extra")]
+		public Extra ExtraInfo { get; set; }
+
+		public class Extra
+		{
+			[JsonProperty("common")]
+			public Common Common { get; set; }
+		}
+
+		public class Common
+		{
+			public int VLAN { get; set; }
+			public string FormName { get; set; }
+		}
+
+		public bool ShouldSerializeStartTime()
+		{
+			return StartTime != "-1";
+		}
+
+		public bool ShouldSerializeEndTime()
+		{
+			return EndTime != "-1";
+		}
 	}
 }
