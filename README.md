@@ -1,5 +1,5 @@
 # NimbraVisionScripts
-Contains a solution with the basic Automation Scripts for circuit creation.
+Contains a solution with the basic Automation Scripts for circuit creation and SDMN Flow Engineering.
 
 ## Collaboration project
 This is the collaboration project being used to develop this: [NetInsight - Partner Management](https://collaboration.dataminer.services/project/14770/list)
