@@ -154,10 +154,18 @@ public class Script
 		{
 			engine.GenerateInformation("Basic Circuit wasn't successfully created.");
 		}
+		else
+		{
+			engine.GenerateInformation("Basic Circuit was successfully created.");
+		}
 
 		if (!vlanCircuitCreated)
 		{
 			engine.GenerateInformation("VLAN Circuit wasn't successfully created.");
+		}
+		else
+		{
+			engine.GenerateInformation("VLAN Circuit was successfully created.");
 		}
 	}
 
