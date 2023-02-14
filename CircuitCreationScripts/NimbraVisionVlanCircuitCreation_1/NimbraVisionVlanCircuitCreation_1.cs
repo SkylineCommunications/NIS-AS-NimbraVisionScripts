@@ -53,6 +53,7 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Text;
+using System.Text.RegularExpressions;
 using Newtonsoft.Json;
 using Skyline.DataMiner.Automation;
 using Skyline.DataMiner.Net.Messages;
@@ -93,7 +94,7 @@ public class Script
 			return;
 		}
 
-		fields.Source = source;
+		fields.Source = Regex.Replace(source, @"[\[\]]", String.Empty).Split(',')[0].Replace("\"", String.Empty);
 
 		if (String.IsNullOrEmpty(destination) || String.IsNullOrWhiteSpace(destination))
 		{
@@ -101,7 +102,7 @@ public class Script
 			return;
 		}
 
-		fields.Destination = destination;
+		fields.Destination = Regex.Replace(destination, @"[\[\]]", String.Empty).Split(',')[0].Replace("\"", String.Empty);
 
 		if (!Int32.TryParse(capacity, out var integerCapcity))
 		{
@@ -126,8 +127,6 @@ public class Script
 		}
 
 		fields.EndTime = endTime;
-
-		engine.GenerateInformation("Here");
 
 		if (!Int32.TryParse(vlan, out var integerVlan))
 		{
@@ -202,6 +201,7 @@ public class Script
 
 		public class Common
 		{
+			[JsonProperty("VLANs")]
 			public int VLAN { get; set; }
 			public string FormName { get; set; }
 		}

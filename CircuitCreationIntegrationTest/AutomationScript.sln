@@ -1,0 +1,42 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.4.33103.184
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Internal", "Internal", "{31562FF1-6776-45C9-B916-FE84F31FC563}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Scripts", "Scripts", "{B6A2227F-5B31-4C90-91D5-04425B76BD03}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Dlls", "Dlls", "{19E31D8E-2683-41BF-9FD4-094DB2A55EF2}"
+	ProjectSection(SolutionItems) = preProject
+		Dlls\readme.txt = Dlls\readme.txt
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Documentation", "Documentation", "{CEF268CE-33BE-4DBB-AD8B-84F4F8B4081A}"
+	ProjectSection(SolutionItems) = preProject
+		Documentation\readme.txt = Documentation\readme.txt
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Code Analysis", "Code Analysis", "{80DC8301-A3FD-4C9A-B1CD-B3A558726666}"
+	ProjectSection(SolutionItems) = preProject
+		Internal\Code Analysis\qaction-debug.ruleset = Internal\Code Analysis\qaction-debug.ruleset
+		Internal\Code Analysis\qaction-release.ruleset = Internal\Code Analysis\qaction-release.ruleset
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "CircuitCreationIntegrationTest", "CircuitCreationIntegrationTest", "{6A3A25CA-9A41-4D60-A059-C661266B33CF}"
+	ProjectSection(SolutionItems) = preProject
+		CircuitCreationIntegrationTest.xml = CircuitCreationIntegrationTest.xml
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{80DC8301-A3FD-4C9A-B1CD-B3A558726666} = {31562FF1-6776-45C9-B916-FE84F31FC563}
+		{6A3A25CA-9A41-4D60-A059-C661266B33CF} = {B6A2227F-5B31-4C90-91D5-04425B76BD03}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {39621F98-FFDB-4384-92A2-A05D53620A27}
+	EndGlobalSection
+EndGlobal

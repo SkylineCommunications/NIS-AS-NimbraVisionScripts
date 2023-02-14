@@ -53,6 +53,7 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Text;
+using System.Text.RegularExpressions;
 using Newtonsoft.Json;
 using Skyline.DataMiner.Automation;
 using Skyline.DataMiner.Net.Messages.SLDataGateway;
@@ -112,7 +113,7 @@ public class Script
 			return;
 		}
 
-		fields.Source = source;
+		fields.Source = Regex.Replace(source, @"[\[\]]", String.Empty).Split(',')[0].Replace("\"", String.Empty);
 
 		if (String.IsNullOrEmpty(destination) || String.IsNullOrWhiteSpace(destination))
 		{
@@ -120,7 +121,7 @@ public class Script
 			return;
 		}
 
-		fields.Destination = destination;
+		fields.Destination = Regex.Replace(destination, @"[\[\]]", String.Empty).Split(',')[0].Replace("\"", String.Empty);
 
 		if (!Int32.TryParse(capacity, out var integerCapcity))
 		{
@@ -136,6 +137,9 @@ public class Script
 			return;
 		}
 
+		if (startTime == "-1")
+			startTime = DateTime.UtcNow.AddMinutes(1).ToString("yyyy-MM-ddTHH:mm:ssZ");
+
 		fields.StartTime = startTime;
 
 		if (endTime != "-1" && !DateTime.TryParseExact(endTime, "yyyy-MM-ddTHH:mm:ssZ", CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTime stopTimeDate))
@@ -145,6 +149,8 @@ public class Script
 		}
 
 		fields.EndTime = endTime;
+
+		engine.GenerateInformation(JsonConvert.SerializeObject(fields));
 
 		ValidateAndReturnElement(engine, "Nimbra Vision").SetParameter(125, JsonConvert.SerializeObject(fields));
 

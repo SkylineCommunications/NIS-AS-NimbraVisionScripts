@@ -52,6 +52,7 @@ DATE		VERSION		AUTHOR			COMMENTS
 using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.Linq;
 using System.Text;
 using Newtonsoft.Json;
 using Skyline.DataMiner.Automation;
@@ -62,15 +63,23 @@ using Skyline.DataMiner.CommunityLibrary.FlowEngineering.Path;
 using Skyline.DataMiner.Library.Automation;
 using Skyline.DataMiner.Library.Common;
 using Skyline.DataMiner.Library.Common.InterAppCalls.Shared;
+using Skyline.DataMiner.Net.Apps.DataMinerObjectModel;
+using Skyline.DataMiner.Net.Messages;
 
 /// <summary>
 /// DataMiner Script Class.
 /// </summary>
 public class Script
 {
+	public enum Action
+	{
+		Delete = 0,
+		Create = 1,
+	}
+
 	private readonly IFlowId flowId = new FlowId
 	{
-		Guid = System.Guid.Parse("33647ebc-454c-46c3-ad70-b73231cbc9cc"),
+		Guid = System.Guid.Parse("2053ee45-4cfe-4bce-a46e-359569aaa878"),
 	};
 
 	private IDms dms;
@@ -89,8 +98,17 @@ public class Script
 
 		var source = engine.GetScriptParam("Source Element").Value;
 		var destination = engine.GetScriptParam("Destination Element").Value;
+		var action = engine.GetScriptParam("Action").Value == "0" ? Action.Delete : Action.Create;
+
+		if(action == Action.Delete)
+		{
+			RemoveFlow(source, destination);
+			return;
+		}
 
 		CalcFlow(engine, source, destination);
+
+		var domHelper = new DomHelper(engine.SendSLNetMessages, "(fle)flows");
 	}
 
 	private void CalcFlow(Engine engine, string source, string destination)
@@ -108,6 +126,21 @@ public class Script
 		}
 
 		logger.Log("Calculated Paths: " + JsonConvert.SerializeObject(paths));
+
+		var path = paths.First();
+
+		if (flowManager.TryProvisionFlow(flowId, path))
+		{
+			engine.GenerateInformation($"Provisioned the Flow");
+		}
+	}
+
+	private void RemoveFlow(string source, string destination)
+	{
+		var destinationElement = dms.GetElement(destination);
+		var sourceElement = dms.GetElement(source);
+
+		flowManager.TryRemovePath(flowId, destinationElement);
 	}
 }
 
