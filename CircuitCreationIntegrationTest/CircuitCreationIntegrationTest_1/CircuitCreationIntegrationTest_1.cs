@@ -71,8 +71,10 @@ public class Script
 	private string destinationBasic = String.Empty;
 	private string sourceVlan = String.Empty;
 	private string destinationVlan = String.Empty;
-	private List<EtsInterfaceData> etsInterfaceData = new List<EtsInterfaceData>();
+	private EtsInterfaceGroup etsInterfaceData = new EtsInterfaceGroup();
 	private List<CircuitTableData> circuitData = new List<CircuitTableData>();
+	private DateTime startTimeDateTime = DateTime.UtcNow.AddDays(1);
+	private string startTime = String.Empty;
 
 	public enum TableIds
 	{
@@ -86,6 +88,7 @@ public class Script
 	/// <param name="engine">Link with SLAutomation process.</param>
 	public void Run(Engine engine)
 	{
+		startTime = startTimeDateTime.ToString("yyyy-MM-ddTHH:mm:ssZ");
 		var nimbraElementName = engine.GetScriptParam("Element Name").Value;
 
 		var dms = engine.GetDms();
@@ -99,19 +102,29 @@ public class Script
 		if (!LoadTableData(nimbraElement))
 			engine.ExitFail("Couldn't load element data.");
 
-		foreach (var etsInterface in etsInterfaceData)
+		bool allInterfacesSaved = false;
+
+		if(etsInterfaceData.NodeData.Count < 4)
 		{
-			if (!circuitData.Any(a => a.Source == etsInterface.InterfaceName) || circuitData.Any(a => a.Destination == etsInterface.InterfaceName))
-			{
-				if (SaveInterface(etsInterface.InterfaceName))
-					break;
-			}
+			engine.ExitFail("Need at least 4 nodes to run the test");
 		}
 
-		// CreateBasicCircuit
-		CreateBasicCircuit(engine);
+		foreach (var node in etsInterfaceData.NodeData)
+		{
+			foreach (var etsInterface in node.Value)
+			{
+				if (!circuitData.Any(a => a.Source == etsInterface.InterfaceName) || circuitData.Any(a => a.Destination == etsInterface.InterfaceName))
+				{
+					allInterfacesSaved = SaveInterface(etsInterface.InterfaceName);
+					break;
+				}
+			}
 
-		// CreateVlanCircuit
+			if (allInterfacesSaved)
+				break;
+		}
+
+		CreateBasicCircuit(engine);
 		CreateVlanCircuit(engine);
 
 		int retries = 3;
@@ -119,17 +132,18 @@ public class Script
 		bool vlanCircuitCreated = false;
 		for (int i = 0; i < retries; i++)
 		{
-			Thread.Sleep(10000);
+			Thread.Sleep(30000);
 			var circuitsTable = nimbraElement.GetTable(1800);
 			var circuits = circuitsTable.GetRows();
+			engine.GenerateInformation(JsonConvert.SerializeObject(circuits));
 			if (!basicCircuitCreated)
 			{
-				basicCircuitCreated = CheckBasicCircuitWasCreated(engine, circuits, source, destination);
+				basicCircuitCreated = CheckBasicCircuitWasCreated(engine, circuits, sourceBasic, destinationBasic);
 			}
 
 			if (!vlanCircuitCreated)
 			{
-				vlanCircuitCreated = CheckVlanCircuitWasCreated(engine, circuits, source, destination);
+				vlanCircuitCreated = CheckVlanCircuitWasCreated(engine, circuits, sourceVlan, destinationVlan);
 			}
 
 			if (basicCircuitCreated && vlanCircuitCreated)
@@ -147,14 +161,14 @@ public class Script
 		}
 	}
 
-	private static void CreateVlanCircuit(Engine engine)
+	private void CreateVlanCircuit(Engine engine)
 	{
 		var createVlanCircuit = engine.PrepareSubScript("NimbraVisionVlanCircuitCreation");
-		createVlanCircuit.SelectScriptParam("Source", source);
-		createVlanCircuit.SelectScriptParam("Destination", destination);
+		createVlanCircuit.SelectScriptParam("Source", sourceVlan);
+		createVlanCircuit.SelectScriptParam("Destination", destinationVlan);
 		createVlanCircuit.SelectScriptParam("Capacity", "5");
-		createVlanCircuit.SelectScriptParam("Service ID", "E-Line");
-		createVlanCircuit.SelectScriptParam("Start Time", "-1");
+		createVlanCircuit.SelectScriptParam("Service ID", "E-Line-VLAN");
+		createVlanCircuit.SelectScriptParam("Start Time", startTime);
 		createVlanCircuit.SelectScriptParam("End Time", "-1");
 		createVlanCircuit.SelectScriptParam("VLAN", "100");
 		createVlanCircuit.SelectScriptParam("Form Name", "EVP-Line");
@@ -198,10 +212,8 @@ public class Script
 		createBasicCircuit.SelectScriptParam("Destination", destinationBasic);
 		createBasicCircuit.SelectScriptParam("Capacity", "5");
 		createBasicCircuit.SelectScriptParam("Service ID", "E-Line");
-		createBasicCircuit.SelectScriptParam("Start Time", "-1");
+		createBasicCircuit.SelectScriptParam("Start Time", startTime);
 		createBasicCircuit.SelectScriptParam("End Time", "-1");
-
-		engine.GenerateInformation("Script Data: " + JsonConvert.SerializeObject(createBasicCircuit));
 
 		createBasicCircuit.StartScript();
 	}
@@ -212,17 +224,35 @@ public class Script
 		{
 			var etsInterfacesTable = nimbraElement.GetTable(1900);
 			var etsInterfacesRows = etsInterfacesTable.GetRows();
-
+			string node;
 			foreach (var intfRow in etsInterfacesRows)
 			{
 				if (!Convert.ToString(intfRow[1]).IsNullOrEmpty())
 				{
-					etsInterfaceData.Add(new EtsInterfaceData
+					node = Convert.ToString(intfRow[21]);
+					if(etsInterfaceData.NodeData.TryGetValue(node, out List<EtsInterfaceData> interfaceData))
 					{
-						TableKey = Convert.ToString(intfRow[0]),
-						FowardingFunction = Convert.ToString(intfRow[1]),
-						InterfaceName = Convert.ToString(intfRow[23]),
-					});
+						interfaceData.Add(new EtsInterfaceData
+						{
+							TableKey = Convert.ToString(intfRow[0]),
+							FowardingFunction = Convert.ToString(intfRow[1]),
+							InterfaceName = Convert.ToString(intfRow[23]),
+							InUse = false,
+						});
+					}
+					else
+					{
+						etsInterfaceData.NodeData.Add(node, new List<EtsInterfaceData>
+						{
+							new EtsInterfaceData
+							{
+								TableKey = Convert.ToString(intfRow[0]),
+								FowardingFunction = Convert.ToString(intfRow[1]),
+								InterfaceName = Convert.ToString(intfRow[23]),
+								InUse = false,
+							},
+						});
+					}
 				}
 			}
 
@@ -253,22 +283,16 @@ public class Script
 			if (Convert.ToString(circuit[2]) != "E-Line")
 				continue;
 
-			if (Convert.ToString(circuit[4]) != "-1")
-				continue;
-
-			if (Convert.ToString(circuit[5]) != "-1")
-				continue;
-
-			if (Convert.ToInt32(circuit[6]) > 399)
+			if (Convert.ToDouble(circuit[5]) != 2593224.0)
 				continue;
 
 			if (Convert.ToString(circuit[8]) != source)
 				continue;
 
-			if(Convert.ToString(circuit[9]) != destination)
+			if (Convert.ToString(circuit[9]) != destination)
 				continue;
 
-			if (Convert.ToString(circuit[10]) != "5")
+			if (Convert.ToInt32(circuit[10]) != 5)
 				continue;
 
 			return true;
@@ -281,16 +305,10 @@ public class Script
 	{
 		foreach (object[] circuit in circuits)
 		{
-			if (Convert.ToString(circuit[2]) != "E-Line")
+			if (Convert.ToString(circuit[2]) != "E-Line-VLAN")
 				continue;
 
-			if (Convert.ToString(circuit[4]) != "-1")
-				continue;
-
-			if (Convert.ToString(circuit[5]) != "-1")
-				continue;
-
-			if (Convert.ToInt32(circuit[6]) > 399)
+			if (Convert.ToDouble(circuit[5]) != 2593224.0)
 				continue;
 
 			if (Convert.ToString(circuit[8]) != source)
@@ -299,7 +317,7 @@ public class Script
 			if (Convert.ToString(circuit[9]) != destination)
 				continue;
 
-			if (Convert.ToString(circuit[10]) != "5")
+			if (Convert.ToInt32(circuit[10]) != 5)
 				continue;
 
 			if (Convert.ToString(circuit[11]) != "EVP-Line")
@@ -322,6 +340,13 @@ public class EtsInterfaceData
 	public string TableKey { get; set; }
 
 	public string FowardingFunction { get; set; }
+
+	public bool InUse { get; set; }
+}
+
+public class EtsInterfaceGroup
+{
+	public Dictionary<string, List<EtsInterfaceData>> NodeData { get; set; } = new Dictionary<string, List<EtsInterfaceData>>();
 }
 
 public class CircuitTableData
