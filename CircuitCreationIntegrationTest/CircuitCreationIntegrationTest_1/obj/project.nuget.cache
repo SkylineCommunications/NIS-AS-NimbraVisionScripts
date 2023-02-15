@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "fUAEIP7yMiwsFCQSfzK25jzwjFdSLIn+gMD9im9AdGfhnUS/Bh4S+b8pChQ3JUf96zhgfGSKT39ZuRofHn5ihw==",
+  "dgSpecHash": "dRiYLXnNmvHSKCHtss7PM+5PCyQeN3yHec+lV33F6k7BPv1VPalx9t+i+z3i/sUQXo2G3qx7g5nH35sq7Psvgg==",
   "success": true,
   "projectFilePath": "C:\\Users\\joaosv\\Source\\Repos\\SkylineCommunications\\NimbraVisionScripts\\CircuitCreationIntegrationTest\\CircuitCreationIntegrationTest_1\\CircuitCreationIntegrationTest_1.csproj",
   "expectedPackageFiles": [
@@ -15,6 +15,7 @@
     "C:\\Users\\joaosv\\.nuget\\packages\\skyline.dataminer.files.slmanagedautomation\\10.0.0.5\\skyline.dataminer.files.slmanagedautomation.10.0.0.5.nupkg.sha512",
     "C:\\Users\\joaosv\\.nuget\\packages\\skyline.dataminer.files.slnettypes\\10.0.0.5\\skyline.dataminer.files.slnettypes.10.0.0.5.nupkg.sha512",
     "C:\\Users\\joaosv\\.nuget\\packages\\skyline.dataminer.files.slprotobuflibrary\\10.0.0.5\\skyline.dataminer.files.slprotobuflibrary.10.0.0.5.nupkg.sha512",
+    "C:\\Users\\joaosv\\.nuget\\packages\\slc.clib.flowprovisioning\\1.0.19985.8-1.0.2.x.8\\slc.clib.flowprovisioning.1.0.19985.8-1.0.2.x.8.nupkg.sha512",
     "C:\\Users\\joaosv\\.nuget\\packages\\slc.lib.automation\\1.3.0.2\\slc.lib.automation.1.3.0.2.nupkg.sha512",
     "C:\\Users\\joaosv\\.nuget\\packages\\slc.lib.common\\1.3.0.2\\slc.lib.common.1.3.0.2.nupkg.sha512",
     "C:\\Users\\joaosv\\.nuget\\packages\\stylecop.analyzers\\1.1.118\\stylecop.analyzers.1.1.118.nupkg.sha512"

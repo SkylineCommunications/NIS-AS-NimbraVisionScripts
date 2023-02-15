@@ -57,8 +57,11 @@ using System.Text;
 using System.Threading;
 using Newtonsoft.Json;
 using Skyline.DataMiner.Automation;
+using Skyline.DataMiner.CommunityLibrary.FlowProvisioning.Info;
 using Skyline.DataMiner.Library.Automation;
 using Skyline.DataMiner.Library.Common;
+using Skyline.DataMiner.Library.Common.InterAppCalls.CallBulk;
+using Skyline.DataMiner.Library.Common.InterAppCalls.CallSingle;
 using Skyline.DataMiner.Net.Helper;
 using Skyline.DataMiner.Net.Serialization;
 
@@ -75,6 +78,7 @@ public class Script
 	private List<CircuitTableData> circuitData = new List<CircuitTableData>();
 	private DateTime startTimeDateTime = DateTime.UtcNow.AddDays(1);
 	private string startTime = String.Empty;
+	private static readonly List<Type> KnownTypes = new List<Type> { typeof(FlowInfoMessage), typeof(DeleteCircuitMessage) };
 
 	public enum TableIds
 	{
@@ -90,7 +94,7 @@ public class Script
 	{
 		startTime = startTimeDateTime.ToString("yyyy-MM-ddTHH:mm:ssZ");
 		var nimbraElementName = engine.GetScriptParam("Element Name").Value;
-
+		
 		var dms = engine.GetDms();
 		var nimbraElement = dms.GetElement(nimbraElementName);
 		if (nimbraElement == null || nimbraElement.State != Skyline.DataMiner.Library.Common.ElementState.Active)
@@ -128,45 +132,53 @@ public class Script
 		CreateVlanCircuit(engine);
 
 		int retries = 3;
-		bool basicCircuitCreated = false;
-		bool vlanCircuitCreated = false;
+		long basicCircuitCreated = -1;
+		long vlanCircuitCreated = -1;
 		for (int i = 0; i < retries; i++)
 		{
 			Thread.Sleep(30000);
 			var circuitsTable = nimbraElement.GetTable(1800);
 			var circuits = circuitsTable.GetRows();
 			engine.GenerateInformation(JsonConvert.SerializeObject(circuits));
-			if (!basicCircuitCreated)
+			if (basicCircuitCreated == -1)
 			{
 				basicCircuitCreated = CheckBasicCircuitWasCreated(engine, circuits, sourceBasic, destinationBasic);
 			}
 
-			if (!vlanCircuitCreated)
+			if (vlanCircuitCreated == -1)
 			{
 				vlanCircuitCreated = CheckVlanCircuitWasCreated(engine, circuits, sourceVlan, destinationVlan);
 			}
 
-			if (basicCircuitCreated && vlanCircuitCreated)
+			if (basicCircuitCreated != -1 && vlanCircuitCreated != -1)
 				break;
 		}
 
-		if (!basicCircuitCreated)
+		IInterAppCall deleteCommand = InterAppCallFactory.CreateNew();
+
+		if (basicCircuitCreated == -1)
 		{
 			engine.GenerateInformation("Basic Circuit wasn't successfully created.");
 		}
 		else
 		{
 			engine.GenerateInformation("Basic Circuit was successfully created.");
+			DeleteCircuitMessage basicCircuitDeleteMessage = new DeleteCircuitMessage { SharedId = Convert.ToString(basicCircuitCreated) };
+			deleteCommand.Messages.Add(basicCircuitDeleteMessage);
 		}
 
-		if (!vlanCircuitCreated)
+		if (vlanCircuitCreated == -1)
 		{
 			engine.GenerateInformation("VLAN Circuit wasn't successfully created.");
 		}
 		else
 		{
 			engine.GenerateInformation("VLAN Circuit was successfully created.");
+			DeleteCircuitMessage vlanCircuitDeleteMessage = new DeleteCircuitMessage { SharedId = Convert.ToString(vlanCircuitCreated) };
+			deleteCommand.Messages.Add(vlanCircuitDeleteMessage);
 		}
+
+		deleteCommand.Send(Engine.SLNetRaw, nimbraElement.DmsElementId.AgentId, nimbraElement.DmsElementId.ElementId, 9000000, KnownTypes);
 	}
 
 	private void CreateVlanCircuit(Engine engine)
@@ -284,7 +296,7 @@ public class Script
 		}
 	}
 
-	private bool CheckBasicCircuitWasCreated(Engine engine, object[][] circuits, string source, string destination)
+	private long CheckBasicCircuitWasCreated(Engine engine, object[][] circuits, string source, string destination)
 	{
 		foreach (object[] circuit in circuits)
 		{
@@ -303,13 +315,13 @@ public class Script
 			if (Convert.ToInt32(circuit[10]) != 5)
 				continue;
 
-			return true;
+			return Convert.ToInt64(circuit[1]);
 		}
 
-		return false;
+		return -1;
 	}
 
-	private bool CheckVlanCircuitWasCreated(Engine engine, object[][] circuits, string source, string destination)
+	private long CheckVlanCircuitWasCreated(Engine engine, object[][] circuits, string source, string destination)
 	{
 		foreach (object[] circuit in circuits)
 		{
@@ -334,10 +346,10 @@ public class Script
 			if (Convert.ToString(circuit[13]) != "100")
 				continue;
 
-			return true;
+			return Convert.ToInt64(circuit[1]);
 		}
 
-		return false;
+		return -1;
 	}
 }
 
@@ -362,4 +374,9 @@ public class CircuitTableData
 	public string Source{ get; set; }
 
 	public string Destination{ get; set; }
+}
+
+public class DeleteCircuitMessage : Message
+{
+	public string SharedId { get; set; }
 }
