@@ -96,14 +96,17 @@ public class Script
 	/// <param name="engine">Link with SLAutomation process.</param>
 	public void Run(Engine engine)
 	{
-		TestReport testReport = new TestReport(
-			new TestInfo("Nimbra Vision Circuit Creation Test", "Networks", new List<int> { 14770 }, "This test creates a Basic and VLAN-based circuit between 2 different nodes and deletes them afterwards in order to validate that circuit creation is working."),
-			new TestSystemInfo("slc-h63-g05.skyline.local"));
-
 		startTime = startTimeDateTime.ToString("yyyy-MM-ddTHH:mm:ssZ");
 		var nimbraElementName = engine.GetScriptParam("Element Name").Value;
-		
+
 		var dms = engine.GetDms();
+		var agentName = dms.GetAgents().First().HostName;
+		engine.GenerateInformation("AgentName: " + agentName);
+
+		TestReport testReport = new TestReport(
+			new TestInfo("Nimbra Vision Circuit Creation Test", "Olympus", new List<int> { 14770 }, "This test creates a Basic and VLAN-based circuit between 2 different nodes and deletes them afterwards in order to validate that circuit creation is working."),
+			new TestSystemInfo(agentName));
+
 		var nimbraElement = dms.GetElement(nimbraElementName);
 		if (nimbraElement == null || nimbraElement.State != Skyline.DataMiner.Library.Common.ElementState.Active)
 		{
@@ -116,7 +119,7 @@ public class Script
 
 		bool allInterfacesSaved = false;
 
-		if(etsInterfaceData.NodeData.Count < 4)
+		if (etsInterfaceData.NodeData.Count < 4)
 		{
 			engine.ExitFail("Need at least 4 nodes to run the test");
 		}
@@ -147,7 +150,7 @@ public class Script
 			Thread.Sleep(30000);
 			var circuitsTable = nimbraElement.GetTable(1800);
 			var circuits = circuitsTable.GetRows();
-			engine.GenerateInformation(JsonConvert.SerializeObject(circuits));
+
 			if (basicCircuitCreated == -1)
 			{
 				basicCircuitCreated = CheckBasicCircuitWasCreated(engine, circuits, sourceBasic, destinationBasic);
@@ -231,7 +234,7 @@ public class Script
 			return false;
 		}
 
-		if(destinationVlan == String.Empty)
+		if (destinationVlan == String.Empty)
 		{
 			destinationVlan = interfaceName;
 			return true;
@@ -265,7 +268,7 @@ public class Script
 				if (!Convert.ToString(intfRow[1]).IsNullOrEmpty())
 				{
 					node = Convert.ToString(intfRow[21]);
-					if(etsInterfaceData.NodeData.TryGetValue(node, out List<EtsInterfaceData> interfaceData))
+					if (etsInterfaceData.NodeData.TryGetValue(node, out List<EtsInterfaceData> interfaceData))
 					{
 						interfaceData.Add(new EtsInterfaceData
 						{
@@ -386,9 +389,9 @@ public class EtsInterfaceGroup
 
 public class CircuitTableData
 {
-	public string Source{ get; set; }
+	public string Source { get; set; }
 
-	public string Destination{ get; set; }
+	public string Destination { get; set; }
 }
 
 public class DeleteCircuitMessage : Message
