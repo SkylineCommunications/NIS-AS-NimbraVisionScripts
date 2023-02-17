@@ -45,6 +45,7 @@
     <Content Include=".editorconfig" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Constants.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="CircuitCreationIntegrationTest_1.cs" />
   </ItemGroup>
@@ -54,6 +55,9 @@
     </PackageReference>
     <PackageReference Include="Skyline.DataMiner.Dev.Automation">
       <Version>10.0.0.5</Version>
+    </PackageReference>
+    <PackageReference Include="Skyline.DataMiner.Utils.QAPortalAPI">
+      <Version>1.0.5</Version>
     </PackageReference>
     <PackageReference Include="SLC.CLib.FlowProvisioning">
       <Version>1.0.19985.8-1.0.2.X.8</Version>

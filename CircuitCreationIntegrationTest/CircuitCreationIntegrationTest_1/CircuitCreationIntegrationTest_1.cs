@@ -55,7 +55,11 @@ using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading;
+using CircuitCreationIntegrationTest_1;
 using Newtonsoft.Json;
+using QAPortalAPI.APIHelper;
+using QAPortalAPI.Enums;
+using QAPortalAPI.Models.ReportingModels;
 using Skyline.DataMiner.Automation;
 using Skyline.DataMiner.CommunityLibrary.FlowProvisioning.Info;
 using Skyline.DataMiner.Library.Automation;
@@ -92,6 +96,10 @@ public class Script
 	/// <param name="engine">Link with SLAutomation process.</param>
 	public void Run(Engine engine)
 	{
+		TestReport testReport = new TestReport(
+			new TestInfo("Nimbra Vision Circuit Creation Test", "Networks", new List<int> { 14770 }, "This test creates a Basic and VLAN-based circuit between 2 different nodes and deletes them afterwards in order to validate that circuit creation is working."),
+			new TestSystemInfo("slc-h63-g05.skyline.local"));
+
 		startTime = startTimeDateTime.ToString("yyyy-MM-ddTHH:mm:ssZ");
 		var nimbraElementName = engine.GetScriptParam("Element Name").Value;
 		
@@ -159,10 +167,12 @@ public class Script
 		if (basicCircuitCreated == -1)
 		{
 			engine.GenerateInformation("Basic Circuit wasn't successfully created.");
+			testReport.TryAddTestCase(TestCaseReport.GetFailTestCase("Basic Circuit", "Basic Circuit wasn't successfully created, after 3 retries separeted by 30 seconds."));
 		}
 		else
 		{
 			engine.GenerateInformation("Basic Circuit was successfully created.");
+			testReport.TryAddTestCase(TestCaseReport.GetSuccessTestCase("Basic Circuit"));
 			DeleteCircuitMessage basicCircuitDeleteMessage = new DeleteCircuitMessage { SharedId = Convert.ToString(basicCircuitCreated) };
 			deleteCommand.Messages.Add(basicCircuitDeleteMessage);
 		}
@@ -170,15 +180,20 @@ public class Script
 		if (vlanCircuitCreated == -1)
 		{
 			engine.GenerateInformation("VLAN Circuit wasn't successfully created.");
+			testReport.TryAddTestCase(TestCaseReport.GetFailTestCase("VLAN Circuit", "VLAN Circuit wasn't successfully created, after 3 retries separeted by 30 seconds."));
 		}
 		else
 		{
 			engine.GenerateInformation("VLAN Circuit was successfully created.");
+			testReport.TryAddTestCase(TestCaseReport.GetSuccessTestCase("VLAN Circuit"));
 			DeleteCircuitMessage vlanCircuitDeleteMessage = new DeleteCircuitMessage { SharedId = Convert.ToString(vlanCircuitCreated) };
 			deleteCommand.Messages.Add(vlanCircuitDeleteMessage);
 		}
 
 		deleteCommand.Send(Engine.SLNetRaw, nimbraElement.DmsElementId.AgentId, nimbraElement.DmsElementId.ElementId, 9000000, KnownTypes);
+
+		QaPortalApiHelper reportHelperViaAPI = new QaPortalApiHelper(engine.GenerateInformation, "https://qaportal.skyline.local/api/public/results/addresult", "internal", "internal");
+		reportHelperViaAPI.PostResult(testReport);
 	}
 
 	private void CreateVlanCircuit(Engine engine)

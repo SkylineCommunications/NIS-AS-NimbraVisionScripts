@@ -51,6 +51,10 @@
               "target": "Package",
               "version": "[10.0.0.5, )"
             },
+            "Skyline.DataMiner.Utils.QAPortalAPI": {
+              "target": "Package",
+              "version": "[1.0.5, )"
+            },
             "StyleCop.Analyzers": {
               "include": "Runtime, Build, Native, ContentFiles, Analyzers, BuildTransitive",
               "suppressParent": "All",
