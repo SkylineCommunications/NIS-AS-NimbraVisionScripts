@@ -45,7 +45,7 @@ Revision History:
 
 DATE		VERSION		AUTHOR			COMMENTS
 
-25/01/2023	1.0.0.1		JSV, Skyline	Initial version
+14/03/2023	1.0.0.1		JSV, Skyline	Initial version
 ****************************************************************************
 */
 
@@ -56,7 +56,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using Newtonsoft.Json;
 using Skyline.DataMiner.Automation;
-using Skyline.DataMiner.Net.Messages.SLDataGateway;
+using Skyline.DataMiner.Net;
 
 /// <summary>
 /// DataMiner Script Class.
@@ -86,25 +86,18 @@ public class Script
 	/// The Script entry point.
 	/// </summary>
 	/// <param name="engine">Link with SLAutomation process.</param>
-	///
 	public void Run(Engine engine)
 	{
-		var serviceId = engine.GetScriptParam("Service ID").Value;
 		var startTime = engine.GetScriptParam("Start Time").Value;
 		var endTime = engine.GetScriptParam("End Time").Value;
 		var source = engine.GetScriptParam("Source").Value;
 		var destination = engine.GetScriptParam("Destination").Value;
 		var capacity = engine.GetScriptParam("Capacity").Value;
+		var hitless = engine.GetScriptParam("1+1").Value;
 
-		var fields = new CreateFields();
+		var fields = new CreateFieldsJ2k();
 
-		if (String.IsNullOrEmpty(serviceId) || String.IsNullOrWhiteSpace(serviceId))
-		{
-			engine.ExitFail("Service ID is null or empty. Can't create circuit.");
-			return;
-		}
-
-		fields.ServiceId = serviceId;
+		fields.ServiceId = hitless.ToLower() == "true" || hitless.ToLower() == "enabled" ? "j2k-hitless" : "j2k";
 
 		if (String.IsNullOrEmpty(source) || String.IsNullOrWhiteSpace(source))
 		{
@@ -149,41 +142,46 @@ public class Script
 
 		fields.EndTime = endTime;
 
+		fields.ProtectionId = 1; // first circuit to be created
+
 		engine.GenerateInformation(JsonConvert.SerializeObject(fields));
 
 		ValidateAndReturnElement(engine, "Nimbra Vision").SetParameter(125, JsonConvert.SerializeObject(fields));
 
 		engine.ExitSuccess("Sent request to Nimbra Vision element.");
 	}
+}
 
-	public class CreateFields
+public class CreateFieldsJ2k
+{
+	[JsonProperty("serviceId")]
+	public string ServiceId { get; set; }
+
+	[JsonProperty("source")]
+	public string Source { get; set; }
+
+	[JsonProperty("destination")]
+	public string Destination { get; set; }
+
+	[JsonProperty("capacity")]
+	public int Capacity { get; set; }
+
+	[JsonProperty("startTime")]
+	public string StartTime { get; set; }
+
+	[JsonProperty("endTime")]
+	public string EndTime { get; set; }
+
+	[JsonProperty("protectionId")]
+	public int ProtectionId { get; set; }
+
+	public bool ShouldSerializeStartTime()
 	{
-		[JsonProperty("serviceId")]
-		public string ServiceId { get; set; }
+		return StartTime != "-1";
+	}
 
-		[JsonProperty("source")]
-		public string Source { get; set; }
-
-		[JsonProperty("destination")]
-		public string Destination { get; set; }
-
-		[JsonProperty("capacity")]
-		public int Capacity { get; set; }
-
-		[JsonProperty("startTime")]
-		public string StartTime { get; set; }
-
-		[JsonProperty("endTime")]
-		public string EndTime { get; set; }
-
-		public bool ShouldSerializeStartTime()
-		{
-			return StartTime != "-1";
-		}
-
-		public bool ShouldSerializeEndTime()
-		{
-			return EndTime != "-1";
-		}
+	public bool ShouldSerializeEndTime()
+	{
+		return EndTime != "-1";
 	}
 }
