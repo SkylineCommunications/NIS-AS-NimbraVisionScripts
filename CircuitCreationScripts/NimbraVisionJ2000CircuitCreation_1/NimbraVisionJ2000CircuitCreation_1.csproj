@@ -49,6 +49,9 @@
     <Compile Include="NimbraVisionJ2000CircuitCreation_1.cs" />
   </ItemGroup>
   <ItemGroup>
+    <PackageReference Include="Newtonsoft.Json">
+      <Version>11.0.2</Version>
+    </PackageReference>
     <PackageReference Include="Skyline.DataMiner.Dev.Automation">
       <Version>10.0.0.5</Version>
     </PackageReference>
