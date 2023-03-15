@@ -1,0 +1,16 @@
+C:\Users\joaosv\Source\Repos\SkylineCommunications\NimbraVisionScripts\CircuitCreationScripts\NimbraVisionScripts_1\bin\Debug\NimbraVisionBasicCircuitCreation.xml
+C:\Users\joaosv\Source\Repos\SkylineCommunications\NimbraVisionScripts\CircuitCreationScripts\NimbraVisionScripts_1\bin\Debug\NimbraVisionScripts_1.dll
+C:\Users\joaosv\Source\Repos\SkylineCommunications\NimbraVisionScripts\CircuitCreationScripts\NimbraVisionScripts_1\bin\Debug\NimbraVisionScripts_1.pdb
+C:\Users\joaosv\Source\Repos\SkylineCommunications\NimbraVisionScripts\CircuitCreationScripts\NimbraVisionScripts_1\bin\Debug\Newtonsoft.Json.dll
+C:\Users\joaosv\Source\Repos\SkylineCommunications\NimbraVisionScripts\CircuitCreationScripts\NimbraVisionScripts_1\bin\Debug\ICSharpCode.SharpZipLib.dll
+C:\Users\joaosv\Source\Repos\SkylineCommunications\NimbraVisionScripts\CircuitCreationScripts\NimbraVisionScripts_1\bin\Debug\protobuf-net.dll
+C:\Users\joaosv\Source\Repos\SkylineCommunications\NimbraVisionScripts\CircuitCreationScripts\NimbraVisionScripts_1\bin\Debug\SLAnalyticsTypes.dll
+C:\Users\joaosv\Source\Repos\SkylineCommunications\NimbraVisionScripts\CircuitCreationScripts\NimbraVisionScripts_1\bin\Debug\SLLoggerUtil.dll
+C:\Users\joaosv\Source\Repos\SkylineCommunications\NimbraVisionScripts\CircuitCreationScripts\NimbraVisionScripts_1\bin\Debug\SLManagedAutomation.dll
+C:\Users\joaosv\Source\Repos\SkylineCommunications\NimbraVisionScripts\CircuitCreationScripts\NimbraVisionScripts_1\bin\Debug\SLNetTypes.dll
+C:\Users\joaosv\Source\Repos\SkylineCommunications\NimbraVisionScripts\CircuitCreationScripts\NimbraVisionScripts_1\bin\Debug\SLProtoBufLibrary.dll
+C:\Users\joaosv\Source\Repos\SkylineCommunications\NimbraVisionScripts\CircuitCreationScripts\NimbraVisionScripts_1\obj\Debug\NimbraVisionBasicCircuitCreation.csproj.AssemblyReference.cache
+C:\Users\joaosv\Source\Repos\SkylineCommunications\NimbraVisionScripts\CircuitCreationScripts\NimbraVisionScripts_1\obj\Debug\NimbraVisionBasicCircuitCreation.csproj.CoreCompileInputs.cache
+C:\Users\joaosv\Source\Repos\SkylineCommunications\NimbraVisionScripts\CircuitCreationScripts\NimbraVisionScripts_1\obj\Debug\NimbraVisionBasicCircuitCreation.csproj.CopyComplete
+C:\Users\joaosv\Source\Repos\SkylineCommunications\NimbraVisionScripts\CircuitCreationScripts\NimbraVisionScripts_1\obj\Debug\NimbraVisionScripts_1.dll
+C:\Users\joaosv\Source\Repos\SkylineCommunications\NimbraVisionScripts\CircuitCreationScripts\NimbraVisionScripts_1\obj\Debug\NimbraVisionScripts_1.pdb

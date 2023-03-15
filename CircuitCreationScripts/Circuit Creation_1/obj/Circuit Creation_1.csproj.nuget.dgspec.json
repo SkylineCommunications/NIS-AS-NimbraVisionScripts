@@ -1,0 +1,72 @@
+{
+  "format": 1,
+  "restore": {
+    "C:\\Users\\joaosv\\Source\\Repos\\SkylineCommunications\\NimbraVisionScripts\\CircuitCreationScripts\\Circuit Creation_1\\Circuit Creation_1.csproj": {}
+  },
+  "projects": {
+    "C:\\Users\\joaosv\\Source\\Repos\\SkylineCommunications\\NimbraVisionScripts\\CircuitCreationScripts\\Circuit Creation_1\\Circuit Creation_1.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "C:\\Users\\joaosv\\Source\\Repos\\SkylineCommunications\\NimbraVisionScripts\\CircuitCreationScripts\\Circuit Creation_1\\Circuit Creation_1.csproj",
+        "projectName": "Circuit Creation_1",
+        "projectPath": "C:\\Users\\joaosv\\Source\\Repos\\SkylineCommunications\\NimbraVisionScripts\\CircuitCreationScripts\\Circuit Creation_1\\Circuit Creation_1.csproj",
+        "packagesPath": "C:\\Users\\joaosv\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\joaosv\\Source\\Repos\\SkylineCommunications\\NimbraVisionScripts\\CircuitCreationScripts\\Circuit Creation_1\\obj\\",
+        "projectStyle": "PackageReference",
+        "skipContentFileWrite": true,
+        "configFilePaths": [
+          "C:\\Users\\joaosv\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+        ],
+        "originalTargetFrameworks": [
+          "net462"
+        ],
+        "sources": {
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+          "http://devcore3:81/nuget": {},
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "net462": {
+            "projectReferences": {}
+          }
+        }
+      },
+      "frameworks": {
+        "net462": {
+          "dependencies": {
+            "SLC.CLib.IASToolkit": {
+              "target": "Package",
+              "version": "[1.0.7.2, )"
+            },
+            "SLC.Lib.Automation": {
+              "target": "Package",
+              "version": "[1.3.0.2, )"
+            },
+            "Skyline.DataMiner.Dev.Automation": {
+              "target": "Package",
+              "version": "[10.0.0.5, )"
+            },
+            "StyleCop.Analyzers": {
+              "include": "Runtime, Build, Native, ContentFiles, Analyzers, BuildTransitive",
+              "suppressParent": "All",
+              "target": "Package",
+              "version": "[1.1.118, )"
+            }
+          }
+        }
+      },
+      "runtimes": {
+        "win": {
+          "#import": []
+        },
+        "win-x64": {
+          "#import": []
+        },
+        "win-x86": {
+          "#import": []
+        }
+      }
+    }
+  }
+}

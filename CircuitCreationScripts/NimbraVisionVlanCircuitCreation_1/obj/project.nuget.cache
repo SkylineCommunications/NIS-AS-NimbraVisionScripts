@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "0jipnclBSrzoaSWb5fgGzOPaSoOEO2CZUo2YdeBqLUWL5t+5YhoMtl8Z7tE/wVPuS/UT25WQX5Qr531MLkP/lQ==",
+  "dgSpecHash": "LOGIUaGd2nTh2ZGnR0lG2gncIyZWEBW/zHPj6xOTbgxn4zt8yqRDzbtslvEbufyUGU05xz8a4xalDc4s5sgLsg==",
   "success": true,
-  "projectFilePath": "C:\\Users\\joaosv\\Source\\Repos\\SkylineCommunications\\NimbraVisionScripts\\NimbraVisionVlanCircuitCreation_1\\NimbraVisionVlanCircuitCreation_1.csproj",
+  "projectFilePath": "C:\\Users\\joaosv\\Source\\Repos\\SkylineCommunications\\NimbraVisionScripts\\CircuitCreationScripts\\NimbraVisionVlanCircuitCreation_1\\NimbraVisionVlanCircuitCreation_1.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\joaosv\\.nuget\\packages\\newtonsoft.json\\13.0.2\\newtonsoft.json.13.0.2.nupkg.sha512",
     "C:\\Users\\joaosv\\.nuget\\packages\\sharpziplib\\0.86.0\\sharpziplib.0.86.0.nupkg.sha512",
