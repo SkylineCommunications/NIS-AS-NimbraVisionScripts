@@ -1,15 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Skyline.DataMiner.Automation;
-using Skyline.DataMiner.Library.Automation;
-using Skyline.DataMiner.Library.Common;
-using Skyline.DataMiner.Net.Helper;
-
-namespace Skyline.Automation.CircuitCreation.Model
+﻿namespace Skyline.Automation.CircuitCreation.Model
 {
+	using System;
+	using System.Collections.Generic;
+	using System.Linq;
+	using Skyline.DataMiner.Automation;
+	using Skyline.DataMiner.Library.Automation;
+	using Skyline.DataMiner.Library.Common;
+	using Skyline.DataMiner.Net.Helper;
+
 	public class Model
 	{
 		private readonly IDms dms;
@@ -18,12 +16,10 @@ namespace Skyline.Automation.CircuitCreation.Model
 		public Model(Engine engine, Settings settings)
 		{
 			dms = engine.GetDms() ?? throw new ArgumentNullException("dms");
-			_settings= settings;
-			var nimbraVisionElement = dms.GetElements().Where(elem => elem.Protocol.Name == "NetInsight Nimbra Vision" && elem.Protocol.Version == "Production").FirstOrDefault() ?? throw new NullReferenceException("Nimbra Vision");
+			_settings = settings;
+			NimbraVisionElement = dms.GetElements().Where(elem => elem.Protocol.Name == "NetInsight Nimbra Vision" && elem.Protocol.Version == "Production").FirstOrDefault() ?? throw new NullReferenceException("Nimbra Vision");
 
-			Interfaces = LoadInterfacesFromElement(nimbraVisionElement);
-
-
+			Interfaces = LoadInterfacesFromElement(NimbraVisionElement);
 		}
 
 		public string Source { get; set; }
@@ -38,6 +34,8 @@ namespace Skyline.Automation.CircuitCreation.Model
 
 		public List<Interface> Interfaces { get; }
 
+		public IDmsElement NimbraVisionElement { get; }
+
 		private List<Interface> LoadInterfacesFromElement(IDmsElement nimbraVisionElement)
 		{
 			List<Interface> interfaces = new List<Interface>();
@@ -47,7 +45,7 @@ namespace Skyline.Automation.CircuitCreation.Model
 			var etsRows = etsIntfTable.GetRows();
 			foreach (var etsRow in etsRows)
 			{
-				interfaces.Add( new Interface
+				interfaces.Add(new Interface
 				{
 					Capabilities = "Ethernet",
 					CircuitCreationInterfaceName = Convert.ToString(etsRow[(int)Utils.Idx.EtsInterfaceCircuitNaming]),

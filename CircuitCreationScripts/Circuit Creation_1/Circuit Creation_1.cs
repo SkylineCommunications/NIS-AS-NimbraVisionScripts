@@ -68,6 +68,7 @@ using Skyline.DataMiner.Net.ReportsAndDashboards;
 public class Script
 {
 	private Settings Settings { get; set; }
+
 	/// <summary>
 	/// The Script entry point.
 	/// </summary>
@@ -78,13 +79,12 @@ public class Script
 		var controller = new InteractiveController(engine);
 		Settings = new Settings();
 		var model = new Model(engine, Settings);
-		engine.GenerateInformation("Interfaces:" + String.Join(",", model.Interfaces.Where(intf=>intf.Capabilities == "Ethernet").Select(a => a.CircuitCreationInterfaceName)));
 		var view = new View(engine, Settings);
 		var presenter = new Presenter(view, model, Settings);
 
 		//presenter.Add += (sender, args) =>
 		//{
-		//	SaveResources(engine, model);
+		//	SaveCircuit(engine, presenter);
 		//};
 
 		view.Show(false);
@@ -93,5 +93,34 @@ public class Script
 		controller.Run(view);
 	}
 
+	private static void ShowResult(IEngine engine, string result)
+	{
+		var dialog = new MessageDialog(engine, result);
+		dialog.Show();
+	}
 
+	//private void SaveCircuit(Engine engine, Presenter presenter)
+	//{
+	//	string result;
+
+	//	try
+	//	{
+	//		if (presenter.CreateCircuit())
+	//		{
+	//			result = $"Successfully sent Create circuit request.";
+	//		}
+	//		else
+	//		{
+	//			result = $"Could not send Create Circuit request.";
+	//		}
+	//	}
+	//	catch(Exception ex)
+	//	{
+	//		result = $"Exception creating Circuit: {ex}";
+	//	}
+
+	//	engine.Log(result);
+	//	ShowResult(engine, result);
+	//	engine.ExitSuccess(result);
+	//}
 }

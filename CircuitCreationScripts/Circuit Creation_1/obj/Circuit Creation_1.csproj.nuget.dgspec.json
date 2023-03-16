@@ -35,6 +35,10 @@
       "frameworks": {
         "net462": {
           "dependencies": {
+            "Newtonsoft.Json": {
+              "target": "Package",
+              "version": "[13.0.3, )"
+            },
             "SLC.CLib.IASToolkit": {
               "target": "Package",
               "version": "[1.0.7.2, )"

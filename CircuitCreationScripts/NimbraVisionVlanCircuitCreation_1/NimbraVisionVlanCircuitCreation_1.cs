@@ -193,6 +193,16 @@ public class Script
 		[JsonProperty("extra")]
 		public Extra ExtraInfo { get; set; }
 
+		public bool ShouldSerializeStartTime()
+		{
+			return StartTime != "-1";
+		}
+
+		public bool ShouldSerializeEndTime()
+		{
+			return EndTime != "-1";
+		}
+
 		public class Extra
 		{
 			[JsonProperty("common")]
@@ -204,16 +214,6 @@ public class Script
 			[JsonProperty("VLANs")]
 			public int VLAN { get; set; }
 			public string FormName { get; set; }
-		}
-
-		public bool ShouldSerializeStartTime()
-		{
-			return StartTime != "-1";
-		}
-
-		public bool ShouldSerializeEndTime()
-		{
-			return EndTime != "-1";
 		}
 	}
 }

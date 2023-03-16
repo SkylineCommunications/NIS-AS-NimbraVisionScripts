@@ -45,6 +45,10 @@
     <Content Include=".editorconfig" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Model\BaseRequestModel.cs" />
+    <Compile Include="Model\ELineRequestModel.cs" />
+    <Compile Include="Model\ELineVlanRequestModel.cs" />
+    <Compile Include="Model\J2kRequestModel.cs" />
     <Compile Include="Model\Model.cs" />
     <Compile Include="Presenter\Presenter.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -53,6 +57,9 @@
     <Compile Include="View\View.cs" />
   </ItemGroup>
   <ItemGroup>
+    <PackageReference Include="Newtonsoft.Json">
+      <Version>13.0.3</Version>
+    </PackageReference>
     <PackageReference Include="Skyline.DataMiner.Dev.Automation">
       <Version>10.0.0.5</Version>
     </PackageReference>
@@ -71,7 +78,7 @@
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <ProjectExtensions>
     <VisualStudio>
-      <UserProperties DisLinkedXmlFile="..\Circuit Creation.xml" DisProjectType="automationScriptProject" DisLinkId="1" />
+      <UserProperties DisLinkId="1" DisProjectType="automationScriptProject" DisLinkedXmlFile="..\Circuit Creation.xml" />
     </VisualStudio>
   </ProjectExtensions>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

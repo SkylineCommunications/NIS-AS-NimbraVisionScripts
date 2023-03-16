@@ -1,12 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics.Contracts;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Skyline.Automation.CircuitCreation
+﻿namespace Skyline.Automation.CircuitCreation
 {
+	using System;
+	using System.Collections.Generic;
+
 	public static class Utils
 	{
 		public enum Pids
@@ -30,12 +26,24 @@ namespace Skyline.Automation.CircuitCreation
 
 	public class Settings
 	{
-		public readonly List<string> SupportedCircuitTypes = new List<string>
+		private readonly List<string> supportedCircuitTypes = new List<string>
 		{
 			"E-Line",
 			"E-Line VLAN",
 			"JPEG 2000",
 			"JPEG 2000 1+1 Hitless",
 		};
+
+		private readonly int labelWidth = 160;
+		private readonly int componentWidth = 150;
+		private readonly int buttonHeight = 25;
+
+		public int LabelWidth => labelWidth;
+
+		public int ComponentWidth => componentWidth;
+
+		public int ButtonHeight => buttonHeight;
+
+		public List<string> SupportedCircuitTypes => supportedCircuitTypes;
 	}
 }

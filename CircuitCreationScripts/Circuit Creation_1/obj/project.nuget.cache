@@ -1,10 +1,10 @@
 {
   "version": 2,
-  "dgSpecHash": "8z1PkqO1uwhfcB5wrOgUKovPx+b0NRoZsc8MiEUEexawWy4+4tUrlxeRUiXTbbvxd8RsrR+zm+w7csEqVENsug==",
+  "dgSpecHash": "jOWgAEIQt/r2yCcusCusxyd5+RskoiViN5nuPhFw7mu46Q4qlTd5tEtwFWekp/bymgFLIEw3u7Yl5Q/5wmKT4w==",
   "success": true,
   "projectFilePath": "C:\\Users\\joaosv\\Source\\Repos\\SkylineCommunications\\NimbraVisionScripts\\CircuitCreationScripts\\Circuit Creation_1\\Circuit Creation_1.csproj",
   "expectedPackageFiles": [
-    "C:\\Users\\joaosv\\.nuget\\packages\\newtonsoft.json\\11.0.2\\newtonsoft.json.11.0.2.nupkg.sha512",
+    "C:\\Users\\joaosv\\.nuget\\packages\\newtonsoft.json\\13.0.3\\newtonsoft.json.13.0.3.nupkg.sha512",
     "C:\\Users\\joaosv\\.nuget\\packages\\sharpziplib\\0.86.0\\sharpziplib.0.86.0.nupkg.sha512",
     "C:\\Users\\joaosv\\.nuget\\packages\\skyline.dataminer.dev.automation\\10.0.0.5\\skyline.dataminer.dev.automation.10.0.0.5.nupkg.sha512",
     "C:\\Users\\joaosv\\.nuget\\packages\\skyline.dataminer.dev.common\\10.0.0.5\\skyline.dataminer.dev.common.10.0.0.5.nupkg.sha512",
