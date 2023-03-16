@@ -28,11 +28,13 @@
 			AddCircuitButton = new Button("Create Circuit") { Width = _settings.ComponentWidth * 2, Height = _settings.ButtonHeight };
 			NoEndTime = new CheckBox("Undefined") { Width = _settings.ComponentWidth };
 			NoStartTime = new CheckBox("Now") { Width = _settings.ComponentWidth };
+			ErrorLabel = new Label(String.Empty);
 
 			SharedInitialiation();
 
 			AddWidget(new WhiteSpace(), RowCount + 1, 1);
 			AddWidget(AddCircuitButton, RowCount + 1 , 2, 2, 2, HorizontalAlignment.Center);
+			AddWidget(ErrorLabel, RowCount, 4, 1, 1);
 			AddWidget(new WhiteSpace(), RowCount + 1, 1);
 		}
 
@@ -80,6 +82,7 @@
 
 			AddWidget(new WhiteSpace(),RowCount + 1, 1);
 			AddWidget(AddCircuitButton, RowCount + 1, 2, 2, 2, HorizontalAlignment.Center);
+			AddWidget(ErrorLabel, RowCount, 4, 1, 1);
 			AddWidget(new WhiteSpace(), RowCount + 1, 1);
 		}
 

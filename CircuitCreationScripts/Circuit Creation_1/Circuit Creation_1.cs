@@ -82,45 +82,9 @@ public class Script
 		var view = new View(engine, Settings);
 		var presenter = new Presenter(view, model, Settings);
 
-		//presenter.Add += (sender, args) =>
-		//{
-		//	SaveCircuit(engine, presenter);
-		//};
-
 		view.Show(false);
 		presenter.LoadFromModel();
 
 		controller.Run(view);
 	}
-
-	private static void ShowResult(IEngine engine, string result)
-	{
-		var dialog = new MessageDialog(engine, result);
-		dialog.Show();
-	}
-
-	//private void SaveCircuit(Engine engine, Presenter presenter)
-	//{
-	//	string result;
-
-	//	try
-	//	{
-	//		if (presenter.CreateCircuit())
-	//		{
-	//			result = $"Successfully sent Create circuit request.";
-	//		}
-	//		else
-	//		{
-	//			result = $"Could not send Create Circuit request.";
-	//		}
-	//	}
-	//	catch(Exception ex)
-	//	{
-	//		result = $"Exception creating Circuit: {ex}";
-	//	}
-
-	//	engine.Log(result);
-	//	ShowResult(engine, result);
-	//	engine.ExitSuccess(result);
-	//}
 }

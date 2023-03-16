@@ -41,31 +41,6 @@
 
 		private Dictionary<string, Func<bool>> SelectCircuitConstructor { get; }
 
-		private void OnCreateResourcesPressed(object sender, EventArgs e)
-		{
-			string result;
-			view.Engine.GenerateInformation("Create Circuit");
-			try
-			{
-				if (SelectCircuitConstructor[view.CircuitTypeSelector.Selected].Invoke())
-				{
-					result = "Circuit request sent successfully.";
-				}
-				else
-				{
-					result = "Circuit request failed.";
-				}
-			}
-			catch (Exception ex)
-			{
-				result = "Issue while creation circuit: " + ex;
-			}
-
-			view.Engine.Log(result);
-			ShowResult(view.Engine, result);
-			view.Engine.ExitSuccess(result);
-		}
-
 		public void LoadFromModel()
 		{
 			view.SourceNode.Options = model.Interfaces.Where(intf => CheckInterfaceCapabilities(intf)).Select(intf => intf.NodeName);
@@ -93,24 +68,42 @@
 				view.Capacity.Value = 50;
 		}
 
-		public bool CreateCircuit()
-		{
-			view.Engine.GenerateInformation("Create Circuit");
-			try
-			{
-				return SelectCircuitConstructor[view.CircuitTypeSelector.Selected].Invoke();
-			}
-			catch(Exception ex)
-			{
-				view.Engine.Log("Issue while creation circuit: " + ex);
-				return false;
-			}
-		}
-
 		private static void ShowResult(IEngine engine, string result)
 		{
 			var dialog = new MessageDialog(engine, result);
 			dialog.Show();
+		}
+
+		private void OnCreateResourcesPressed(object sender, EventArgs e)
+		{
+			string result;
+			view.Engine.GenerateInformation("Create Circuit");
+
+			if(view.SourceInterface.Selected == view.DestinationInterface.Selected)
+			{
+				view.ErrorLabel.Text = "Nodes can't be the same!";
+				return;
+			}
+
+			try
+			{
+				if (SelectCircuitConstructor[view.CircuitTypeSelector.Selected].Invoke())
+				{
+					result = "Circuit request sent successfully.";
+				}
+				else
+				{
+					result = "Circuit request failed.";
+				}
+			}
+			catch (Exception ex)
+			{
+				result = "Issue while creation circuit: " + ex;
+			}
+
+			view.Engine.Log(result);
+			ShowResult(view.Engine, result);
+			view.Engine.ExitSuccess(result);
 		}
 
 		private Func<bool> CreateELineCircuit()
