@@ -2,6 +2,7 @@
 {
 	using System;
 	using System.Collections.Generic;
+	using System.Globalization;
 	using System.Linq;
 	using Newtonsoft.Json;
 	using Skyline.Automation.CircuitCreation.Model;
@@ -79,7 +80,7 @@
 			string result;
 			view.Engine.GenerateInformation("Create Circuit");
 
-			if(view.SourceInterface.Selected == view.DestinationInterface.Selected)
+			if (view.SourceNode.Selected == view.DestinationNode.Selected)
 			{
 				view.ErrorLabel.Text = "Nodes can't be the same!";
 				return;
@@ -123,7 +124,18 @@
 						EndTime = view.NoEndTime.IsChecked ? DateTime.MinValue : view.StopTime.DateTime,
 					};
 
-					view.Engine.FindElement(model.NimbraVisionElement.Name).SetParameter(125, JsonConvert.SerializeObject(createFields));
+					view.Engine.FindElement(model.NimbraVisionElement.Name).SetParameter(
+						125,
+						JsonConvert.SerializeObject(
+							createFields,
+							Formatting.Indented,
+							new JsonSerializerSettings
+							{
+								NullValueHandling = NullValueHandling.Ignore,
+								Culture = CultureInfo.InvariantCulture,
+								DateTimeZoneHandling = DateTimeZoneHandling.Utc,
+							}));
+
 					return true;
 				}
 				catch
@@ -150,7 +162,18 @@
 						ProtectionId = view.CircuitTypeSelector.Selected == "JPEG 2000 1+1 Hitless" ? 1 : -1,
 					};
 
-					view.Engine.FindElement(model.NimbraVisionElement.Name).SetParameter(125, JsonConvert.SerializeObject(createFields));
+					view.Engine.FindElement(model.NimbraVisionElement.Name).SetParameter(
+						125,
+						JsonConvert.SerializeObject(
+							createFields,
+							Formatting.Indented,
+							new JsonSerializerSettings
+							{
+								NullValueHandling = NullValueHandling.Ignore,
+								Culture = CultureInfo.InvariantCulture,
+								DateTimeZoneHandling = DateTimeZoneHandling.Utc,
+							}));
+
 					return true;
 				}
 				catch
@@ -184,7 +207,18 @@
 						},
 					};
 
-					view.Engine.FindElement(model.NimbraVisionElement.Name).SetParameter(125, JsonConvert.SerializeObject(createFields));
+					view.Engine.FindElement(model.NimbraVisionElement.Name).SetParameter(
+						125,
+						JsonConvert.SerializeObject(
+							createFields,
+							Formatting.Indented,
+							new JsonSerializerSettings
+							{
+								NullValueHandling = NullValueHandling.Ignore,
+								Culture = CultureInfo.InvariantCulture,
+								DateTimeZoneHandling = DateTimeZoneHandling.Utc,
+							}));
+
 					return true;
 				}
 				catch
