@@ -19,11 +19,11 @@
 			StopTime = new DateTimePicker(DateTime.Now.AddDays(1)) { Width = _settings.ComponentWidth, Minimum = DateTime.Now };
 			CircuitTypeSelector = new DropDown(_settings.SupportedCircuitTypes) { Width = _settings.ComponentWidth };
 			Capacity = new Numeric(1) { Width = _settings.ComponentWidth, Decimals = 0, Minimum = 1, Maximum = 1000, Tooltip = "Capacity in Mbps", ValidationText = "Invalid Range" };
-			SourceNode = new DropDown() { Width = _settings.ComponentWidth };
-			DestinationNode = new DropDown() { Width = _settings.ComponentWidth };
-			SourceInterface = new DropDown() { Width = _settings.ComponentWidth };
-			DestinationInterface = new DropDown() { Width = _settings.ComponentWidth };
-			FormName = new TextBox() { Width = _settings.ComponentWidth };
+			SourceNode = new DropDown { Width = _settings.ComponentWidth };
+			DestinationNode = new DropDown { Width = _settings.ComponentWidth };
+			SourceInterface = new DropDown { Width = _settings.ComponentWidth };
+			DestinationInterface = new DropDown { Width = _settings.ComponentWidth };
+			FormName = new TextBox { Width = _settings.ComponentWidth };
 			Vlan = new Numeric(1) { Width = _settings.ComponentWidth, Decimals = 0, Minimum = 1, Maximum = 4096, ValidationText = "Invalid Range" };
 			AddCircuitButton = new Button("Create Circuit") { Width = _settings.ComponentWidth * 2, Height = _settings.ButtonHeight };
 			NoEndTime = new CheckBox("Undefined") { Width = _settings.ComponentWidth };

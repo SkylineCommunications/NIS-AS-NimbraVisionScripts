@@ -67,8 +67,6 @@ using Skyline.DataMiner.Net.ReportsAndDashboards;
 /// </summary>
 public class Script
 {
-	private Settings Settings { get; set; }
-
 	/// <summary>
 	/// The Script entry point.
 	/// </summary>
@@ -77,10 +75,10 @@ public class Script
 	{
 		// engine.ShowUI(); - this comment is needed for Interactive UI to work
 		var controller = new InteractiveController(engine);
-		Settings = new Settings();
-		var model = new Model(engine, Settings);
-		var view = new View(engine, Settings);
-		var presenter = new Presenter(view, model, Settings);
+		var settings = new Settings();
+		var model = new Model(engine);
+		var view = new View(engine, settings);
+		var presenter = new Presenter(view, model, settings);
 
 		view.Show(false);
 		presenter.LoadFromModel();

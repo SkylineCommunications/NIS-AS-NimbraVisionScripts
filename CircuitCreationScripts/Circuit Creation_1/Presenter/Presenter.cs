@@ -15,7 +15,6 @@
 	{
 		private readonly View view;
 		private readonly Model model;
-		private readonly Settings _settings;
 
 		public Presenter(View view, Model model, Settings settings)
 		{
@@ -25,11 +24,9 @@
 			{
 				{ "E-Line", CreateELineCircuit() },
 				{ "E-Line VLAN", CreateELineVlanCircuit() },
-				{ "JPEG 2000", CreateJ2kCircuit() },
-				{ "JPEG 2000 1+1 Hitless", CreateJ2kCircuit() },
+				{ "JPEG 2000", CreateJ2KCircuit() },
+				{ "JPEG 2000 1+1 Hitless", CreateJ2KCircuit() },
 			};
-
-			_settings = settings;
 
 			view.CircuitTypeSelector.Changed += UpdateUI;
 			view.SourceNode.Changed += UpdateUI;
@@ -118,8 +115,8 @@
 					{
 						ServiceId = view.CircuitTypeSelector.Selected,
 						Capacity = Convert.ToInt32(view.Capacity.Value),
-						Destination = model.Interfaces.FirstOrDefault(intf => intf.InterfaceName == view.DestinationInterface.Selected).CircuitCreationInterfaceName,
-						Source = model.Interfaces.FirstOrDefault(intf => intf.InterfaceName == view.SourceInterface.Selected).CircuitCreationInterfaceName,
+						Destination = model.Interfaces.First(intf => intf.InterfaceName == view.DestinationInterface.Selected).CircuitCreationInterfaceName,
+						Source = model.Interfaces.First(intf => intf.InterfaceName == view.SourceInterface.Selected).CircuitCreationInterfaceName,
 						StartTime = view.NoStartTime.IsChecked ? DateTime.MinValue : view.StartTime.DateTime,
 						EndTime = view.NoEndTime.IsChecked ? DateTime.MinValue : view.StopTime.DateTime,
 					};
@@ -145,7 +142,7 @@
 			};
 		}
 
-		private Func<bool> CreateJ2kCircuit()
+		private Func<bool> CreateJ2KCircuit()
 		{
 			return () =>
 			{
@@ -155,8 +152,8 @@
 					{
 						ServiceId = view.CircuitTypeSelector.Selected == "JPEG 2000 1+1 Hitless" ? "j2k-hitless" : "j2k",
 						Capacity = Convert.ToInt32(view.Capacity.Value),
-						Destination = model.Interfaces.FirstOrDefault(intf => intf.InterfaceName == view.DestinationInterface.Selected).CircuitCreationInterfaceName,
-						Source = model.Interfaces.FirstOrDefault(intf => intf.InterfaceName == view.SourceInterface.Selected).CircuitCreationInterfaceName,
+						Destination = model.Interfaces.First(intf => intf.InterfaceName == view.DestinationInterface.Selected).CircuitCreationInterfaceName,
+						Source = model.Interfaces.First(intf => intf.InterfaceName == view.SourceInterface.Selected).CircuitCreationInterfaceName,
 						StartTime = view.NoStartTime.IsChecked ? DateTime.MinValue : view.StartTime.DateTime,
 						EndTime = view.NoEndTime.IsChecked ? DateTime.MinValue : view.StopTime.DateTime,
 						ProtectionId = view.CircuitTypeSelector.Selected == "JPEG 2000 1+1 Hitless" ? 1 : -1,
@@ -193,8 +190,8 @@
 					{
 						ServiceId = view.CircuitTypeSelector.Selected,
 						Capacity = Convert.ToInt32(view.Capacity.Value),
-						Destination = model.Interfaces.FirstOrDefault(intf => intf.InterfaceName == view.DestinationInterface.Selected).CircuitCreationInterfaceName,
-						Source = model.Interfaces.FirstOrDefault(intf => intf.InterfaceName == view.SourceInterface.Selected).CircuitCreationInterfaceName,
+						Destination = model.Interfaces.First(intf => intf.InterfaceName == view.DestinationInterface.Selected).CircuitCreationInterfaceName,
+						Source = model.Interfaces.First(intf => intf.InterfaceName == view.SourceInterface.Selected).CircuitCreationInterfaceName,
 						StartTime = view.NoStartTime.IsChecked ? DateTime.MinValue : view.StartTime.DateTime,
 						EndTime = view.NoEndTime.IsChecked ? DateTime.MinValue : view.StopTime.DateTime,
 						ExtraInfo = new ELineVlanRequestModel.Extra

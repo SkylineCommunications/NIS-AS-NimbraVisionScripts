@@ -10,14 +10,11 @@
 
 	public class Model
 	{
-		private readonly IDms dms;
-		private readonly Settings _settings;
-
-		public Model(Engine engine, Settings settings)
+		public Model(Engine engine)
 		{
-			dms = engine.GetDms() ?? throw new ArgumentNullException("dms");
-			_settings = settings;
-			NimbraVisionElement = dms.GetElements().Where(elem => elem.Protocol.Name == "NetInsight Nimbra Vision" && elem.Protocol.Version == "Production").FirstOrDefault() ?? throw new NullReferenceException("Nimbra Vision");
+			var dms = engine.GetDms() ?? throw new NullReferenceException("dms");
+			NimbraVisionElement = dms.GetElements().FirstOrDefault(
+				elem => elem.Protocol.Name == "NetInsight Nimbra Vision" && elem.Protocol.Version == "Production") ?? throw new NullReferenceException("Nimbra Vision");
 
 			Interfaces = LoadInterfacesFromElement(NimbraVisionElement);
 		}
@@ -66,7 +63,7 @@
 				interfaces.Add(new Interface
 				{
 					Capabilities = capabilities,
-					CircuitCreationInterfaceName = String.Join("_", new[] { Convert.ToString(itsRow[0]).Split('-')[1], Convert.ToString(itsRow[(int)Utils.Idx.ItsInterfaceNodeName]) }),
+					CircuitCreationInterfaceName = String.Join("_", Convert.ToString(itsRow[0]).Split('-')[1], Convert.ToString(itsRow[(int)Utils.Idx.ItsInterfaceNodeName]) ),
 					InterfaceName = Convert.ToString(itsRow[0]),
 					NodeName = Convert.ToString(itsRow[(int)Utils.Idx.ItsInterfaceNodeName]),
 				});
