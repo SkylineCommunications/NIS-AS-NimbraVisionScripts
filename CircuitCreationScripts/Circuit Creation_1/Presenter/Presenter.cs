@@ -79,7 +79,7 @@
 			string result;
 			view.Engine.GenerateInformation("Create Circuit");
 
-			if(view.SourceInterface.Selected == view.DestinationInterface.Selected)
+			if(view.SourceNode.Selected == view.DestinationNode.Selected)
 			{
 				view.ErrorLabel.Text = "Nodes can't be the same!";
 				return;
