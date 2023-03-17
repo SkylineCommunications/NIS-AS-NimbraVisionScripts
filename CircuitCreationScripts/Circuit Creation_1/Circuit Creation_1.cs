@@ -78,7 +78,7 @@ public class Script
 		var settings = new Settings();
 		var model = new Model(engine);
 		var view = new View(engine, settings);
-		var presenter = new Presenter(view, model, settings);
+		var presenter = new Presenter(view, model);
 
 		view.Show(false);
 		presenter.LoadFromModel();

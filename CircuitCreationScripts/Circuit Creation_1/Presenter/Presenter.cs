@@ -16,7 +16,7 @@
 		private readonly View view;
 		private readonly Model model;
 
-		public Presenter(View view, Model model, Settings settings)
+		public Presenter(View view, Model model)
 		{
 			this.view = view ?? throw new ArgumentNullException("view");
 			this.model = model ?? throw new ArgumentNullException("model");
@@ -85,14 +85,9 @@
 
 			try
 			{
-				if (SelectCircuitConstructor[view.CircuitTypeSelector.Selected].Invoke())
-				{
-					result = "Circuit request sent successfully.";
-				}
-				else
-				{
-					result = "Circuit request failed.";
-				}
+				result = SelectCircuitConstructor[view.CircuitTypeSelector.Selected].Invoke()
+					? "Circuit request sent successfully."
+					: "Circuit request failed.";
 			}
 			catch (Exception ex)
 			{
