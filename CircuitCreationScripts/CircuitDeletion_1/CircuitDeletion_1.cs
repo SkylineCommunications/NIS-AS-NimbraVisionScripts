@@ -54,6 +54,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Text;
 using Skyline.DataMiner.Automation;
+using Skyline.DataMiner.CommunityLibrary.FlowProvisioning.Info;
 using Skyline.DataMiner.Library.Automation;
 using Skyline.DataMiner.Library.Common.InterAppCalls.CallBulk;
 using Skyline.DataMiner.Library.Common.InterAppCalls.CallSingle;
@@ -68,9 +69,11 @@ public class Script
 		CircuitsTable = 1800,
 	}
 
+	private static readonly List<Type> KnownTypes = new List<Type> { typeof(FlowInfoMessage), typeof(DeleteCircuitMessage) };
+
 	public static Element ValidateAndReturnElement(Engine engine, string elementName)
 	{
-		var element = engine.FindElement("Nimbra Vision");
+		var element = engine.FindElement(elementName);
 
 		if (element == null)
 		{
@@ -121,6 +124,10 @@ public class Script
 			DeleteCircuitMessage basicCircuitDeleteMessage = new DeleteCircuitMessage { SharedId = Convert.ToString(sharedId) };
 			deleteCommand.Messages.Add(basicCircuitDeleteMessage);
 		}
+
+		engine.GenerateInformation(String.Join(";", sharedIds));
+
+		deleteCommand.Send(Engine.SLNetRaw, idmsElement.DmsElementId.AgentId, idmsElement.DmsElementId.ElementId, 9000000, KnownTypes);
 	}
 }
 
