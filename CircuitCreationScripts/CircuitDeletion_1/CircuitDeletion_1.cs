@@ -53,6 +53,8 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Text;
+using Skyline.DataMiner.Analytics.DataHandling;
+using System.Text.RegularExpressions;
 using Skyline.DataMiner.Automation;
 using Skyline.DataMiner.CommunityLibrary.FlowProvisioning.Info;
 using Skyline.DataMiner.Library.Automation;
@@ -96,7 +98,7 @@ public class Script
 	/// <param name="engine">Link with SLAutomation process.</param>
 	public void Run(Engine engine)
 	{
-		var intfName = engine.GetScriptParam("Interface Name").Value;
+		var intfName = Regex.Replace(engine.GetScriptParam("Interface Name").Value, @"[\[\]]", String.Empty).Split(',')[0].Replace("\"", String.Empty);
 		var element = ValidateAndReturnElement(engine, "Nimbra Vision");
 		if(element == null)
 		{
