@@ -51,9 +51,6 @@ dd/mm/2023	1.0.0.1		XXX, Skyline	Initial version
 
 using System;
 using System.Collections.Generic;
-using System.Globalization;
-using System.Text;
-using Skyline.DataMiner.Analytics.DataHandling;
 using System.Text.RegularExpressions;
 using Skyline.DataMiner.Automation;
 using Skyline.DataMiner.CommunityLibrary.FlowProvisioning.Info;

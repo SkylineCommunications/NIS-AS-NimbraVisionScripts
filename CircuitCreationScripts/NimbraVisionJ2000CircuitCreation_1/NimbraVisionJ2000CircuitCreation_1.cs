@@ -54,6 +54,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Text;
 using System.Text.RegularExpressions;
+using System.Threading;
 using Newtonsoft.Json;
 using Skyline.DataMiner.Automation;
 using Skyline.DataMiner.Net;
@@ -147,6 +148,8 @@ public class Script
 		engine.GenerateInformation(JsonConvert.SerializeObject(fields));
 
 		ValidateAndReturnElement(engine, "Nimbra Vision").SetParameter(125, JsonConvert.SerializeObject(fields));
+
+		Thread.Sleep(5000);
 
 		engine.ExitSuccess("Sent request to Nimbra Vision element.");
 	}
