@@ -45,25 +45,44 @@
     <Content Include=".editorconfig" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Model\BaseRequestModel.cs" />
+    <Compile Include="Model\ELineRequestModel.cs" />
+    <Compile Include="Model\ELineVlanRequestModel.cs" />
+    <Compile Include="Model\J2kRequestModel.cs" />
+    <Compile Include="Model\Model.cs" />
+    <Compile Include="Presenter\Presenter.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="DomInterfaceSelection_1.cs" />
     <Compile Include="Utils.cs" />
+    <Compile Include="View\View.cs" />
   </ItemGroup>
   <ItemGroup>
+    <PackageReference Include="Newtonsoft.Json">
+      <Version>13.0.3</Version>
+    </PackageReference>
     <PackageReference Include="Skyline.DataMiner.Dev.Automation">
-      <Version>10.0.0.5</Version>
+      <Version>10.3.3.1</Version>
+    </PackageReference>
+    <PackageReference Include="Skyline.DataMiner.Files.Skyline.DataMiner.Storage.Types">
+      <Version>10.3.3.1</Version>
+    </PackageReference>
+    <PackageReference Include="Skyline.DataMiner.Files.SLNetTypes">
+      <Version>10.3.3.1</Version>
     </PackageReference>
     <PackageReference Include="SLC.CLib.IASToolkit">
       <Version>1.0.7.2</Version>
     </PackageReference>
     <PackageReference Include="SLC.CLib.Labs.API">
-      <Version>1.0.10325.73-1.0.0.X.73</Version>
+      <Version>1.0.10325.46</Version>
     </PackageReference>
     <PackageReference Include="SLC.CLib.Labs.DOM">
-      <Version>1.0.10325.16-1.0.0.X.16</Version>
+      <Version>1.0.10325.7-1.0.0.X.7</Version>
     </PackageReference>
     <PackageReference Include="SLC.Lib.Automation">
-      <Version>1.4.0.2</Version>
+      <Version>1.3.0.2</Version>
+    </PackageReference>
+    <PackageReference Include="SLC.Lib.Common">
+      <Version>1.3.0.2</Version>
     </PackageReference>
     <PackageReference Include="StyleCop.Analyzers">
       <Version>1.1.118</Version>
@@ -71,13 +90,11 @@
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="View\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <ProjectExtensions>
     <VisualStudio>
-      <UserProperties DisLinkId="1" DisProjectType="automationScriptProject" DisLinkedXmlFile="..\DomInterfaceSelection.xml" />
+      <UserProperties DisLinkedXmlFile="..\DomInterfaceSelection.xml" DisProjectType="automationScriptProject" DisLinkId="1" />
     </VisualStudio>
   </ProjectExtensions>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

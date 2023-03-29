@@ -5,6 +5,7 @@
 	using System.Linq;
 	using Skyline.DataMiner.Net.Apps.DataMinerObjectModel;
 	using Skyline.DataMiner.Net.Messages.SLDataGateway;
+	using Skyline.DataMiner.Net.Sections;
 
 	public static class Utils
 	{
@@ -56,6 +57,40 @@
 			domHelper.StitchDomInstances(domInstances);
 
 			return domInstances.First();
+		}
+
+		public static object GetFieldValue(DomInstance domInstance, string fieldName)
+		{
+			foreach (var section in domInstance.Sections)
+			{
+				foreach (var fieldValue in section.FieldValues)
+				{
+					var fieldDescriptor = fieldValue.GetFieldDescriptor();
+					if (fieldDescriptor.Name.Equals(fieldName))
+					{
+						return fieldValue.Value.Value;
+					}
+				}
+			}
+
+			return null;
+		}
+
+		public static FieldDescriptorID GetFiledId(DomInstance domInstance, string fieldName)
+		{
+			foreach (var section in domInstance.Sections)
+			{
+				foreach (var fieldValue in section.FieldValues)
+				{
+					var fieldDescriptor = fieldValue.GetFieldDescriptor();
+					if (fieldDescriptor.Name.Equals(fieldName))
+					{
+						return fieldValue.FieldDescriptorID;
+					}
+				}
+			}
+
+			return null;
 		}
 	}
 

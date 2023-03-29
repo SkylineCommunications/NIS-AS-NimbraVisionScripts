@@ -38,7 +38,7 @@
 			List<Interface> interfaces = new List<Interface>();
 			var etsIntfTable = nimbraVisionElement.GetTable((int)Utils.Pids.EtsInterfaceTable);
 			var itsIntfTable = nimbraVisionElement.GetTable((int)Utils.Pids.ItsInterfaceTable);
-
+			var circuitsTable = nimbraVisionElement.GetTable((int))
 			var etsRows = etsIntfTable.GetRows();
 			foreach (var etsRow in etsRows)
 			{

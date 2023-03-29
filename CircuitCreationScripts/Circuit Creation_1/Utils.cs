@@ -12,6 +12,7 @@
 			EtsInterfaceTable = 1900,
 			EtsInterfaceCircuitNaming = 1924,
 			EtsInterfaceNodeName = 1922,
+			CircuitsTable = 1800,
 		}
 
 		public enum Idx
@@ -21,6 +22,8 @@
 			ItsInterfaceName = 4,
 			EtsInterfaceNodeName = 21,
 			EtsInterfaceCircuitNaming = 23,
+			CircuitSource = 8,
+			CircuitDestination = 9,
 		}
 	}
 

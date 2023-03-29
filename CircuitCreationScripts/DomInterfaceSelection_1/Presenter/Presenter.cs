@@ -10,6 +10,10 @@
 	using Skyline.DataMiner.Automation;
 	using Skyline.DataMiner.DeveloperCommunityLibrary.InteractiveAutomationToolkit;
 	using Skyline.DataMiner.Net;
+	using Skyline.DataMiner.Net.Apps.DataMinerObjectModel;
+	using Skyline.DataMiner.Net.LogHelpers;
+	using Skyline.DataMiner.Net.Messages.SLDataGateway;
+	using Skyline.DataMiner.Net.Sections;
 
 	public class Presenter
 	{
@@ -20,39 +24,30 @@
 		{
 			this.view = view ?? throw new ArgumentNullException("view");
 			this.model = model ?? throw new ArgumentNullException("model");
-			SelectCircuitConstructor = new Dictionary<string, Func<bool>>
-			{
-				{ "E-Line", CreateELineCircuit() },
-				{ "E-Line VLAN", CreateELineVlanCircuit() },
-				{ "JPEG 2000", CreateJ2KCircuit() },
-				{ "JPEG 2000 1+1 Hitless", CreateJ2KCircuit() },
-			};
 
 			view.CircuitTypeSelector.Changed += UpdateUI;
 			view.SourceNode.Changed += UpdateUI;
 			view.DestinationNode.Changed += UpdateUI;
-			view.NoEndTime.Changed += UpdateUI;
-			view.NoStartTime.Changed += UpdateUI;
 
-			view.AddCircuitButton.Pressed += OnCreateResourcesPressed;
+			view.AddCircuitButton.Pressed += OnScheduleResourcePressed;
 		}
-
-		private Dictionary<string, Func<bool>> SelectCircuitConstructor { get; }
 
 		public void LoadFromModel()
 		{
 			view.SourceNode.Options = model.Interfaces.Where(intf => CheckInterfaceCapabilities(intf)).Select(intf => intf.NodeName);
+			view.Engine.GenerateInformation("Source Node");
 			view.DestinationNode.Options = model.Interfaces.Where(intf => CheckInterfaceCapabilities(intf)).Select(intf => intf.NodeName);
-
+			view.Engine.GenerateInformation("Destination Node");
 			view.SourceInterface.Options = model.Interfaces.Where(intf => CheckInterfaceCapabilities(intf) && intf.NodeName == view.SourceNode.Selected).Select(intf => intf.InterfaceName);
+			view.Engine.GenerateInformation("SourceInterface");
 			view.DestinationInterface.Options = model.Interfaces.Where(intf => CheckInterfaceCapabilities(intf) && intf.NodeName == view.DestinationNode.Selected).Select(intf => intf.InterfaceName);
+			view.Engine.GenerateInformation("DestinationInterface");
 
 			bool CheckInterfaceCapabilities(CircuitCreation.Model.Interface intf)
 			{
 				switch (view.CircuitTypeSelector.Selected)
 				{
 					case "E-Line":
-					case "E-Line VLAN":
 						return intf.Capabilities == "Ethernet";
 					case "JPEG 2000":
 					case "JPEG 2000 1+1 Hitless":
@@ -61,172 +56,30 @@
 						return false;
 				}
 			}
-
-			if (view.CircuitTypeSelector.Selected.Contains("JPEG 2000"))
-				view.Capacity.Value = 50;
 		}
 
-		private static void ShowResult(IEngine engine, string result)
+		private void OnScheduleResourcePressed(object sender, EventArgs e)
 		{
-			var dialog = new MessageDialog(engine, result);
-			dialog.Show();
-		}
-
-		private void OnCreateResourcesPressed(object sender, EventArgs e)
-		{
-			string result;
-			view.Engine.GenerateInformation("Create Circuit");
-
 			if (view.SourceNode.Selected == view.DestinationNode.Selected)
 			{
 				view.ErrorLabel.Text = "Nodes can't be the same!";
 				return;
 			}
 
-			try
-			{
-				result = SelectCircuitConstructor[view.CircuitTypeSelector.Selected].Invoke()
-					? "Circuit request sent successfully."
-					: "Circuit request failed.";
-			}
-			catch (Exception ex)
-			{
-				result = "Issue while creation circuit: " + ex;
-			}
+			var sectionDefinitionLinks = model.DomInstance.GetDomDefinition().SectionDefinitionLinks;
+			FilterElement<SectionDefinition> sectionDefintionfilter = SectionDefinitionExposers.ID.Equal(sectionDefinitionLinks.First().SectionDefinitionID);
+			var sectionDefinition = model.DomHelper.SectionDefinitions.Read(sectionDefintionfilter).First(sd => sd.GetName() == "Circuit Info");
 
-			view.Engine.Log(result);
-			ShowResult(view.Engine, result);
-			view.Engine.ExitSuccess(result);
-		}
-
-		private Func<bool> CreateELineCircuit()
-		{
-			return () =>
-			{
-				view.Engine.GenerateInformation("CreateELineCircuit");
-				try
-				{
-					var createFields = new ELineRequestModel
-					{
-						ServiceId = view.CircuitTypeSelector.Selected,
-						Capacity = Convert.ToInt32(view.Capacity.Value),
-						Destination = model.Interfaces.First(intf => intf.InterfaceName == view.DestinationInterface.Selected).CircuitCreationInterfaceName,
-						Source = model.Interfaces.First(intf => intf.InterfaceName == view.SourceInterface.Selected).CircuitCreationInterfaceName,
-						StartTime = view.NoStartTime.IsChecked ? DateTime.MinValue : view.StartTime.DateTime,
-						EndTime = view.NoEndTime.IsChecked ? DateTime.MinValue : view.StopTime.DateTime,
-					};
-
-					view.Engine.FindElement(model.NimbraVisionElement.Name).SetParameter(
-						125,
-						JsonConvert.SerializeObject(
-							createFields,
-							Formatting.Indented,
-							new JsonSerializerSettings
-							{
-								NullValueHandling = NullValueHandling.Ignore,
-								Culture = CultureInfo.InvariantCulture,
-								DateTimeZoneHandling = DateTimeZoneHandling.Utc,
-							}));
-
-					return true;
-				}
-				catch
-				{
-					return false;
-				}
-			};
-		}
-
-		private Func<bool> CreateJ2KCircuit()
-		{
-			return () =>
-			{
-				try
-				{
-					var createFields = new J2kRequestModel
-					{
-						ServiceId = view.CircuitTypeSelector.Selected == "JPEG 2000 1+1 Hitless" ? "j2k-hitless" : "j2k",
-						Capacity = Convert.ToInt32(view.Capacity.Value),
-						Destination = model.Interfaces.First(intf => intf.InterfaceName == view.DestinationInterface.Selected).CircuitCreationInterfaceName,
-						Source = model.Interfaces.First(intf => intf.InterfaceName == view.SourceInterface.Selected).CircuitCreationInterfaceName,
-						StartTime = view.NoStartTime.IsChecked ? DateTime.MinValue : view.StartTime.DateTime,
-						EndTime = view.NoEndTime.IsChecked ? DateTime.MinValue : view.StopTime.DateTime,
-						ProtectionId = view.CircuitTypeSelector.Selected == "JPEG 2000 1+1 Hitless" ? 1 : -1,
-					};
-
-					view.Engine.FindElement(model.NimbraVisionElement.Name).SetParameter(
-						125,
-						JsonConvert.SerializeObject(
-							createFields,
-							Formatting.Indented,
-							new JsonSerializerSettings
-							{
-								NullValueHandling = NullValueHandling.Ignore,
-								Culture = CultureInfo.InvariantCulture,
-								DateTimeZoneHandling = DateTimeZoneHandling.Utc,
-							}));
-
-					return true;
-				}
-				catch
-				{
-					return false;
-				}
-			};
-		}
-
-		private Func<bool> CreateELineVlanCircuit()
-		{
-			return () =>
-			{
-				try
-				{
-					var createFields = new ELineVlanRequestModel
-					{
-						ServiceId = view.CircuitTypeSelector.Selected,
-						Capacity = Convert.ToInt32(view.Capacity.Value),
-						Destination = model.Interfaces.First(intf => intf.InterfaceName == view.DestinationInterface.Selected).CircuitCreationInterfaceName,
-						Source = model.Interfaces.First(intf => intf.InterfaceName == view.SourceInterface.Selected).CircuitCreationInterfaceName,
-						StartTime = view.NoStartTime.IsChecked ? DateTime.MinValue : view.StartTime.DateTime,
-						EndTime = view.NoEndTime.IsChecked ? DateTime.MinValue : view.StopTime.DateTime,
-						ExtraInfo = new ELineVlanRequestModel.Extra
-						{
-							Common = new ELineVlanRequestModel.Common
-							{
-								FormName = view.FormName.Text,
-								VLAN = Convert.ToInt32(view.Vlan.Value),
-							},
-						},
-					};
-
-					view.Engine.FindElement(model.NimbraVisionElement.Name).SetParameter(
-						125,
-						JsonConvert.SerializeObject(
-							createFields,
-							Formatting.Indented,
-							new JsonSerializerSettings
-							{
-								NullValueHandling = NullValueHandling.Ignore,
-								Culture = CultureInfo.InvariantCulture,
-								DateTimeZoneHandling = DateTimeZoneHandling.Utc,
-							}));
-
-					return true;
-				}
-				catch
-				{
-					return false;
-				}
-			};
+			model.DomInstance.AddOrUpdateFieldValue(sectionDefinition, sectionDefinition.GetAllFieldDescriptors().First(fd => fd.Name == "Source Node"), view.SourceNode.Selected);
+			model.DomInstance.AddOrUpdateFieldValue(sectionDefinition, sectionDefinition.GetAllFieldDescriptors().First(fd => fd.Name == "Source Interface"), view.SourceInterface.Selected);
+			model.DomInstance.AddOrUpdateFieldValue(sectionDefinition, sectionDefinition.GetAllFieldDescriptors().First(fd => fd.Name == "Destination Node"), view.DestinationNode.Selected);
+			model.DomInstance.AddOrUpdateFieldValue(sectionDefinition, sectionDefinition.GetAllFieldDescriptors().First(fd => fd.Name == "Destination Interface"), view.DestinationInterface.Selected);
+			model.DomHelper.DomInstances.Update(model.DomInstance);
+			model.DomHelper.DomInstances.DoStatusTransition(model.DomInstance.ID, model.TransitionId);
+			view.Engine.ExitSuccess("Completed Scheduling.");
 		}
 
 		private void UpdateUI(object sender, DropDown.DropDownChangedEventArgs e)
-		{
-			LoadFromModel();
-			view.RestartUI();
-		}
-
-		private void UpdateUI(object sender, CheckBox.CheckBoxChangedEventArgs e)
 		{
 			LoadFromModel();
 			view.RestartUI();

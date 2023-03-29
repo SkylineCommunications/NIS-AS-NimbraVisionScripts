@@ -85,6 +85,4 @@ public class Script
 
 		controller.Run(view);
 	}
-
-
 }

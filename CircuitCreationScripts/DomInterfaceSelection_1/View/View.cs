@@ -11,7 +11,7 @@
 		public View(IEngine engine, Settings settings, Utils.CircuitType circuitType) : base(engine)
 		{
 			Title = "Select Interfaces";
-			Width = 800;
+			Width = 1200;
 			this._settings = settings;
 			AllowOverlappingWidgets = true;
 
@@ -29,7 +29,7 @@
 					circuitTypeStr = "JPEG 2000 1+1 Hitless";
 					break;
 				default:
-
+					circuitTypeStr = "E-Line";
 					break;
 			}
 
@@ -82,11 +82,11 @@
 			AddWidget(CircuitTypeSelector, 0, 2, 1, 1);
 			AddWidget(new Label("Source Node") { Width = _settings.LabelWidth, Style = TextStyle.Bold }, 2, 1);
 			AddWidget(SourceNode, 2, 2, 1, 1);
-			AddWidget(new Label("Source Interface") { Width = _settings.LabelWidth, Style = TextStyle.Bold }, 2, 3, HorizontalAlignment.Right);
+			AddWidget(new Label("Source Interface") { Width = _settings.LabelWidth, Style = TextStyle.Bold }, 2, 3, HorizontalAlignment.Left);
 			AddWidget(SourceInterface, 2, 4, 1, 1);
 			AddWidget(new Label("Destination Node") { Width = _settings.LabelWidth, Style = TextStyle.Bold }, 3, 1);
 			AddWidget(DestinationNode, 3, 2, 1, 1);
-			AddWidget(new Label("Destination Interface") { Width = _settings.LabelWidth, Style = TextStyle.Bold }, 3, 3, HorizontalAlignment.Right);
+			AddWidget(new Label("Destination Interface") { Width = _settings.LabelWidth, Style = TextStyle.Bold }, 3, 3, HorizontalAlignment.Left);
 			AddWidget(DestinationInterface, 3, 4, 1, 1);
 		}
 	}
