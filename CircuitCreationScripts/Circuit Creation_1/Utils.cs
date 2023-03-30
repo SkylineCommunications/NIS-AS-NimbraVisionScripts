@@ -18,7 +18,7 @@
 			EtsInterfaceTable = 1900,
 			EtsInterfaceCircuitNaming = 1924,
 			EtsInterfaceNodeName = 1922,
-			CircuitsTable = 1800,
+			CircuitTable = 1800,
 		}
 
 		public enum Idx
@@ -28,8 +28,25 @@
 			ItsInterfaceName = 4,
 			EtsInterfaceNodeName = 21,
 			EtsInterfaceCircuitNaming = 23,
-			CircuitSource = 8,
-			CircuitDestination = 9,
+			CircuitServiceId = 2,
+			CircuitSourceIntf = 8,
+			CircuitDestIntf = 9,
+		}
+
+		public static string GetCircuitNamedEtsInterface(string interfaceName)
+		{
+			var splittedInterfaceName = interfaceName.Split('_');
+			var node = splittedInterfaceName[0];
+			var interfaceNumbering = splittedInterfaceName[1].Replace("eth", String.Empty);
+			return String.Join("_", interfaceNumbering, node );
+		}
+
+		public static string GetCircuitNamedItsInterface(string interfaceName)
+		{
+			var splittedInterfaceName = interfaceName.Split('_');
+			var node = splittedInterfaceName[0];
+			var interfaceNumbering = splittedInterfaceName[1].Split('-')[1];
+			return String.Join("_", interfaceNumbering, node );
 		}
 	}
 

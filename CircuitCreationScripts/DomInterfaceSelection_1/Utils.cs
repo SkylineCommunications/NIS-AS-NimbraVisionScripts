@@ -19,6 +19,7 @@
 		{
 			ItsInterfaceTable = 1600,
 			ItsInterfaceCapabilities = 1603,
+			CircuitTable = 1800,
 			EtsInterfaceTable = 1900,
 			EtsInterfaceCircuitNaming = 1924,
 			EtsInterfaceNodeName = 1922,
@@ -31,6 +32,9 @@
 			ItsInterfaceName = 4,
 			EtsInterfaceNodeName = 21,
 			EtsInterfaceCircuitNaming = 23,
+			CircuitServiceId = 2,
+			CircuitSourceIntf = 8,
+			CircuitDestIntf = 9,
 		}
 
 		public enum CircuitType
@@ -104,7 +108,7 @@
 			var splittedInterfaceName = interfaceName.Split('_');
 			var node = splittedInterfaceName[0];
 			var interfaceNumbering = splittedInterfaceName[1].Replace("eth", String.Empty);
-			return String.Join("_", new[] { interfaceNumbering, node });
+			return String.Join("_", interfaceNumbering, node);
 		}
 
 		public static string GetCircuitNamedItsInterface(string interfaceName)
@@ -112,7 +116,7 @@
 			var splittedInterfaceName = interfaceName.Split('_');
 			var node = splittedInterfaceName[0];
 			var interfaceNumbering = splittedInterfaceName[1].Split('-')[1];
-			return String.Join("_", new[] { interfaceNumbering, node });
+			return String.Join("_", interfaceNumbering, node);
 		}
 	}
 

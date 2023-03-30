@@ -96,7 +96,7 @@ public class Script
 		var capacity = engine.GetScriptParam("Capacity").Value;
 		var hitless = engine.GetScriptParam("1+1").Value;
 
-		var fields = new CreateFieldsJ2k();
+		var fields = new CreateFieldsJ2K();
 
 		fields.ServiceId = hitless.ToLower() == "true" || hitless.ToLower() == "enabled" ? "j2k-hitless" : "j2k";
 
@@ -155,7 +155,7 @@ public class Script
 	}
 }
 
-public class CreateFieldsJ2k
+public class CreateFieldsJ2K
 {
 	[JsonProperty("serviceId")]
 	public string ServiceId { get; set; }
