@@ -34,16 +34,13 @@
 
 		public void LoadFromModel()
 		{
-			view.SourceNode.Options = model.Interfaces.Where(intf => CheckInterfaceCapabilities(intf)).Select(intf => intf.NodeName);
-			view.Engine.GenerateInformation("Source Node");
-			view.DestinationNode.Options = model.Interfaces.Where(intf => CheckInterfaceCapabilities(intf)).Select(intf => intf.NodeName);
-			view.Engine.GenerateInformation("Destination Node");
-			view.SourceInterface.Options = model.Interfaces.Where(intf => CheckInterfaceCapabilities(intf) && intf.NodeName == view.SourceNode.Selected).Select(intf => intf.InterfaceName);
-			view.Engine.GenerateInformation("SourceInterface");
-			view.DestinationInterface.Options = model.Interfaces.Where(intf => CheckInterfaceCapabilities(intf) && intf.NodeName == view.DestinationNode.Selected).Select(intf => intf.InterfaceName);
-			view.Engine.GenerateInformation("DestinationInterface");
+			view.SourceNode.Options = model.Interfaces.Where(intf => CheckInterfaceCapabilities(intf, Utils.InterfaceType.Source)).Select(intf => intf.NodeName);
+			view.DestinationNode.Options = model.Interfaces.Where(intf => CheckInterfaceCapabilities(intf, Utils.InterfaceType.Destination)).Select(intf => intf.NodeName);
 
-			bool CheckInterfaceCapabilities(CircuitCreation.Model.Interface intf)
+			view.SourceInterface.Options = model.Interfaces.Where(intf => CheckInterfaceCapabilities(intf, Utils.InterfaceType.Source) && intf.NodeName == view.SourceNode.Selected).Select(intf => intf.InterfaceName);
+			view.DestinationInterface.Options = model.Interfaces.Where(intf => CheckInterfaceCapabilities(intf, Utils.InterfaceType.Destination) && intf.NodeName == view.DestinationNode.Selected).Select(intf => intf.InterfaceName);
+
+			bool CheckInterfaceCapabilities(CircuitCreation.Model.Interface intf, Utils.InterfaceType inOrOut)
 			{
 				switch (view.CircuitTypeSelector.Selected)
 				{
@@ -51,7 +48,10 @@
 						return intf.Capabilities == "Ethernet";
 					case "JPEG 2000":
 					case "JPEG 2000 1+1 Hitless":
-						return intf.Capabilities.Contains("j2k");
+						if(inOrOut == Utils.InterfaceType.Source)
+							return intf.Capabilities.Contains("j2kEnc");
+
+						return intf.Capabilities.Contains("j2kDec");
 					default:
 						return false;
 				}
@@ -69,11 +69,23 @@
 			var sectionDefinitionLinks = model.DomInstance.GetDomDefinition().SectionDefinitionLinks;
 			FilterElement<SectionDefinition> sectionDefintionfilter = SectionDefinitionExposers.ID.Equal(sectionDefinitionLinks.First().SectionDefinitionID);
 			var sectionDefinition = model.DomHelper.SectionDefinitions.Read(sectionDefintionfilter).First(sd => sd.GetName() == "Circuit Info");
+			var capacity = Convert.ToInt64(Utils.GetFieldValue(model.DomInstance, "Capacity"));
+			long newCapacity = capacity;
+			if (capacity < 0)
+				newCapacity = 50;
+
+			if (view.CircuitTypeSelector.Selected.Contains("JPEG") && capacity < 50)
+				newCapacity = 50;
 
 			model.DomInstance.AddOrUpdateFieldValue(sectionDefinition, sectionDefinition.GetAllFieldDescriptors().First(fd => fd.Name == "Source Node"), view.SourceNode.Selected);
 			model.DomInstance.AddOrUpdateFieldValue(sectionDefinition, sectionDefinition.GetAllFieldDescriptors().First(fd => fd.Name == "Source Interface"), view.SourceInterface.Selected);
 			model.DomInstance.AddOrUpdateFieldValue(sectionDefinition, sectionDefinition.GetAllFieldDescriptors().First(fd => fd.Name == "Destination Node"), view.DestinationNode.Selected);
 			model.DomInstance.AddOrUpdateFieldValue(sectionDefinition, sectionDefinition.GetAllFieldDescriptors().First(fd => fd.Name == "Destination Interface"), view.DestinationInterface.Selected);
+			if(newCapacity != capacity)
+			{
+				model.DomInstance.AddOrUpdateFieldValue(sectionDefinition, sectionDefinition.GetAllFieldDescriptors().First(fd => fd.Name == "Capacity"), newCapacity);
+			}
+
 			model.DomHelper.DomInstances.Update(model.DomInstance);
 			model.DomHelper.DomInstances.DoStatusTransition(model.DomInstance.ID, model.TransitionId);
 			view.Engine.ExitSuccess("Completed Scheduling.");

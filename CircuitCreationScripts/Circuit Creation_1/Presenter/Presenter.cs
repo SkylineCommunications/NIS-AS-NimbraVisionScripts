@@ -41,22 +41,24 @@
 
 		public void LoadFromModel()
 		{
-			view.SourceNode.Options = model.Interfaces.Where(intf => CheckInterfaceCapabilities(intf)).Select(intf => intf.NodeName);
-			view.DestinationNode.Options = model.Interfaces.Where(intf => CheckInterfaceCapabilities(intf)).Select(intf => intf.NodeName);
+			view.SourceNode.Options = model.Interfaces.Where(intf => CheckInterfaceCapabilities(intf, Utils.InterfaceType.Source)).Select(intf => intf.NodeName);
+			view.DestinationNode.Options = model.Interfaces.Where(intf => CheckInterfaceCapabilities(intf, Utils.InterfaceType.Destination)).Select(intf => intf.NodeName);
 
-			view.SourceInterface.Options = model.Interfaces.Where(intf => CheckInterfaceCapabilities(intf) && intf.NodeName == view.SourceNode.Selected).Select(intf => intf.InterfaceName);
-			view.DestinationInterface.Options = model.Interfaces.Where(intf => CheckInterfaceCapabilities(intf) && intf.NodeName == view.DestinationNode.Selected).Select(intf => intf.InterfaceName);
+			view.SourceInterface.Options = model.Interfaces.Where(intf => CheckInterfaceCapabilities(intf, Utils.InterfaceType.Source) && intf.NodeName == view.SourceNode.Selected).Select(intf => intf.InterfaceName);
+			view.DestinationInterface.Options = model.Interfaces.Where(intf => CheckInterfaceCapabilities(intf, Utils.InterfaceType.Destination) && intf.NodeName == view.DestinationNode.Selected).Select(intf => intf.InterfaceName);
 
-			bool CheckInterfaceCapabilities(CircuitCreation.Model.Interface intf)
+			bool CheckInterfaceCapabilities(CircuitCreation.Model.Interface intf, Utils.InterfaceType inOrOut)
 			{
 				switch (view.CircuitTypeSelector.Selected)
 				{
 					case "E-Line":
-					case "E-Line VLAN":
 						return intf.Capabilities == "Ethernet";
 					case "JPEG 2000":
 					case "JPEG 2000 1+1 Hitless":
-						return intf.Capabilities.Contains("j2k");
+						if (inOrOut == Utils.InterfaceType.Source)
+							return intf.Capabilities.Contains("j2kEnc");
+
+						return intf.Capabilities.Contains("j2kDec");
 					default:
 						return false;
 				}

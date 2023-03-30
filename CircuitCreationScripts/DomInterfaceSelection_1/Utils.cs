@@ -9,6 +9,12 @@
 
 	public static class Utils
 	{
+		public enum InterfaceType
+		{
+			Source = 0,
+			Destination = 1,
+		}
+
 		public enum Pids
 		{
 			ItsInterfaceTable = 1600,
@@ -91,6 +97,22 @@
 			}
 
 			return null;
+		}
+
+		public static string GetCircuitNamedEtsInterface(string interfaceName)
+		{
+			var splittedInterfaceName = interfaceName.Split('_');
+			var node = splittedInterfaceName[0];
+			var interfaceNumbering = splittedInterfaceName[1].Replace("eth", String.Empty);
+			return String.Join("_", new[] { interfaceNumbering, node });
+		}
+
+		public static string GetCircuitNamedItsInterface(string interfaceName)
+		{
+			var splittedInterfaceName = interfaceName.Split('_');
+			var node = splittedInterfaceName[0];
+			var interfaceNumbering = splittedInterfaceName[1].Split('-')[1];
+			return String.Join("_", new[] { interfaceNumbering, node });
 		}
 	}
 

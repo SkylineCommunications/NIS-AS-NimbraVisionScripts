@@ -5,6 +5,12 @@
 
 	public static class Utils
 	{
+		public enum InterfaceType
+		{
+			Source = 0,
+			Destination = 1,
+		}
+
 		public enum Pids
 		{
 			ItsInterfaceTable = 1600,

@@ -115,6 +115,7 @@ public class Script
 				break;
 			case "Approve":
 				var requestSent = ConfirmReservationAndCreateCircuit(engine, domInstance);
+				domHelper.DomInstances.Update(domInstance);
 				transitionId = requestSent ? "waiting for approval_to_confirmed" : "waiting for approval_to_rejected";
 				break;
 			case "Reject":
@@ -147,23 +148,41 @@ public class Script
 		controller.Run(view);
 	}
 
-	private bool ConfirmReservationAndCreateCircuit(IEngine engine, DomInstance domInstance)
+	private static void CreateJ2KCircuit(IEngine engine, DateTime startTime, DateTime endTime, string sourceIntf, string destinationIntf, long newCapacity, Utils.CircuitType circuitType)
+	{
+		var now = DateTime.Now;
+		var subscriptJ2k = engine.PrepareSubScript("NimbraVisionJ2000CircuitCreation");
+		subscriptJ2k.SelectScriptParam("Capacity", newCapacity.ToString());
+		subscriptJ2k.SelectScriptParam("Start Time", startTime < now ? "-1" : startTime.ToString("yyyy-MM-ddTHH:mm:ssZ", CultureInfo.InvariantCulture));
+		subscriptJ2k.SelectScriptParam("End Time", endTime.ToString("yyyy-MM-ddTHH:mm:ssZ", CultureInfo.InvariantCulture));
+		subscriptJ2k.SelectScriptParam("Source", Utils.GetCircuitNamedItsInterface(sourceIntf));
+		subscriptJ2k.SelectScriptParam("Destination", Utils.GetCircuitNamedItsInterface(destinationIntf));
+		subscriptJ2k.SelectScriptParam("1+1", circuitType == Utils.CircuitType.J2kHitless ? "enabled" : "no");
+		engine.GenerateInformation("ScriptData: " + JsonConvert.SerializeObject(subscriptJ2k));
+		subscriptJ2k.StartScript();
+	}
+
+	private static void CreateELineCircuit(IEngine engine, DateTime startTime, DateTime endTime, string sourceIntf, string destinationIntf, long newCapacity)
+	{
+		var now = DateTime.Now;
+		var subscriptEline = engine.PrepareSubScript("NimbraVisionBasicCircuitCreation");
+		subscriptEline.SelectScriptParam("Service ID", "E-Line");
+		subscriptEline.SelectScriptParam("Capacity", newCapacity.ToString());
+		subscriptEline.SelectScriptParam("Start Time", startTime < now ? "-1" : startTime.ToString("yyyy-MM-ddTHH:mm:ssZ", CultureInfo.InvariantCulture));
+		subscriptEline.SelectScriptParam("End Time", endTime.ToString("yyyy-MM-ddTHH:mm:ssZ", CultureInfo.InvariantCulture));
+		subscriptEline.SelectScriptParam("Source", Utils.GetCircuitNamedEtsInterface(sourceIntf));
+		subscriptEline.SelectScriptParam("Destination", Utils.GetCircuitNamedEtsInterface(destinationIntf));
+		subscriptEline.StartScript();
+	}
+
+	private static bool ConfirmReservationAndCreateCircuit(IEngine engine, DomInstance domInstance)
 	{
 		Utils.CircuitType circuitType = (Utils.CircuitType)Convert.ToInt32(Utils.GetFieldValue(domInstance, "Circuit Type"));
 		var startTime = Convert.ToDateTime(Utils.GetFieldValue(domInstance, "Start time"));
 		var endTime = Convert.ToDateTime(Utils.GetFieldValue(domInstance, "End time"));
 		var sourceIntf = Convert.ToString(Utils.GetFieldValue(domInstance, "Source Interface"));
 		var destinationIntf = Convert.ToString(Utils.GetFieldValue(domInstance, "Destination Interface"));
-		int capacity;
-		string newCapacity;
-		try
-		{
-			capacity = Convert.ToInt32(Utils.GetFieldValue(domInstance, "Capacity"));
-		}
-		catch
-		{
-			capacity = 50;
-		}
+		long capacity = Convert.ToInt64(Utils.GetFieldValue(domInstance, "Capacity"));
 
 		var now = DateTime.Now;
 
@@ -176,56 +195,15 @@ public class Script
 		switch (circuitType)
 		{
 			case Utils.CircuitType.Eline:
-				newCapacity = capacity <= 0 ? "50" : capacity.ToString();
-				CreateELineCircuit(engine, startTime, endTime, sourceIntf, destinationIntf, newCapacity);
-
-				if (capacity.ToString() != newCapacity)
-				{
-					domInstance.AddOrUpdateFieldValue(SectionDefinition, SectionDefinition.GetAllFieldDescriptors().First(fd => fd.Name == "Capacity"), Convert.ToInt32(newCapacity));
-				}
-
+				CreateELineCircuit(engine, startTime, endTime, sourceIntf, destinationIntf, capacity);
 				return true;
 			case Utils.CircuitType.J2k:
 			case Utils.CircuitType.J2kHitless:
-				newCapacity = capacity < 50 ? "50" : capacity.ToString();
-				CreateJ2KCircuit(engine, startTime, endTime, sourceIntf, destinationIntf, newCapacity, circuitType);
-
-				if (capacity.ToString() != newCapacity)
-				{
-					domInstance.AddOrUpdateFieldValue(SectionDefinition, SectionDefinition.GetAllFieldDescriptors().First(fd => fd.Name == "Capacity"), Convert.ToInt32(newCapacity));
-				}
-
+				CreateJ2KCircuit(engine, startTime, endTime, sourceIntf, destinationIntf, capacity, circuitType);
 				return true;
 			default:
 				engine.GenerateInformation($"Circuit type {circuitType} not supported.");
 				return false;
 		}
-	}
-
-	private static void CreateJ2KCircuit(IEngine engine, DateTime startTime, DateTime endTime, string sourceIntf, string destinationIntf, string newCapacity, Utils.CircuitType circuitType)
-	{
-		var now = DateTime.Now;
-		var subscriptJ2k = engine.PrepareSubScript("NimbraVisionJ2000CircuitCreation");
-		subscriptJ2k.SelectScriptParam("Capacity", newCapacity);
-		subscriptJ2k.SelectScriptParam("Start Time", startTime < now ? "-1" : startTime.ToString("yyyy-MM-ddTHH:mm:ssZ", CultureInfo.InvariantCulture));
-		subscriptJ2k.SelectScriptParam("End Time", endTime.ToString("yyyy-MM-ddTHH:mm:ssZ", CultureInfo.InvariantCulture));
-		subscriptJ2k.SelectScriptParam("Source", Utils.GetCircuitNamedItsInterface(sourceIntf));
-		subscriptJ2k.SelectScriptParam("Destination", Utils.GetCircuitNamedItsInterface(destinationIntf));
-		subscriptJ2k.SelectScriptParam("1+1", circuitType == Utils.CircuitType.J2kHitless ? "enabled" : "no");
-		engine.GenerateInformation("ScriptData: " + JsonConvert.SerializeObject(subscriptJ2k));
-		subscriptJ2k.StartScript();
-	}
-
-	private static void CreateELineCircuit(IEngine engine, DateTime startTime, DateTime endTime, string sourceIntf, string destinationIntf, string newCapacity)
-	{
-		var now = DateTime.Now;
-		var subscriptEline = engine.PrepareSubScript("NimbraVisionBasicCircuitCreation");
-		subscriptEline.SelectScriptParam("Service ID", "E-Line");
-		subscriptEline.SelectScriptParam("Capacity", newCapacity.ToString());
-		subscriptEline.SelectScriptParam("Start Time", startTime < now ? "-1" : startTime.ToString("yyyy-MM-ddTHH:mm:ssZ", CultureInfo.InvariantCulture));
-		subscriptEline.SelectScriptParam("End Time", endTime.ToString("yyyy-MM-ddTHH:mm:ssZ", CultureInfo.InvariantCulture));
-		subscriptEline.SelectScriptParam("Source", Utils.GetCircuitNamedEtsInterface(sourceIntf));
-		subscriptEline.SelectScriptParam("Destination", Utils.GetCircuitNamedEtsInterface(destinationIntf));
-		subscriptEline.StartScript();
 	}
 }
