@@ -52,6 +52,7 @@
 				switch (view.CircuitTypeSelector.Selected)
 				{
 					case "E-Line":
+					case "E-Line VLAN":
 						return intf.Capabilities == "Ethernet";
 					case "JPEG 2000":
 					case "JPEG 2000 1+1 Hitless":
