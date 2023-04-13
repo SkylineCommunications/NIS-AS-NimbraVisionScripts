@@ -45,7 +45,7 @@ Revision History:
 
 DATE		VERSION		AUTHOR			COMMENTS
 
-dd/mm/2023	1.0.0.1		XXX, Skyline	Initial version
+07/04/2023	1.0.0.1		JSV, Skyline	Initial version
 ****************************************************************************
 */
 
@@ -54,6 +54,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using Newtonsoft.Json;
 using Skyline.Automation.CircuitCreation;
 using Skyline.Automation.CircuitCreation.Model;
@@ -61,17 +62,22 @@ using Skyline.Automation.CircuitCreation.Presenter;
 using Skyline.Automation.CircuitCreation.View;
 using Skyline.DataMiner.Automation;
 using Skyline.DataMiner.DeveloperCommunityLibrary.InteractiveAutomationToolkit;
+using Skyline.DataMiner.Library.Automation;
+using Skyline.DataMiner.Library.Common;
 using Skyline.DataMiner.Library.Common.InterAppCalls.CallBulk;
 using Skyline.DataMiner.Library.Common.InterAppCalls.CallSingle;
 using Skyline.DataMiner.Library.Common.Serializing;
 using Skyline.DataMiner.Net.Apps.DataMinerObjectModel;
 using Skyline.DataMiner.Net.Apps.DataMinerObjectModel.Actions;
+using Skyline.DataMiner.Net.Apps.Sections.SectionDefinitions;
 using Skyline.DataMiner.Net.Correlation;
+using Skyline.DataMiner.Net.ManagerStore;
 using Skyline.DataMiner.Net.MasterSync;
 using Skyline.DataMiner.Net.Messages;
 using Skyline.DataMiner.Net.Messages.SLDataGateway;
 using Skyline.DataMiner.Net.ReportsAndDashboards;
 using Skyline.DataMiner.Net.Sections;
+using static Skyline.Automation.CircuitCreation.Utils;
 
 /// <summary>
 /// DataMiner Script Class.
@@ -80,13 +86,55 @@ public class Script
 {
 	public SectionDefinition SectionDefinition { get; set; }
 
+	public DomHelper DomHelper { get; set; }
+
 	/// <summary>
 	/// The Script entry point.
 	/// </summary>
 	/// <param name="engine">Link with SLAutomation process.</param>
 	public void Run(Engine engine)
 	{
-		engine.ExitFail("This script should be executed using the 'OnDomAction' entry point");
+		DomHelper = new DomHelper(engine.SendSLNetMessages, "(netinsight)circuitjobs");
+		var domInstancesCrudHelper = DomHelper.DomInstances;
+		var allDomInstances = domInstancesCrudHelper.ReadAll();
+		DomHelper.StitchDomInstances(allDomInstances);
+
+		var dateTimeNowServer = DateTime.Now;
+
+		// Check End and Start Times to do status transitions.
+		foreach (var domInstance in allDomInstances)
+		{
+			if(domInstance.StatusId == "ongoing")
+			{
+				var endTime = Convert.ToDateTime(GetFieldValue(domInstance, "End time")).ToLocalTime();
+				if(endTime < dateTimeNowServer)
+				{
+					var transitionId = "ongoing_to_completed";
+					DomHelper.DomInstances.DoStatusTransition(domInstance.ID, transitionId);
+				}
+
+				continue;
+			}
+
+			if(domInstance.StatusId == "confirmed")
+			{
+				var startTime = Convert.ToDateTime(GetFieldValue(domInstance, "Start time")).ToLocalTime();
+				engine.GenerateInformation("StartTime: " + startTime);
+				if (startTime < dateTimeNowServer)
+				{
+					var transitionId = "confirmed_to_ongoing";
+					DomHelper.DomInstances.DoStatusTransition(domInstance.ID, transitionId);
+					continue;
+				}
+
+				var endTime = Convert.ToDateTime(GetFieldValue(domInstance, "End time"));
+				if (endTime < dateTimeNowServer)
+				{
+					var transitionId = "confirmed_to_completed";
+					DomHelper.DomInstances.DoStatusTransition(domInstance.ID, transitionId);
+				}
+			}
+		}
 	}
 
 	[AutomationEntryPoint(AutomationEntryPointType.Types.OnDomAction)]
@@ -100,26 +148,46 @@ public class Script
 			engine.ExitFail("Input is not valid");
 		}
 
-		var domHelper = new DomHelper(engine.SendSLNetMessages, instanceId.ModuleId);
+		DomHelper = new DomHelper(engine.SendSLNetMessages, instanceId.ModuleId);
 		string transitionId = string.Empty;
-		DomInstance domInstance = Utils.GetDomInstance(domHelper, instanceId);
+		DomInstance domInstance = Utils.GetDomInstance(DomHelper, instanceId);
 		var sectionDefinitionLinks = domInstance.GetDomDefinition().SectionDefinitionLinks;
 		FilterElement<SectionDefinition> sectionDefintionfilter = SectionDefinitionExposers.ID.Equal(sectionDefinitionLinks.First().SectionDefinitionID);
-		SectionDefinition = domHelper.SectionDefinitions.Read(sectionDefintionfilter).First(sd => sd.GetName() == "Circuit Info");
+		SectionDefinition = DomHelper.SectionDefinitions.Read(sectionDefintionfilter).First(sd => sd.GetName() == "Circuit Info");
 
 		switch (action)
 		{
 			case "Select Interfaces":
 				transitionId = "draft_to_waiting for approval";
-				ScheduleReservation(engine, domInstance, domHelper, transitionId);
+				ScheduleReservation(engine, domInstance, DomHelper, transitionId);
 				break;
 			case "Approve":
 				var requestSent = ConfirmReservationAndCreateCircuit(engine, domInstance);
-				domHelper.DomInstances.Update(domInstance);
-				transitionId = requestSent ? "waiting for approval_to_confirmed" : "waiting for approval_to_rejected";
+				DomHelper.DomInstances.Update(domInstance);
+				if(!requestSent)
+				{
+					transitionId = "waiting for approval_to_rejected";
+					domInstance.AddOrUpdateFieldValue(SectionDefinition, SectionDefinition.GetAllFieldDescriptors().First(fd => fd.Name == "Circuit Notes"), "Circuit Creation wasn't succssful");
+					DomHelper.DomInstances.Update(domInstance);
+				}
+				else
+				{
+					transitionId = "waiting for approval_to_confirmed";
+				}
+
 				break;
 			case "Reject":
 				transitionId = "waiting for approval_to_rejected";
+				break;
+			case "Terminate":
+				transitionId = "ongoing_to_completed";
+				DeleteReservationCircuits(engine, domInstance);
+				DomHelper.DomInstances.Update(domInstance);
+				break;
+			case "Cancel":
+				transitionId = "confirmed_to_cancelled";
+				DeleteReservationCircuits(engine, domInstance);
+				DomHelper.DomInstances.Update(domInstance);
 				break;
 			default:
 				throw new InvalidOperationException($"Action {action} not supported.");
@@ -127,7 +195,7 @@ public class Script
 
 		if (!string.IsNullOrEmpty(transitionId))
 		{
-			domHelper.DomInstances.DoStatusTransition(instanceId, transitionId);
+			DomHelper.DomInstances.DoStatusTransition(instanceId, transitionId);
 		}
 	}
 
@@ -148,41 +216,92 @@ public class Script
 		controller.Run(view);
 	}
 
-	private static void CreateJ2KCircuit(IEngine engine, DateTime startTime, DateTime endTime, string sourceIntf, string destinationIntf, long newCapacity, Utils.CircuitType circuitType)
+	private static bool CreateJ2KCircuit(IEngine engine, DateTime startTime, DateTime endTime, string sourceIntf, string destinationIntf, long newCapacity, Utils.CircuitType circuitType)
 	{
-		var now = DateTime.Now;
-		var subscriptJ2k = engine.PrepareSubScript("NimbraVisionJ2000CircuitCreation");
-		subscriptJ2k.SelectScriptParam("Capacity", newCapacity.ToString());
-		subscriptJ2k.SelectScriptParam("Start Time", startTime < now ? "-1" : startTime.ToString("yyyy-MM-ddTHH:mm:ssZ", CultureInfo.InvariantCulture));
-		subscriptJ2k.SelectScriptParam("End Time", endTime.ToString("yyyy-MM-ddTHH:mm:ssZ", CultureInfo.InvariantCulture));
-		subscriptJ2k.SelectScriptParam("Source", Utils.GetCircuitNamedItsInterface(sourceIntf));
-		subscriptJ2k.SelectScriptParam("Destination", Utils.GetCircuitNamedItsInterface(destinationIntf));
-		subscriptJ2k.SelectScriptParam("1+1", circuitType == Utils.CircuitType.J2kHitless ? "enabled" : "no");
-		engine.GenerateInformation("ScriptData: " + JsonConvert.SerializeObject(subscriptJ2k));
-		subscriptJ2k.StartScript();
+		try
+		{
+			var now = DateTime.Now;
+			var subscriptJ2k = engine.PrepareSubScript("NimbraVisionJ2000CircuitCreation");
+			subscriptJ2k.SelectScriptParam("Capacity", newCapacity.ToString());
+			subscriptJ2k.SelectScriptParam("Start Time", startTime < now ? "-1" : startTime.ToString("yyyy-MM-ddTHH:mm:ssZ", CultureInfo.InvariantCulture));
+			subscriptJ2k.SelectScriptParam("End Time", endTime.ToString("yyyy-MM-ddTHH:mm:ssZ", CultureInfo.InvariantCulture));
+			subscriptJ2k.SelectScriptParam("Source", GetCircuitNamedItsInterface(sourceIntf));
+			subscriptJ2k.SelectScriptParam("Destination", GetCircuitNamedItsInterface(destinationIntf));
+			subscriptJ2k.SelectScriptParam("1+1", circuitType == CircuitType.J2kHitless ? "enabled" : "no");
+			subscriptJ2k.StartScript();
+
+			return ValidateCircuitCreation(engine, circuitType, sourceIntf, destinationIntf);
+		}
+		catch
+		{
+			return false;
+		}
 	}
 
-	private static void CreateELineCircuit(IEngine engine, DateTime startTime, DateTime endTime, string sourceIntf, string destinationIntf, long newCapacity)
+	private static bool CreateELineCircuit(IEngine engine, DateTime startTime, DateTime endTime, string sourceIntf, string destinationIntf, long newCapacity)
 	{
-		var now = DateTime.Now;
-		var subscriptEline = engine.PrepareSubScript("NimbraVisionBasicCircuitCreation");
-		subscriptEline.SelectScriptParam("Service ID", "E-Line");
-		subscriptEline.SelectScriptParam("Capacity", newCapacity.ToString());
-		subscriptEline.SelectScriptParam("Start Time", startTime < now ? "-1" : startTime.ToString("yyyy-MM-ddTHH:mm:ssZ", CultureInfo.InvariantCulture));
-		subscriptEline.SelectScriptParam("End Time", endTime.ToString("yyyy-MM-ddTHH:mm:ssZ", CultureInfo.InvariantCulture));
-		subscriptEline.SelectScriptParam("Source", Utils.GetCircuitNamedEtsInterface(sourceIntf));
-		subscriptEline.SelectScriptParam("Destination", Utils.GetCircuitNamedEtsInterface(destinationIntf));
-		subscriptEline.StartScript();
+		try
+		{
+			var now = DateTime.Now;
+			var subscriptEline = engine.PrepareSubScript("NimbraVisionBasicCircuitCreation");
+			subscriptEline.SelectScriptParam("Service ID", "E-Line");
+			subscriptEline.SelectScriptParam("Capacity", newCapacity.ToString());
+			subscriptEline.SelectScriptParam("Start Time", startTime < now ? "-1" : startTime.ToString("yyyy-MM-ddTHH:mm:ssZ", CultureInfo.InvariantCulture));
+			subscriptEline.SelectScriptParam("End Time", endTime.ToString("yyyy-MM-ddTHH:mm:ssZ", CultureInfo.InvariantCulture));
+			subscriptEline.SelectScriptParam("Source", GetCircuitNamedEtsInterface(sourceIntf));
+			subscriptEline.SelectScriptParam("Destination", GetCircuitNamedEtsInterface(destinationIntf));
+			subscriptEline.StartScript();
+			return ValidateCircuitCreation(engine, CircuitType.Eline, sourceIntf, destinationIntf);
+		}
+		catch
+		{
+			return false;
+		}
+	}
+
+	private static bool ValidateCircuitCreation(IEngine engine, CircuitType circuitType, string sourceIntf, string destinationIntf)
+	{
+		var dms = engine.GetDms() ?? throw new NullReferenceException("dms");
+		var nimbraElement = dms.GetElements()
+						 .FirstOrDefault(elem => elem.Protocol.Name == "NetInsight Nimbra Vision" && elem.Protocol.Version == "Production") ?? throw new NullReferenceException("Nimbra Vision");
+
+		var circuitTable = nimbraElement.GetTable((int)Pids.CircuitTable);
+		string translatedSourceIntf = String.Empty;
+		string translatedDestinationIntf = String.Empty;
+
+		if (circuitType == CircuitType.Eline)
+		{
+			translatedDestinationIntf = GetCircuitNamedEtsInterface(Convert.ToString(destinationIntf));
+			translatedSourceIntf = GetCircuitNamedEtsInterface(Convert.ToString(sourceIntf));
+		}
+		else
+		{
+			translatedDestinationIntf = GetCircuitNamedItsInterface(Convert.ToString(destinationIntf));
+			translatedSourceIntf = GetCircuitNamedItsInterface(Convert.ToString(sourceIntf));
+		}
+
+		for (int i = 0; i < NumberOfRetries; i++)
+		{
+			var row = circuitTable.GetData()
+						 .FirstOrDefault(kv => Convert.ToString(kv.Value[(int)Idx.CircuitSourceIntf]) == translatedSourceIntf && Convert.ToString(kv.Value[(int)Idx.CircuitDestIntf]) == translatedDestinationIntf);
+			if (row.Key != null)
+				return true;
+
+			Thread.Sleep(SleepTime);
+			circuitTable = nimbraElement.GetTable((int)Pids.CircuitTable);
+		}
+
+		return false;
 	}
 
 	private static bool ConfirmReservationAndCreateCircuit(IEngine engine, DomInstance domInstance)
 	{
-		Utils.CircuitType circuitType = (Utils.CircuitType)Convert.ToInt32(Utils.GetFieldValue(domInstance, "Circuit Type"));
-		var startTime = Convert.ToDateTime(Utils.GetFieldValue(domInstance, "Start time"));
-		var endTime = Convert.ToDateTime(Utils.GetFieldValue(domInstance, "End time"));
-		var sourceIntf = Convert.ToString(Utils.GetFieldValue(domInstance, "Source Interface"));
-		var destinationIntf = Convert.ToString(Utils.GetFieldValue(domInstance, "Destination Interface"));
-		long capacity = Convert.ToInt64(Utils.GetFieldValue(domInstance, "Capacity"));
+		CircuitType circuitType = (CircuitType)Convert.ToInt32(GetFieldValue(domInstance, "Circuit Type"));
+		var startTime = Convert.ToDateTime(GetFieldValue(domInstance, "Start time"));
+		var endTime = Convert.ToDateTime(GetFieldValue(domInstance, "End time"));
+		var sourceIntf = Convert.ToString(GetFieldValue(domInstance, "Source Interface"));
+		var destinationIntf = Convert.ToString(GetFieldValue(domInstance, "Destination Interface"));
+		long capacity = Convert.ToInt64(GetFieldValue(domInstance, "Capacity"));
 
 		var now = DateTime.Now;
 
@@ -194,16 +313,71 @@ public class Script
 
 		switch (circuitType)
 		{
-			case Utils.CircuitType.Eline:
-				CreateELineCircuit(engine, startTime, endTime, sourceIntf, destinationIntf, capacity);
-				return true;
-			case Utils.CircuitType.J2k:
-			case Utils.CircuitType.J2kHitless:
-				CreateJ2KCircuit(engine, startTime, endTime, sourceIntf, destinationIntf, capacity, circuitType);
-				return true;
+			case CircuitType.Eline:
+				if(CreateELineCircuit(engine, startTime, endTime, sourceIntf, destinationIntf, capacity))
+				{
+					return true;
+				}
+
+				return false;
+			case CircuitType.J2k:
+			case CircuitType.J2kHitless:
+				if (CreateJ2KCircuit(engine, startTime, endTime, sourceIntf, destinationIntf, capacity, circuitType))
+				{
+					return true;
+				}
+
+				return false;
 			default:
 				engine.GenerateInformation($"Circuit type {circuitType} not supported.");
 				return false;
+		}
+	}
+
+	private void DeleteReservationCircuits(IEngine engine, DomInstance domInstance)
+	{
+		try
+		{
+			var sourceInterface = GetFieldValue(domInstance, "Source Interface");
+			var destinationInterface = GetFieldValue(domInstance, "Destination Interface");
+			string translatedSourceIntf = String.Empty;
+			string translatedDestinationIntf = String.Empty;
+			var circuitType = (CircuitType)Convert.ToInt32(GetFieldValue(domInstance, "Circuit Type"));
+
+			if (circuitType == CircuitType.Eline)
+			{
+				translatedDestinationIntf = GetCircuitNamedEtsInterface(Convert.ToString(destinationInterface));
+				translatedSourceIntf = GetCircuitNamedEtsInterface(Convert.ToString(sourceInterface));
+			}
+			else
+			{
+				translatedDestinationIntf = GetCircuitNamedItsInterface(Convert.ToString(destinationInterface));
+				translatedSourceIntf = GetCircuitNamedItsInterface(Convert.ToString(sourceInterface));
+			}
+
+			var dms = engine.GetDms() ?? throw new NullReferenceException("dms");
+			var nimbraElement = dms.GetElements()
+							 .FirstOrDefault(elem => elem.Protocol.Name == "NetInsight Nimbra Vision" && elem.Protocol.Version == "Production") ?? throw new NullReferenceException("Nimbra Vision");
+
+			var circuitTable = nimbraElement.GetTable((int)Pids.CircuitTable);
+
+			var rowToDelete = circuitTable.GetData()
+								.FirstOrDefault(kv => Convert.ToString(kv.Value[(int)Idx.CircuitSourceIntf]) == translatedSourceIntf && Convert.ToString(kv.Value[(int)Idx.CircuitDestIntf]) == translatedDestinationIntf);
+
+			IInterAppCall deleteCommand = InterAppCallFactory.CreateNew();
+			DeleteCircuitMessage basicCircuitDeleteMessage = new DeleteCircuitMessage { SharedId = Convert.ToString(rowToDelete.Value[(int)Utils.Idx.CircuitsSharedId]) };
+			deleteCommand.Messages.Add(basicCircuitDeleteMessage);
+			deleteCommand.Send(Engine.SLNetRaw, nimbraElement.DmsElementId.AgentId, nimbraElement.DmsElementId.ElementId, 9000000, Utils.KnownTypes);
+
+			var sectionDefinitionLinks = domInstance.GetDomDefinition().SectionDefinitionLinks;
+			FilterElement<SectionDefinition> sectionDefintionfilter = SectionDefinitionExposers.ID.Equal(sectionDefinitionLinks.First().SectionDefinitionID);
+			var sectionDefinition = DomHelper.SectionDefinitions.Read(sectionDefintionfilter).First(sd => sd.GetName() == "Circuit Info");
+
+			domInstance.AddOrUpdateFieldValue(sectionDefinition, sectionDefinition.GetAllFieldDescriptors().First(fd => fd.Name == "End Time"), DateTime.Now);
+		}
+		catch(Exception e)
+		{
+			engine.GenerateInformation("Couldn't complete deletion. Exception: " + e);
 		}
 	}
 }

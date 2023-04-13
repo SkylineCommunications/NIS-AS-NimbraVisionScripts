@@ -50,6 +50,7 @@
 				j2kInterfacesInUse.Add(Convert.ToString(row[(int)Utils.Idx.CircuitSourceIntf]));
 				j2kInterfacesInUse.Add(Convert.ToString(row[(int)Utils.Idx.CircuitDestIntf]));
 			}
+
 			var etsRows = etsIntfTable.GetRows();
 			foreach (var etsRow in etsRows)
 			{

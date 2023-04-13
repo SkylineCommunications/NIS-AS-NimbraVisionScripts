@@ -3,12 +3,20 @@
 	using System;
 	using System.Collections.Generic;
 	using System.Linq;
+	using Skyline.DataMiner.CommunityLibrary.FlowProvisioning.Info;
+	using Skyline.DataMiner.Library.Common.InterAppCalls.CallSingle;
 	using Skyline.DataMiner.Net.Apps.DataMinerObjectModel;
 	using Skyline.DataMiner.Net.Messages.SLDataGateway;
 	using Skyline.DataMiner.Net.Sections;
 
 	public static class Utils
 	{
+		public static readonly int NumberOfRetries = 60;
+
+		public static readonly int SleepTime = 1000;
+
+		public static readonly List<Type> KnownTypes = new List<Type> { typeof(FlowInfoMessage), typeof(DeleteCircuitMessage) };
+
 		public enum InterfaceType
 		{
 			Source = 0,
@@ -35,6 +43,7 @@
 			CircuitServiceId = 2,
 			CircuitSourceIntf = 8,
 			CircuitDestIntf = 9,
+			CircuitsSharedId = 1,
 		}
 
 		public enum CircuitType
@@ -141,5 +150,10 @@
 		public int ButtonHeight => buttonHeight;
 
 		public List<string> SupportedCircuitTypes => supportedCircuitTypes;
+	}
+
+	public class DeleteCircuitMessage : Message
+	{
+		public string SharedId { get; set; }
 	}
 }

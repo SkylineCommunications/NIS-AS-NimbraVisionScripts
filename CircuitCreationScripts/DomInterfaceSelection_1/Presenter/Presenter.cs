@@ -74,8 +74,8 @@
 			if (capacity < 0)
 				newCapacity = 50;
 
-			if (view.CircuitTypeSelector.Selected.Contains("JPEG") && capacity < 50)
-				newCapacity = 50;
+			if (view.CircuitTypeSelector.Selected.Contains("JPEG") && capacity < 150)
+				newCapacity = 150;
 
 			model.DomInstance.AddOrUpdateFieldValue(sectionDefinition, sectionDefinition.GetAllFieldDescriptors().First(fd => fd.Name == "Source Node"), view.SourceNode.Selected);
 			model.DomInstance.AddOrUpdateFieldValue(sectionDefinition, sectionDefinition.GetAllFieldDescriptors().First(fd => fd.Name == "Source Interface"), view.SourceInterface.Selected);

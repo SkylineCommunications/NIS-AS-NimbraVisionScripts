@@ -69,6 +69,9 @@
     <PackageReference Include="Skyline.DataMiner.Files.SLNetTypes">
       <Version>10.3.3.1</Version>
     </PackageReference>
+    <PackageReference Include="SLC.CLib.FlowProvisioning">
+      <Version>1.0.2.2</Version>
+    </PackageReference>
     <PackageReference Include="SLC.CLib.IASToolkit">
       <Version>1.0.7.2</Version>
     </PackageReference>
@@ -94,7 +97,7 @@
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <ProjectExtensions>
     <VisualStudio>
-      <UserProperties DisLinkedXmlFile="..\DomInterfaceSelection.xml" DisProjectType="automationScriptProject" DisLinkId="1" />
+      <UserProperties DisLinkId="1" DisProjectType="automationScriptProject" DisLinkedXmlFile="..\DomInterfaceSelection.xml" />
     </VisualStudio>
   </ProjectExtensions>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
