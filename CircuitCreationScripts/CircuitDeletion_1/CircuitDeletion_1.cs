@@ -52,6 +52,7 @@ dd/mm/2023	1.0.0.1		XXX, Skyline	Initial version
 using System;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
+using System.Threading;
 using Skyline.DataMiner.Automation;
 using Skyline.DataMiner.CommunityLibrary.FlowProvisioning.Info;
 using Skyline.DataMiner.Library.Automation;
@@ -63,12 +64,12 @@ using Skyline.DataMiner.Library.Common.InterAppCalls.CallSingle;
 /// </summary>
 public class Script
 {
+	private static readonly List<Type> KnownTypes = new List<Type> { typeof(FlowInfoMessage), typeof(DeleteCircuitMessage) };
+
 	public enum Pids
 	{
 		CircuitsTable = 1800,
 	}
-
-	private static readonly List<Type> KnownTypes = new List<Type> { typeof(FlowInfoMessage), typeof(DeleteCircuitMessage) };
 
 	public static Element ValidateAndReturnElement(Engine engine, string elementName)
 	{
@@ -103,6 +104,8 @@ public class Script
 			return;
 		}
 
+		engine.GenerateInformation("Interface Name: " + intfName);
+
 		var dms = engine.GetDms();
 		var idmsElement = dms.GetElement(element.ElementName);
 		var circuitsTable = idmsElement.GetTable((int)Pids.CircuitsTable);
@@ -127,6 +130,8 @@ public class Script
 		engine.GenerateInformation(String.Join(";", sharedIds));
 
 		deleteCommand.Send(Engine.SLNetRaw, idmsElement.DmsElementId.AgentId, idmsElement.DmsElementId.ElementId, 9000000, KnownTypes);
+
+		Thread.Sleep(1500);
 	}
 }
 

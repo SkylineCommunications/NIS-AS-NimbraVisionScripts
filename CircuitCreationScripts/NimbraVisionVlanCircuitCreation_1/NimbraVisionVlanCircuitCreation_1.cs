@@ -63,6 +63,25 @@ using Skyline.DataMiner.Net.Messages;
 /// </summary>
 public class Script
 {
+	public static Element ValidateAndReturnElement(Engine engine, string elementName)
+	{
+		var element = engine.FindElement("Nimbra Vision");
+
+		if (element == null)
+		{
+			engine.ExitFail("Element Nimbra Vision does not exist!");
+			return null;
+		}
+
+		if (element.ElementInfo.State != Skyline.DataMiner.Net.Messages.ElementState.Active)
+		{
+			engine.ExitFail("Element Nimbra Vision is not in Active state");
+			return null;
+		}
+
+		return element;
+	}
+
 	/// <summary>
 	/// The Script entry point.
 	/// </summary>
@@ -136,7 +155,7 @@ public class Script
 
 		fields.ExtraInfo = new CreateFields.Extra();
 		fields.ExtraInfo.Common = new CreateFields.Common();
-		fields.ExtraInfo.Common.VLAN = integerVlan;
+		fields.ExtraInfo.Common.Vlan = integerVlan;
 
 		if (String.IsNullOrEmpty(formName) || String.IsNullOrWhiteSpace(formName))
 		{
@@ -149,25 +168,6 @@ public class Script
 		ValidateAndReturnElement(engine, "Nimbra Vision").SetParameter(125, JsonConvert.SerializeObject(fields));
 
 		engine.ExitSuccess("Sent request to Nimbra Vision element.");
-	}
-
-	public static Element ValidateAndReturnElement(Engine engine, string elementName)
-	{
-		var element = engine.FindElement("Nimbra Vision");
-
-		if (element == null)
-		{
-			engine.ExitFail("Element Nimbra Vision does not exist!");
-			return null;
-		}
-
-		if (element.ElementInfo.State != Skyline.DataMiner.Net.Messages.ElementState.Active)
-		{
-			engine.ExitFail("Element Nimbra Vision is not in Active state");
-			return null;
-		}
-
-		return element;
 	}
 
 	public class CreateFields
@@ -212,7 +212,8 @@ public class Script
 		public class Common
 		{
 			[JsonProperty("VLANs")]
-			public int VLAN { get; set; }
+			public int Vlan { get; set; }
+
 			public string FormName { get; set; }
 		}
 	}

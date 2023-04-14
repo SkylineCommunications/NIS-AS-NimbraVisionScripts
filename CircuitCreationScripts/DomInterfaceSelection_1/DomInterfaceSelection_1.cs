@@ -119,7 +119,6 @@ public class Script
 			if(domInstance.StatusId == "confirmed")
 			{
 				var startTime = Convert.ToDateTime(GetFieldValue(domInstance, "Start time")).ToLocalTime();
-				engine.GenerateInformation("StartTime: " + startTime);
 				if (startTime < dateTimeNowServer)
 				{
 					var transitionId = "confirmed_to_ongoing";
@@ -181,12 +180,12 @@ public class Script
 				break;
 			case "Terminate":
 				transitionId = "ongoing_to_completed";
-				DeleteReservationCircuits(engine, domInstance);
+				DeleteReservationCircuits(engine, domInstance, transitionId);
 				DomHelper.DomInstances.Update(domInstance);
 				break;
 			case "Cancel":
 				transitionId = "confirmed_to_cancelled";
-				DeleteReservationCircuits(engine, domInstance);
+				DeleteReservationCircuits(engine, domInstance, transitionId);
 				DomHelper.DomInstances.Update(domInstance);
 				break;
 			default:
@@ -334,7 +333,7 @@ public class Script
 		}
 	}
 
-	private void DeleteReservationCircuits(IEngine engine, DomInstance domInstance)
+	private void DeleteReservationCircuits(IEngine engine, DomInstance domInstance, string transitionId)
 	{
 		try
 		{
@@ -373,7 +372,14 @@ public class Script
 			FilterElement<SectionDefinition> sectionDefintionfilter = SectionDefinitionExposers.ID.Equal(sectionDefinitionLinks.First().SectionDefinitionID);
 			var sectionDefinition = DomHelper.SectionDefinitions.Read(sectionDefintionfilter).First(sd => sd.GetName() == "Circuit Info");
 
-			domInstance.AddOrUpdateFieldValue(sectionDefinition, sectionDefinition.GetAllFieldDescriptors().First(fd => fd.Name == "End Time"), DateTime.Now);
+			if(transitionId == "ongoing_to_completed")
+			{
+				domInstance.AddOrUpdateFieldValue(sectionDefinition, sectionDefinition.GetAllFieldDescriptors().First(fd => fd.Name == "End time"), DateTime.Now);
+			}
+			else
+			{
+				domInstance.AddOrUpdateFieldValue(sectionDefinition, sectionDefinition.GetAllFieldDescriptors().First(fd => fd.Name == "End time"), Utils.GetFieldValue(domInstance, "Start time"));
+			}
 		}
 		catch(Exception e)
 		{

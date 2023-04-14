@@ -77,6 +77,15 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Actions", "Actions", "{1DBB
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DomInterfaceSelection_1", "DomInterfaceSelection_1\DomInterfaceSelection_1.csproj", "{CFDF988E-6488-48D5-8AD7-9C8798025F6D}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "VisionToEdgeOrchestration", "VisionToEdgeOrchestration", "{AACCFC0E-97B7-4624-9594-D3F16DBFCD11}"
+	ProjectSection(SolutionItems) = preProject
+		VisionToEdgeOrchestration.xml = VisionToEdgeOrchestration.xml
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Actions", "Actions", "{0854EAFE-7274-42FD-8400-D15A2DA72540}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VisionToEdgeOrchestration_1", "VisionToEdgeOrchestration_1\VisionToEdgeOrchestration_1.csproj", "{0E8563B8-224F-4284-B2BE-37E12B8B5CB8}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -107,6 +116,10 @@ Global
 		{CFDF988E-6488-48D5-8AD7-9C8798025F6D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CFDF988E-6488-48D5-8AD7-9C8798025F6D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{CFDF988E-6488-48D5-8AD7-9C8798025F6D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0E8563B8-224F-4284-B2BE-37E12B8B5CB8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0E8563B8-224F-4284-B2BE-37E12B8B5CB8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0E8563B8-224F-4284-B2BE-37E12B8B5CB8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0E8563B8-224F-4284-B2BE-37E12B8B5CB8}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -131,6 +144,9 @@ Global
 		{470D9C66-E474-4A3A-8C4F-E0BE329D531D} = {16B0F393-674A-4B6C-91CB-CF687FEFAC83}
 		{1DBBA11C-C454-4167-B6D1-617A7C904749} = {470D9C66-E474-4A3A-8C4F-E0BE329D531D}
 		{CFDF988E-6488-48D5-8AD7-9C8798025F6D} = {1DBBA11C-C454-4167-B6D1-617A7C904749}
+		{AACCFC0E-97B7-4624-9594-D3F16DBFCD11} = {16B0F393-674A-4B6C-91CB-CF687FEFAC83}
+		{0854EAFE-7274-42FD-8400-D15A2DA72540} = {AACCFC0E-97B7-4624-9594-D3F16DBFCD11}
+		{0E8563B8-224F-4284-B2BE-37E12B8B5CB8} = {0854EAFE-7274-42FD-8400-D15A2DA72540}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {DB43C6F2-5491-4648-AD2C-ACEE95415159}

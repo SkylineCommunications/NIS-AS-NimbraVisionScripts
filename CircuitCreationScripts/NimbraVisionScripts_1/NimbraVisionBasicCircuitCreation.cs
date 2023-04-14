@@ -137,9 +137,6 @@ public class Script
 			return;
 		}
 
-		if (startTime == "-1")
-			startTime = DateTime.UtcNow.AddMinutes(1).ToString("yyyy-MM-ddTHH:mm:ssZ");
-
 		fields.StartTime = startTime;
 
 		if (endTime != "-1" && !DateTime.TryParseExact(endTime, "yyyy-MM-ddTHH:mm:ssZ", CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTime stopTimeDate))
