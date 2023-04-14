@@ -302,7 +302,7 @@ public class Script
 		var destinationIntf = Convert.ToString(GetFieldValue(domInstance, "Destination Interface"));
 		long capacity = Convert.ToInt64(GetFieldValue(domInstance, "Capacity"));
 
-		var now = DateTime.Now;
+		var now = DateTime.UtcNow;
 
 		if (endTime < now || endTime < startTime)
 		{

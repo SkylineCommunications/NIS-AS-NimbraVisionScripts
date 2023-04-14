@@ -75,7 +75,7 @@ public class Script
 
 	private readonly int numberOfRetries = 60;
 	private readonly int sleepTime = 1000;
-	private readonly int defaultCapacity = 150;
+	private readonly int defaultCapacity = 50;
 
 	private string visionDestIntf;
 	private string edgeInput;
