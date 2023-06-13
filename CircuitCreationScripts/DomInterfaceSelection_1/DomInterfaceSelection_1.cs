@@ -258,6 +258,28 @@ public class Script
 		}
 	}
 
+	private static bool CreateJxsCircuit(IEngine engine, DateTime startTime, DateTime endTime, string sourceIntf, string destinationIntf, long newCapacity, Utils.CircuitType circuitType)
+	{
+		try
+		{
+			var now = DateTime.Now;
+			var subscriptJ2k = engine.PrepareSubScript("NimbraVisionJxsCircuitCreation");
+			subscriptJ2k.SelectScriptParam("Capacity", newCapacity.ToString());
+			subscriptJ2k.SelectScriptParam("Start Time", startTime < now ? "-1" : startTime.ToString("yyyy-MM-ddTHH:mm:ssZ", CultureInfo.InvariantCulture));
+			subscriptJ2k.SelectScriptParam("End Time", endTime.ToString("yyyy-MM-ddTHH:mm:ssZ", CultureInfo.InvariantCulture));
+			subscriptJ2k.SelectScriptParam("Source", GetCircuitNamedItsInterface(sourceIntf));
+			subscriptJ2k.SelectScriptParam("Destination", GetCircuitNamedItsInterface(destinationIntf));
+			subscriptJ2k.SelectScriptParam("1+1", circuitType == CircuitType.JxsHitless ? "enabled" : "no");
+			subscriptJ2k.StartScript();
+
+			return ValidateCircuitCreation(engine, circuitType, sourceIntf, destinationIntf);
+		}
+		catch
+		{
+			return false;
+		}
+	}
+
 	private static bool ValidateCircuitCreation(IEngine engine, CircuitType circuitType, string sourceIntf, string destinationIntf)
 	{
 		var dms = engine.GetDms() ?? throw new NullReferenceException("dms");
@@ -322,6 +344,14 @@ public class Script
 			case CircuitType.J2k:
 			case CircuitType.J2kHitless:
 				if (CreateJ2KCircuit(engine, startTime, endTime, sourceIntf, destinationIntf, capacity, circuitType))
+				{
+					return true;
+				}
+
+				return false;
+			case CircuitType.Jxs:
+			case CircuitType.JxsHitless:
+				if(CreateJxsCircuit(engine, startTime, endTime, sourceIntf, destinationIntf, capacity, circuitType))
 				{
 					return true;
 				}

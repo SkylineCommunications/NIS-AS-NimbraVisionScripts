@@ -1,0 +1,44 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<DMSScript options="272" xmlns="http://www.skyline.be/automation">
+	<Name>NimbraVisionJxsCircuitCreation</Name>
+	<Description></Description>
+	<Type>Automation</Type>
+	<Author>SKYLINE2\JoaoSV</Author>
+	<CheckSets>FALSE</CheckSets>
+	<Folder>NimbraOrch</Folder>
+
+	<Protocols>
+	</Protocols>
+
+	<Memory>
+	</Memory>
+
+	<Parameters>
+		<ScriptParameter id="2" type="string" values="">
+			<Description>Start Time</Description>
+		</ScriptParameter>
+		<ScriptParameter id="3" type="string" values="">
+			<Description>End Time</Description>
+		</ScriptParameter>
+		<ScriptParameter id="4" type="string" values="">
+			<Description>Source</Description>
+		</ScriptParameter>
+		<ScriptParameter id="5" type="string" values="">
+			<Description>Destination</Description>
+		</ScriptParameter>
+		<ScriptParameter id="6" type="string" values="">
+			<Description>Capacity</Description>
+		</ScriptParameter>
+		<ScriptParameter id="7" type="string" values="">
+			<Description>1+1</Description>
+		</ScriptParameter>
+	</Parameters>
+
+	<Script>
+		<Exe id="1" type="csharp">
+			<Value><![CDATA[[Project:NimbraVisionJxsCircuitCreation_1]]]></Value>
+			<!--<Param type="debug">true</Param>-->
+			<Message></Message>
+		</Exe>
+	</Script>
+</DMSScript>

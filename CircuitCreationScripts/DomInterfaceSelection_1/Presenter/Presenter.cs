@@ -52,6 +52,12 @@
 							return intf.Capabilities.Contains("j2kEnc");
 
 						return intf.Capabilities.Contains("j2kDec");
+					case "JPEG-XS":
+					case "JPEG-XS 1+1 Hitless":
+						if(inOrOut == Utils.InterfaceType.Source)
+							return intf.Capabilities.Contains("jxse");
+
+						return intf.Capabilities.Contains("jxsd");
 					default:
 						return false;
 				}

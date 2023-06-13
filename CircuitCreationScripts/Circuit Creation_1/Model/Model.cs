@@ -40,7 +40,6 @@
 			var itsIntfTable = nimbraVisionElement.GetTable((int)Utils.Pids.ItsInterfaceTable);
 			var circuitsTable = nimbraVisionElement.GetTable((int)Utils.Pids.CircuitTable);
 
-
 			var circuitRows = circuitsTable.GetRows();
 			HashSet<string> j2kInterfacesInUse = new HashSet<string>();
 			foreach (var row in from row in circuitRows
@@ -49,6 +48,15 @@
 			{
 				j2kInterfacesInUse.Add(Convert.ToString(row[(int)Utils.Idx.CircuitSourceIntf]));
 				j2kInterfacesInUse.Add(Convert.ToString(row[(int)Utils.Idx.CircuitDestIntf]));
+			}
+
+			HashSet<string> jxsInterfacesInUse = new HashSet<string>();
+			foreach (var row in from row in circuitRows
+								where Convert.ToString(row[(int)Utils.Idx.CircuitServiceId]).Contains("jxs")
+								select row)
+			{
+				jxsInterfacesInUse.Add(Convert.ToString(row[(int)Utils.Idx.CircuitSourceIntf]));
+				jxsInterfacesInUse.Add(Convert.ToString(row[(int)Utils.Idx.CircuitDestIntf]));
 			}
 
 			var etsRows = etsIntfTable.GetRows();
@@ -75,6 +83,9 @@
 				var circuitCreationInterfaceName = Utils.GetCircuitNamedItsInterface(Convert.ToString(itsRow[0]));
 
 				if (j2kInterfacesInUse.Contains(circuitCreationInterfaceName))
+					continue;
+
+				if (jxsInterfacesInUse.Contains(circuitCreationInterfaceName))
 					continue;
 
 				interfaces.Add(new Interface

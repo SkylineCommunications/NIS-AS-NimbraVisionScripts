@@ -61,6 +61,15 @@
 				j2kInterfacesInUse.Add(Convert.ToString(row[(int)Utils.Idx.CircuitDestIntf]));
 			}
 
+			HashSet<string> jxsInterfacesInUse = new HashSet<string>();
+			foreach (var row in from row in circuitRows
+								where Convert.ToString(row[(int)Utils.Idx.CircuitServiceId]).Contains("jxs")
+								select row)
+			{
+				jxsInterfacesInUse.Add(Convert.ToString(row[(int)Utils.Idx.CircuitSourceIntf]));
+				jxsInterfacesInUse.Add(Convert.ToString(row[(int)Utils.Idx.CircuitDestIntf]));
+			}
+
 			var etsRows = etsIntfTable.GetRows();
 			foreach (var etsRow in etsRows)
 			{
@@ -85,6 +94,9 @@
 				var circuitCreationInterfaceName = Utils.GetCircuitNamedItsInterface(Convert.ToString(itsRow[0]));
 
 				if (j2kInterfacesInUse.Contains(circuitCreationInterfaceName))
+					continue;
+
+				if (jxsInterfacesInUse.Contains(circuitCreationInterfaceName))
 					continue;
 
 				interfaces.Add(new Interface

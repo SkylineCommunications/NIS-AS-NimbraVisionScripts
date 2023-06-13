@@ -28,6 +28,12 @@
 				case Utils.CircuitType.J2kHitless:
 					circuitTypeStr = "JPEG 2000 1+1 Hitless";
 					break;
+				case Utils.CircuitType.Jxs:
+					circuitTypeStr = "JPEG-XS";
+					break;
+				case Utils.CircuitType.JxsHitless:
+					circuitTypeStr = "JPEG-XS 1+1 Hitless";
+					break;
 				default:
 					circuitTypeStr = "E-Line";
 					break;

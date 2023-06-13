@@ -51,6 +51,8 @@
 			Eline = 0,
 			J2k = 1,
 			J2kHitless = 2,
+			Jxs = 3,
+			JxsHitless = 4,
 		}
 
 		public static bool ValidateArguments(DomInstanceId domInstanceId, string scriptParamValue)
@@ -137,6 +139,8 @@
 			"E-Line VLAN",
 			"JPEG 2000",
 			"JPEG 2000 1+1 Hitless",
+			"JPEG-XS",
+			"JPEG-XS 1+1 Hitless",
 		};
 
 		private readonly int labelWidth = 250;

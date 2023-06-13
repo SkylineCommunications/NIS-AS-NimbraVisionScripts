@@ -26,6 +26,8 @@
 				{ "E-Line VLAN", CreateELineVlanCircuit() },
 				{ "JPEG 2000", CreateJ2KCircuit() },
 				{ "JPEG 2000 1+1 Hitless", CreateJ2KCircuit() },
+				{ "JPEG-XS", CreateJxsCircuit() },
+				{ "JPEG-XS 1+1 Hitless", CreateJxsCircuit() },
 			};
 
 			view.CircuitTypeSelector.Changed += UpdateUI;
@@ -60,6 +62,12 @@
 							return intf.Capabilities.Contains("j2kEnc");
 
 						return intf.Capabilities.Contains("j2kDec");
+					case "JPEG-XS":
+					case "JPEG-XS 1+1 Hitless":
+						if (inOrOut == Utils.InterfaceType.Source)
+							return intf.Capabilities.Contains("jxse");
+
+						return intf.Capabilities.Contains("jxsd");
 					default:
 						return false;
 				}
@@ -67,6 +75,12 @@
 
 			if (view.CircuitTypeSelector.Selected.Contains("JPEG 2000"))
 				view.Capacity.Value = 50;
+
+			if (view.CircuitTypeSelector.Selected.Equals("JPEG-XS"))
+				view.Capacity.Value = 103;
+
+			if (view.CircuitTypeSelector.Selected.Equals("JPEG-XS 1+1 Hitless"))
+				view.Capacity.Value = 125;
 		}
 
 		private static void ShowResult(IEngine engine, string result)
@@ -177,6 +191,45 @@
 				}
 			};
 		}
+
+		private Func<bool> CreateJxsCircuit()
+		{
+			return () =>
+			{
+				try
+				{
+					var createFields = new J2kRequestModel
+					{
+						ServiceId = view.CircuitTypeSelector.Selected == "JPEG-XS 1+1 Hitless" ? "jxs-hitless" : "jxs",
+						Capacity = Convert.ToInt32(view.Capacity.Value),
+						Destination = model.Interfaces.First(intf => intf.InterfaceName == view.DestinationInterface.Selected).CircuitCreationInterfaceName,
+						Source = model.Interfaces.First(intf => intf.InterfaceName == view.SourceInterface.Selected).CircuitCreationInterfaceName,
+						StartTime = view.NoStartTime.IsChecked ? DateTime.MinValue : view.StartTime.DateTime,
+						EndTime = view.NoEndTime.IsChecked ? DateTime.MinValue : view.StopTime.DateTime,
+						ProtectionId = view.CircuitTypeSelector.Selected == "JPEG-XS 1+1 Hitless" ? 1 : -1,
+					};
+
+					view.Engine.FindElement(model.NimbraVisionElement.Name).SetParameter(
+						125,
+						JsonConvert.SerializeObject(
+							createFields,
+							Formatting.Indented,
+							new JsonSerializerSettings
+							{
+								NullValueHandling = NullValueHandling.Ignore,
+								Culture = CultureInfo.InvariantCulture,
+								DateTimeZoneHandling = DateTimeZoneHandling.Utc,
+							}));
+
+					return true;
+				}
+				catch
+				{
+					return false;
+				}
+			};
+		}
+
 
 		private Func<bool> CreateELineVlanCircuit()
 		{

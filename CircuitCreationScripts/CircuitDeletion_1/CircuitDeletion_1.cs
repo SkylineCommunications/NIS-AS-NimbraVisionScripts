@@ -97,7 +97,7 @@ public class Script
 	public void Run(Engine engine)
 	{
 		var intfName = Regex.Replace(engine.GetScriptParam("Interface Name").Value, @"[\[\]]", String.Empty).Split(',')[0].Replace("\"", String.Empty);
-		var element = ValidateAndReturnElement(engine, "Nimbra Vision");
+		var element = ValidateAndReturnElement(engine, "NetInsight Nimbra Vision");
 		if(element == null)
 		{
 			engine.ExitFail("Couldn't find element named Nimbra Vision");

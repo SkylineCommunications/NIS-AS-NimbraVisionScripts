@@ -66,7 +66,7 @@ public class Script
 {
 	public static Element ValidateAndReturnElement(Engine engine, string elementName)
 	{
-		var element = engine.FindElement("Nimbra Vision");
+		var element = engine.FindElement("NetInsight Nimbra Vision");
 
 		if (element == null)
 		{
