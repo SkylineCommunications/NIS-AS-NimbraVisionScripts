@@ -1,0 +1,2 @@
+C:\Users\joaosv\Source\Repos\SkylineCommunications\NimbraVisionScripts\CircuitCreationScripts\CircuitCreationIntegrationTest_1\obj\Debug\CircuitCreationIntegrationTest_1.csproj.AssemblyReference.cache
+C:\Users\joaosv\Source\Repos\SkylineCommunications\NimbraVisionScripts\CircuitCreationScripts\CircuitCreationIntegrationTest_1\obj\Debug\CircuitCreationIntegrationTest_1.csproj.CoreCompileInputs.cache
