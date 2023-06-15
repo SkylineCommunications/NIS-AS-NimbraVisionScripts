@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\joaosv\\Source\\Repos\\SkylineCommunications\\NimbraVisionScripts\\CircuitCreationScripts\\VisionToEdgeOrchestration_1\\VisionToEdgeOrchestration_1.csproj": {}
+    "C:\\Users\\joaosv\\Source\\Repos\\SkylineCommunications\\NimbraVisionScripts\\VisionToEdgeOrchestration_1\\VisionToEdgeOrchestration_1.csproj": {}
   },
   "projects": {
-    "C:\\Users\\joaosv\\Source\\Repos\\SkylineCommunications\\NimbraVisionScripts\\CircuitCreationScripts\\VisionToEdgeOrchestration_1\\VisionToEdgeOrchestration_1.csproj": {
+    "C:\\Users\\joaosv\\Source\\Repos\\SkylineCommunications\\NimbraVisionScripts\\VisionToEdgeOrchestration_1\\VisionToEdgeOrchestration_1.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\joaosv\\Source\\Repos\\SkylineCommunications\\NimbraVisionScripts\\CircuitCreationScripts\\VisionToEdgeOrchestration_1\\VisionToEdgeOrchestration_1.csproj",
+        "projectUniqueName": "C:\\Users\\joaosv\\Source\\Repos\\SkylineCommunications\\NimbraVisionScripts\\VisionToEdgeOrchestration_1\\VisionToEdgeOrchestration_1.csproj",
         "projectName": "VisionToEdgeOrchestration_1",
-        "projectPath": "C:\\Users\\joaosv\\Source\\Repos\\SkylineCommunications\\NimbraVisionScripts\\CircuitCreationScripts\\VisionToEdgeOrchestration_1\\VisionToEdgeOrchestration_1.csproj",
+        "projectPath": "C:\\Users\\joaosv\\Source\\Repos\\SkylineCommunications\\NimbraVisionScripts\\VisionToEdgeOrchestration_1\\VisionToEdgeOrchestration_1.csproj",
         "packagesPath": "C:\\Users\\joaosv\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\joaosv\\Source\\Repos\\SkylineCommunications\\NimbraVisionScripts\\CircuitCreationScripts\\VisionToEdgeOrchestration_1\\obj\\",
+        "outputPath": "C:\\Users\\joaosv\\Source\\Repos\\SkylineCommunications\\NimbraVisionScripts\\VisionToEdgeOrchestration_1\\obj\\",
         "projectStyle": "PackageReference",
         "skipContentFileWrite": true,
         "configFilePaths": [

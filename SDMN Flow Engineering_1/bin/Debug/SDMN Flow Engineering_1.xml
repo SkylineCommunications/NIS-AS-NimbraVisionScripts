@@ -4,14 +4,14 @@
         <name>SDMN Flow Engineering_1</name>
     </assembly>
     <members>
-        <member name="T:SDMN_Flow_Engineering_1.Script">
+        <member name="T:Script">
             <summary>
-            Represents a DataMiner Automation script.
+            DataMiner Script Class.
             </summary>
         </member>
-        <member name="M:SDMN_Flow_Engineering_1.Script.Run(Skyline.DataMiner.Automation.IEngine)">
+        <member name="M:Script.Run(Skyline.DataMiner.Automation.Engine)">
             <summary>
-            The script entry point.
+            The Script entry point.
             </summary>
             <param name="engine">Link with SLAutomation process.</param>
         </member>

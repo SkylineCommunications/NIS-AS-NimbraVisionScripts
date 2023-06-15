@@ -11,7 +11,7 @@
 
 	public static class Utils
 	{
-		public static readonly int NumberOfRetries = 60;
+		public static readonly int NumberOfRetries = 15;
 
 		public static readonly int SleepTime = 1000;
 

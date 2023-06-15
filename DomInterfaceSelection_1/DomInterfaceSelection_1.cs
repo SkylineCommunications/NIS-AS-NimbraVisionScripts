@@ -71,6 +71,8 @@ using Skyline.DataMiner.Net.Apps.DataMinerObjectModel;
 using Skyline.DataMiner.Net.Apps.DataMinerObjectModel.Actions;
 using Skyline.DataMiner.Net.Apps.Sections.SectionDefinitions;
 using Skyline.DataMiner.Net.Correlation;
+using Skyline.DataMiner.Net.History;
+using Skyline.DataMiner.Net.LogHelpers;
 using Skyline.DataMiner.Net.ManagerStore;
 using Skyline.DataMiner.Net.MasterSync;
 using Skyline.DataMiner.Net.Messages;
@@ -162,18 +164,48 @@ public class Script
 				break;
 			case "Approve":
 				var requestSent = ConfirmReservationAndCreateCircuit(engine, domInstance);
-				DomHelper.DomInstances.Update(domInstance);
 				if(!requestSent)
 				{
 					transitionId = "waiting for approval_to_rejected";
 					domInstance.AddOrUpdateFieldValue(SectionDefinition, SectionDefinition.GetAllFieldDescriptors().First(fd => fd.Name == "Circuit Notes"), "Circuit Creation wasn't succssful");
-					DomHelper.DomInstances.Update(domInstance);
+					var ui = new UIBuilder
+					{
+						Title = "Circuit Creation",
+						RequireResponse = true,
+						RowDefs = "50;50",
+						ColumnDefs = "*;200;*",
+						Height = 150,
+						Width = 300,
+					};
+
+					ui.AppendBlock(new UIBlockDefinition
+					{
+						Column = 1,
+						ColumnSpan = 1,
+						Row = 0,
+						RowSpan = 1,
+						Type = UIBlockType.StaticText,
+						Text = "Circuit Creation wasn't succssful" + "\r\n",
+					});
+
+					ui.AppendBlock(new UIBlockDefinition
+					{
+						Column = 1,
+						ColumnSpan = 1,
+						Row = 1,
+						RowSpan = 1,
+						Text = "Dismiss",
+						Type = UIBlockType.Button,
+					});
+
+					engine.ShowUI(ui);
 				}
 				else
 				{
 					transitionId = "waiting for approval_to_confirmed";
 				}
 
+				DomHelper.DomInstances.Update(domInstance);
 				break;
 			case "Reject":
 				transitionId = "waiting for approval_to_rejected";

@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\joaosv\\Source\\Repos\\SkylineCommunications\\NimbraVisionScripts\\CircuitCreationScripts\\NimbraVisionScripts_1\\NimbraVisionBasicCircuitCreation.csproj": {}
+    "C:\\Users\\joaosv\\Source\\Repos\\SkylineCommunications\\NimbraVisionScripts\\NimbraVisionScripts_1\\NimbraVisionBasicCircuitCreation.csproj": {}
   },
   "projects": {
-    "C:\\Users\\joaosv\\Source\\Repos\\SkylineCommunications\\NimbraVisionScripts\\CircuitCreationScripts\\NimbraVisionScripts_1\\NimbraVisionBasicCircuitCreation.csproj": {
+    "C:\\Users\\joaosv\\Source\\Repos\\SkylineCommunications\\NimbraVisionScripts\\NimbraVisionScripts_1\\NimbraVisionBasicCircuitCreation.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\joaosv\\Source\\Repos\\SkylineCommunications\\NimbraVisionScripts\\CircuitCreationScripts\\NimbraVisionScripts_1\\NimbraVisionBasicCircuitCreation.csproj",
+        "projectUniqueName": "C:\\Users\\joaosv\\Source\\Repos\\SkylineCommunications\\NimbraVisionScripts\\NimbraVisionScripts_1\\NimbraVisionBasicCircuitCreation.csproj",
         "projectName": "NimbraVisionScripts_1",
-        "projectPath": "C:\\Users\\joaosv\\Source\\Repos\\SkylineCommunications\\NimbraVisionScripts\\CircuitCreationScripts\\NimbraVisionScripts_1\\NimbraVisionBasicCircuitCreation.csproj",
+        "projectPath": "C:\\Users\\joaosv\\Source\\Repos\\SkylineCommunications\\NimbraVisionScripts\\NimbraVisionScripts_1\\NimbraVisionBasicCircuitCreation.csproj",
         "packagesPath": "C:\\Users\\joaosv\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\joaosv\\Source\\Repos\\SkylineCommunications\\NimbraVisionScripts\\CircuitCreationScripts\\NimbraVisionScripts_1\\obj\\",
+        "outputPath": "C:\\Users\\joaosv\\Source\\Repos\\SkylineCommunications\\NimbraVisionScripts\\NimbraVisionScripts_1\\obj\\",
         "projectStyle": "PackageReference",
         "skipContentFileWrite": true,
         "configFilePaths": [
