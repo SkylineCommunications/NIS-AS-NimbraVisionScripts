@@ -50,39 +50,51 @@ DATE		VERSION		AUTHOR			COMMENTS
 */
 
 using System;
-using System.Collections.Generic;
 using System.Globalization;
-using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading;
 using Newtonsoft.Json;
 using Skyline.DataMiner.Automation;
-using Skyline.DataMiner.Net;
+
+public class CreateFieldsJ2K
+{
+	[JsonProperty("capacity")]
+	public int Capacity { get; set; }
+
+	[JsonProperty("destination")]
+	public string Destination { get; set; }
+
+	[JsonProperty("endTime")]
+	public string EndTime { get; set; }
+
+	[JsonProperty("protectionId")]
+	public int ProtectionId { get; set; }
+
+	[JsonProperty("serviceId")]
+	public string ServiceId { get; set; }
+
+	[JsonProperty("source")]
+	public string Source { get; set; }
+
+	[JsonProperty("startTime")]
+	public string StartTime { get; set; }
+
+	public bool ShouldSerializeEndTime()
+	{
+		return EndTime != "-1";
+	}
+
+	public bool ShouldSerializeStartTime()
+	{
+		return StartTime != "-1";
+	}
+}
 
 /// <summary>
 /// DataMiner Script Class.
 /// </summary>
 public class Script
 {
-	public static Element ValidateAndReturnElement(Engine engine, string elementName)
-	{
-		var element = engine.FindElement("NetInsight Nimbra Vision");
-
-		if (element == null)
-		{
-			engine.ExitFail("Element Nimbra Vision does not exist!");
-			return null;
-		}
-
-		if (element.ElementInfo.State != Skyline.DataMiner.Net.Messages.ElementState.Active)
-		{
-			engine.ExitFail("Element Nimbra Vision is not in Active state");
-			return null;
-		}
-
-		return element;
-	}
-
 	/// <summary>
 	/// The Script entry point.
 	/// </summary>
@@ -147,44 +159,42 @@ public class Script
 
 		engine.GenerateInformation(JsonConvert.SerializeObject(fields));
 
-		ValidateAndReturnElement(engine, "Nimbra Vision").SetParameter(125, JsonConvert.SerializeObject(fields));
+		ValidateAndReturnElement(engine).SetParameter(125, JsonConvert.SerializeObject(fields));
 
 		Thread.Sleep(5000);
 
 		engine.ExitSuccess("Sent request to Nimbra Vision element.");
 	}
-}
 
-public class CreateFieldsJ2K
-{
-	[JsonProperty("serviceId")]
-	public string ServiceId { get; set; }
-
-	[JsonProperty("source")]
-	public string Source { get; set; }
-
-	[JsonProperty("destination")]
-	public string Destination { get; set; }
-
-	[JsonProperty("capacity")]
-	public int Capacity { get; set; }
-
-	[JsonProperty("startTime")]
-	public string StartTime { get; set; }
-
-	[JsonProperty("endTime")]
-	public string EndTime { get; set; }
-
-	[JsonProperty("protectionId")]
-	public int ProtectionId { get; set; }
-
-	public bool ShouldSerializeStartTime()
+	private static string ParseParamValue(string paramValueRaw)
 	{
-		return StartTime != "-1";
+		// Checking first characters
+		var firstCharacters = "[\"";
+		var paramValue = (paramValueRaw.Substring(0, 2) == firstCharacters) ?
+			paramValueRaw.Substring(2, paramValueRaw.Length - 4) :
+			paramValueRaw;
+
+		return paramValue;
 	}
 
-	public bool ShouldSerializeEndTime()
+	private static Element ValidateAndReturnElement(Engine engine)
 	{
-		return EndTime != "-1";
+		var paramValueRaw = engine.GetScriptParam("ElementName").Value;
+		var elementName = ParseParamValue(paramValueRaw);
+		var element = engine.FindElement(elementName);
+
+		if (element == null)
+		{
+			engine.ExitFail("Element Nimbra Vision does not exist!");
+			return null;
+		}
+
+		if (element.ElementInfo.State != Skyline.DataMiner.Net.Messages.ElementState.Active)
+		{
+			engine.ExitFail("Element Nimbra Vision is not in Active state");
+			return null;
+		}
+
+		return element;
 	}
 }

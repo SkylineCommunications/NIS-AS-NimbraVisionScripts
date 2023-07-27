@@ -8,12 +8,12 @@
 	using Skyline.Automation.CircuitCreation.Model;
 	using Skyline.Automation.CircuitCreation.View;
 	using Skyline.DataMiner.Automation;
-	using Skyline.DataMiner.DeveloperCommunityLibrary.InteractiveAutomationToolkit;
 	using Skyline.DataMiner.Net;
 	using Skyline.DataMiner.Net.Apps.DataMinerObjectModel;
 	using Skyline.DataMiner.Net.LogHelpers;
 	using Skyline.DataMiner.Net.Messages.SLDataGateway;
 	using Skyline.DataMiner.Net.Sections;
+	using Skyline.DataMiner.Utils.InteractiveAutomationScript;
 
 	public class Presenter
 	{

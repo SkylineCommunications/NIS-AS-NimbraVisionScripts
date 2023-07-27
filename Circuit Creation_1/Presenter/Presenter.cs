@@ -8,8 +8,7 @@
 	using Skyline.Automation.CircuitCreation.Model;
 	using Skyline.Automation.CircuitCreation.View;
 	using Skyline.DataMiner.Automation;
-	using Skyline.DataMiner.DeveloperCommunityLibrary.InteractiveAutomationToolkit;
-	using Skyline.DataMiner.Net;
+	using Skyline.DataMiner.Utils.InteractiveAutomationScript;
 
 	public class Presenter
 	{
@@ -56,18 +55,21 @@
 					case "E-Line":
 					case "E-Line VLAN":
 						return intf.Capabilities == "Ethernet";
+
 					case "JPEG 2000":
 					case "JPEG 2000 1+1 Hitless":
 						if (inOrOut == Utils.InterfaceType.Source)
 							return intf.Capabilities.Contains("j2kEnc");
 
 						return intf.Capabilities.Contains("j2kDec");
+
 					case "JPEG-XS":
 					case "JPEG-XS 1+1 Hitless":
 						if (inOrOut == Utils.InterfaceType.Source)
 							return intf.Capabilities.Contains("jxse");
 
 						return intf.Capabilities.Contains("jxsd");
+
 					default:
 						return false;
 				}
@@ -229,7 +231,6 @@
 				}
 			};
 		}
-
 
 		private Func<bool> CreateELineVlanCircuit()
 		{

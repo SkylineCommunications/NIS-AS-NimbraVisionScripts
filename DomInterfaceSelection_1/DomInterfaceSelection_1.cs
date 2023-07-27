@@ -50,35 +50,23 @@ DATE		VERSION		AUTHOR			COMMENTS
 */
 
 using System;
-using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
-using System.Text;
 using System.Threading;
-using Newtonsoft.Json;
 using Skyline.Automation.CircuitCreation;
 using Skyline.Automation.CircuitCreation.Model;
 using Skyline.Automation.CircuitCreation.Presenter;
 using Skyline.Automation.CircuitCreation.View;
 using Skyline.DataMiner.Automation;
-using Skyline.DataMiner.DeveloperCommunityLibrary.InteractiveAutomationToolkit;
-using Skyline.DataMiner.Library.Automation;
+using Skyline.DataMiner.Core.DataMinerSystem.Automation;
 using Skyline.DataMiner.Library.Common;
 using Skyline.DataMiner.Library.Common.InterAppCalls.CallBulk;
-using Skyline.DataMiner.Library.Common.InterAppCalls.CallSingle;
-using Skyline.DataMiner.Library.Common.Serializing;
 using Skyline.DataMiner.Net.Apps.DataMinerObjectModel;
 using Skyline.DataMiner.Net.Apps.DataMinerObjectModel.Actions;
-using Skyline.DataMiner.Net.Apps.Sections.SectionDefinitions;
-using Skyline.DataMiner.Net.Correlation;
-using Skyline.DataMiner.Net.History;
-using Skyline.DataMiner.Net.LogHelpers;
 using Skyline.DataMiner.Net.ManagerStore;
-using Skyline.DataMiner.Net.MasterSync;
-using Skyline.DataMiner.Net.Messages;
 using Skyline.DataMiner.Net.Messages.SLDataGateway;
-using Skyline.DataMiner.Net.ReportsAndDashboards;
 using Skyline.DataMiner.Net.Sections;
+using Skyline.DataMiner.Utils.InteractiveAutomationScript;
 using static Skyline.Automation.CircuitCreation.Utils;
 
 /// <summary>
@@ -86,6 +74,8 @@ using static Skyline.Automation.CircuitCreation.Utils;
 /// </summary>
 public class Script
 {
+	public const string NimbraVisionElementName = "Nimbra Vision";
+
 	public SectionDefinition SectionDefinition { get; set; }
 
 	public DomHelper DomHelper { get; set; }
@@ -106,10 +96,10 @@ public class Script
 		// Check End and Start Times to do status transitions.
 		foreach (var domInstance in allDomInstances)
 		{
-			if(domInstance.StatusId == "ongoing")
+			if (domInstance.StatusId == "ongoing")
 			{
 				var endTime = Convert.ToDateTime(GetFieldValue(domInstance, "End time")).ToLocalTime();
-				if(endTime < dateTimeNowServer)
+				if (endTime < dateTimeNowServer)
 				{
 					var transitionId = "ongoing_to_completed";
 					DomHelper.DomInstances.DoStatusTransition(domInstance.ID, transitionId);
@@ -118,7 +108,7 @@ public class Script
 				continue;
 			}
 
-			if(domInstance.StatusId == "confirmed")
+			if (domInstance.StatusId == "confirmed")
 			{
 				var startTime = Convert.ToDateTime(GetFieldValue(domInstance, "Start time")).ToLocalTime();
 				if (startTime < dateTimeNowServer)
@@ -162,9 +152,10 @@ public class Script
 				transitionId = "draft_to_waiting for approval";
 				ScheduleReservation(engine, domInstance, DomHelper, transitionId);
 				break;
+
 			case "Approve":
 				var requestSent = ConfirmReservationAndCreateCircuit(engine, domInstance);
-				if(!requestSent)
+				if (!requestSent)
 				{
 					transitionId = "waiting for approval_to_rejected";
 					domInstance.AddOrUpdateFieldValue(SectionDefinition, SectionDefinition.GetAllFieldDescriptors().First(fd => fd.Name == "Circuit Notes"), "Circuit Creation wasn't succssful");
@@ -207,19 +198,23 @@ public class Script
 
 				DomHelper.DomInstances.Update(domInstance);
 				break;
+
 			case "Reject":
 				transitionId = "waiting for approval_to_rejected";
 				break;
+
 			case "Terminate":
 				transitionId = "ongoing_to_completed";
 				DeleteReservationCircuits(engine, domInstance, transitionId);
 				DomHelper.DomInstances.Update(domInstance);
 				break;
+
 			case "Cancel":
 				transitionId = "confirmed_to_cancelled";
 				DeleteReservationCircuits(engine, domInstance, transitionId);
 				DomHelper.DomInstances.Update(domInstance);
 				break;
+
 			default:
 				throw new InvalidOperationException($"Action {action} not supported.");
 		}
@@ -237,7 +232,7 @@ public class Script
 		// engine.ShowUI(); - this comment is needed for Interactive UI to work
 		var controller = new InteractiveController(engine);
 		var settings = new Settings();
-		var model = new Model(engine, domInstance, domHelper, transitionId);
+		var model = new Model(engine, domInstance, domHelper, transitionId, NimbraVisionElementName);
 		var view = new View(engine, settings, circuitType);
 		var presenter = new Presenter(view, model);
 
@@ -259,6 +254,7 @@ public class Script
 			subscriptJ2k.SelectScriptParam("Source", GetCircuitNamedItsInterface(sourceIntf));
 			subscriptJ2k.SelectScriptParam("Destination", GetCircuitNamedItsInterface(destinationIntf));
 			subscriptJ2k.SelectScriptParam("1+1", circuitType == CircuitType.J2kHitless ? "enabled" : "no");
+			subscriptJ2k.SelectScriptParam("ElementName", NimbraVisionElementName);
 			subscriptJ2k.StartScript();
 
 			return ValidateCircuitCreation(engine, circuitType, sourceIntf, destinationIntf);
@@ -281,6 +277,7 @@ public class Script
 			subscriptEline.SelectScriptParam("End Time", endTime.ToString("yyyy-MM-ddTHH:mm:ssZ", CultureInfo.InvariantCulture));
 			subscriptEline.SelectScriptParam("Source", GetCircuitNamedEtsInterface(sourceIntf));
 			subscriptEline.SelectScriptParam("Destination", GetCircuitNamedEtsInterface(destinationIntf));
+			subscriptEline.SelectScriptParam("ElementName", NimbraVisionElementName);
 			subscriptEline.StartScript();
 			return ValidateCircuitCreation(engine, CircuitType.Eline, sourceIntf, destinationIntf);
 		}
@@ -302,6 +299,7 @@ public class Script
 			subscriptJ2k.SelectScriptParam("Source", GetCircuitNamedItsInterface(sourceIntf));
 			subscriptJ2k.SelectScriptParam("Destination", GetCircuitNamedItsInterface(destinationIntf));
 			subscriptJ2k.SelectScriptParam("1+1", circuitType == CircuitType.JxsHitless ? "enabled" : "no");
+			subscriptJ2k.SelectScriptParam("ElementName", NimbraVisionElementName);
 			subscriptJ2k.StartScript();
 
 			return ValidateCircuitCreation(engine, circuitType, sourceIntf, destinationIntf);
@@ -315,8 +313,7 @@ public class Script
 	private static bool ValidateCircuitCreation(IEngine engine, CircuitType circuitType, string sourceIntf, string destinationIntf)
 	{
 		var dms = engine.GetDms() ?? throw new NullReferenceException("dms");
-		var nimbraElement = dms.GetElements()
-						 .FirstOrDefault(elem => elem.Protocol.Name == "NetInsight Nimbra Vision" && elem.Protocol.Version == "Production") ?? throw new NullReferenceException("Nimbra Vision");
+		var nimbraElement = dms.GetElement(NimbraVisionElementName);
 
 		var circuitTable = nimbraElement.GetTable((int)Pids.CircuitTable);
 		string translatedSourceIntf = String.Empty;
@@ -367,12 +364,13 @@ public class Script
 		switch (circuitType)
 		{
 			case CircuitType.Eline:
-				if(CreateELineCircuit(engine, startTime, endTime, sourceIntf, destinationIntf, capacity))
+				if (CreateELineCircuit(engine, startTime, endTime, sourceIntf, destinationIntf, capacity))
 				{
 					return true;
 				}
 
 				return false;
+
 			case CircuitType.J2k:
 			case CircuitType.J2kHitless:
 				if (CreateJ2KCircuit(engine, startTime, endTime, sourceIntf, destinationIntf, capacity, circuitType))
@@ -381,14 +379,16 @@ public class Script
 				}
 
 				return false;
+
 			case CircuitType.Jxs:
 			case CircuitType.JxsHitless:
-				if(CreateJxsCircuit(engine, startTime, endTime, sourceIntf, destinationIntf, capacity, circuitType))
+				if (CreateJxsCircuit(engine, startTime, endTime, sourceIntf, destinationIntf, capacity, circuitType))
 				{
 					return true;
 				}
 
 				return false;
+
 			default:
 				engine.GenerateInformation($"Circuit type {circuitType} not supported.");
 				return false;
@@ -417,8 +417,7 @@ public class Script
 			}
 
 			var dms = engine.GetDms() ?? throw new NullReferenceException("dms");
-			var nimbraElement = dms.GetElements()
-							 .FirstOrDefault(elem => elem.Protocol.Name == "NetInsight Nimbra Vision" && elem.Protocol.Version == "Production") ?? throw new NullReferenceException("Nimbra Vision");
+			var nimbraElement = dms.GetElement(NimbraVisionElementName);
 
 			var circuitTable = nimbraElement.GetTable((int)Pids.CircuitTable);
 
@@ -434,7 +433,7 @@ public class Script
 			FilterElement<SectionDefinition> sectionDefintionfilter = SectionDefinitionExposers.ID.Equal(sectionDefinitionLinks.First().SectionDefinitionID);
 			var sectionDefinition = DomHelper.SectionDefinitions.Read(sectionDefintionfilter).First(sd => sd.GetName() == "Circuit Info");
 
-			if(transitionId == "ongoing_to_completed")
+			if (transitionId == "ongoing_to_completed")
 			{
 				domInstance.AddOrUpdateFieldValue(sectionDefinition, sectionDefinition.GetAllFieldDescriptors().First(fd => fd.Name == "End time"), DateTime.Now);
 			}
@@ -443,7 +442,7 @@ public class Script
 				domInstance.AddOrUpdateFieldValue(sectionDefinition, sectionDefinition.GetAllFieldDescriptors().First(fd => fd.Name == "End time"), Utils.GetFieldValue(domInstance, "Start time"));
 			}
 		}
-		catch(Exception e)
+		catch (Exception e)
 		{
 			engine.GenerateInformation("Couldn't complete deletion. Exception: " + e);
 		}

@@ -55,9 +55,14 @@ using System.Text.RegularExpressions;
 using System.Threading;
 using Skyline.DataMiner.Automation;
 using Skyline.DataMiner.CommunityLibrary.FlowProvisioning.Info;
-using Skyline.DataMiner.Library.Automation;
+using Skyline.DataMiner.Core.DataMinerSystem.Automation;
 using Skyline.DataMiner.Library.Common.InterAppCalls.CallBulk;
 using Skyline.DataMiner.Library.Common.InterAppCalls.CallSingle;
+
+public class DeleteCircuitMessage : Message
+{
+	public string SharedId { get; set; }
+}
 
 /// <summary>
 /// DataMiner Script Class.
@@ -71,25 +76,6 @@ public class Script
 		CircuitsTable = 1800,
 	}
 
-	public static Element ValidateAndReturnElement(Engine engine, string elementName)
-	{
-		var element = engine.FindElement(elementName);
-
-		if (element == null)
-		{
-			engine.ExitFail("Element Nimbra Vision does not exist!");
-			return null;
-		}
-
-		if (element.ElementInfo.State != Skyline.DataMiner.Net.Messages.ElementState.Active)
-		{
-			engine.ExitFail("Element Nimbra Vision is not in Active state");
-			return null;
-		}
-
-		return element;
-	}
-
 	/// <summary>
 	/// The Script entry point.
 	/// </summary>
@@ -97,8 +83,9 @@ public class Script
 	public void Run(Engine engine)
 	{
 		var intfName = Regex.Replace(engine.GetScriptParam("Interface Name").Value, @"[\[\]]", String.Empty).Split(',')[0].Replace("\"", String.Empty);
-		var element = ValidateAndReturnElement(engine, "NetInsight Nimbra Vision");
-		if(element == null)
+		var element = ValidateAndReturnElement(engine);
+
+		if (element == null)
 		{
 			engine.ExitFail("Couldn't find element named Nimbra Vision");
 			return;
@@ -114,7 +101,7 @@ public class Script
 
 		foreach (var row in rows)
 		{
-			if(Convert.ToString(row[8]) == intfName || Convert.ToString(row[9]) == intfName)
+			if (Convert.ToString(row[8]) == intfName || Convert.ToString(row[9]) == intfName)
 			{
 				sharedIds.Add(Convert.ToString(row[1]));
 			}
@@ -133,9 +120,36 @@ public class Script
 
 		Thread.Sleep(1500);
 	}
-}
 
-public class DeleteCircuitMessage : Message
-{
-	public string SharedId { get; set; }
+	private static string ParseParamValue(string paramValueRaw)
+	{
+		// Checking first characters
+		var firstCharacters = "[\"";
+		var paramValue = (paramValueRaw.Substring(0, 2) == firstCharacters) ?
+			paramValueRaw.Substring(2, paramValueRaw.Length - 4) :
+			paramValueRaw;
+
+		return paramValue;
+	}
+
+	private static Element ValidateAndReturnElement(Engine engine)
+	{
+		var paramValueRaw = engine.GetScriptParam("ElementName").Value;
+		var elementName = ParseParamValue(paramValueRaw);
+		var element = engine.FindElement(elementName);
+
+		if (element == null)
+		{
+			engine.ExitFail("Element Nimbra Vision does not exist!");
+			return null;
+		}
+
+		if (element.ElementInfo.State != Skyline.DataMiner.Net.Messages.ElementState.Active)
+		{
+			engine.ExitFail("Element Nimbra Vision is not in Active state");
+			return null;
+		}
+
+		return element;
+	}
 }

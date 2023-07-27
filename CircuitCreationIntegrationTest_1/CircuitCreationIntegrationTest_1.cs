@@ -51,25 +51,17 @@ dd/mm/2023	1.0.0.1		XXX, Skyline	Initial version
 
 using System;
 using System.Collections.Generic;
-using System.Configuration;
-using System.Globalization;
 using System.Linq;
-using System.Runtime.Remoting.Messaging;
-using System.Text;
 using System.Threading;
-using CircuitCreationIntegrationTest_1;
-using Newtonsoft.Json;
 using QAPortalAPI.APIHelper;
-using QAPortalAPI.Enums;
 using QAPortalAPI.Models.ReportingModels;
 using Skyline.DataMiner.Automation;
 using Skyline.DataMiner.CommunityLibrary.FlowProvisioning.Info;
-using Skyline.DataMiner.Library.Automation;
-using Skyline.DataMiner.Library.Common;
+using Skyline.DataMiner.Core.DataMinerSystem.Automation;
+using Skyline.DataMiner.Core.DataMinerSystem.Common;
 using Skyline.DataMiner.Library.Common.InterAppCalls.CallBulk;
 using Skyline.DataMiner.Library.Common.InterAppCalls.CallSingle;
 using Skyline.DataMiner.Net.Helper;
-using Skyline.DataMiner.Net.Serialization;
 
 /// <summary>
 /// DataMiner Script Class.
@@ -110,7 +102,8 @@ public class Script
 			new TestSystemInfo(agentName));
 
 		var nimbraElement = dms.GetElement(nimbraElementName);
-		if (nimbraElement == null || nimbraElement.State != Skyline.DataMiner.Library.Common.ElementState.Active)
+		if (nimbraElement == null ||
+			nimbraElement.State != ElementState.Active)
 		{
 			engine.GenerateInformation("Nimbra element is null or not active.");
 			engine.ExitFail("Nimbra element is null or not active.");

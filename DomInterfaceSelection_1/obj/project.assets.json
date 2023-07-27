@@ -5,27 +5,45 @@
       "Newtonsoft.Json/13.0.3": {
         "type": "package",
         "compile": {
-          "lib/net45/Newtonsoft.Json.dll": {
-            "related": ".xml"
-          }
+          "lib/net45/Newtonsoft.Json.dll": {}
         },
         "runtime": {
-          "lib/net45/Newtonsoft.Json.dll": {
-            "related": ".xml"
-          }
+          "lib/net45/Newtonsoft.Json.dll": {}
         }
       },
       "SharpZipLib/1.3.3": {
         "type": "package",
         "compile": {
-          "lib/net45/_._": {
-            "related": ".pdb;.xml"
-          }
+          "lib/net45/_._": {}
         },
         "runtime": {
-          "lib/net45/ICSharpCode.SharpZipLib.dll": {
-            "related": ".pdb;.xml"
-          }
+          "lib/net45/ICSharpCode.SharpZipLib.dll": {}
+        }
+      },
+      "Skyline.DataMiner.Core.DataMinerSystem.Automation/1.1.0.5": {
+        "type": "package",
+        "dependencies": {
+          "Skyline.DataMiner.Core.DataMinerSystem.Common": "1.1.0.5",
+          "Skyline.DataMiner.Dev.Automation": "10.1.11"
+        },
+        "compile": {
+          "lib/net462/Skyline.DataMiner.Core.DataMinerSystem.Automation.dll": {}
+        },
+        "runtime": {
+          "lib/net462/Skyline.DataMiner.Core.DataMinerSystem.Automation.dll": {}
+        }
+      },
+      "Skyline.DataMiner.Core.DataMinerSystem.Common/1.1.0.5": {
+        "type": "package",
+        "dependencies": {
+          "Newtonsoft.Json": "13.0.2",
+          "Skyline.DataMiner.Dev.Common": "10.1.11"
+        },
+        "compile": {
+          "lib/net462/Skyline.DataMiner.Core.DataMinerSystem.Common.dll": {}
+        },
+        "runtime": {
+          "lib/net462/Skyline.DataMiner.Core.DataMinerSystem.Common.dll": {}
         }
       },
       "Skyline.DataMiner.Dev.Automation/10.3.3.1": {
@@ -92,27 +110,19 @@
       "Skyline.DataMiner.Files.SLManagedAutomation/10.3.3.1": {
         "type": "package",
         "compile": {
-          "lib/net462/SLManagedAutomation.dll": {
-            "related": ".xml"
-          }
+          "lib/net462/SLManagedAutomation.dll": {}
         },
         "runtime": {
-          "lib/net462/SLManagedAutomation.dll": {
-            "related": ".xml"
-          }
+          "lib/net462/SLManagedAutomation.dll": {}
         }
       },
       "Skyline.DataMiner.Files.SLNetTypes/10.3.3.1": {
         "type": "package",
         "compile": {
-          "ref/net462/SLNetTypes.dll": {
-            "related": ".xml"
-          }
+          "ref/net462/SLNetTypes.dll": {}
         },
         "runtime": {
-          "lib/net462/SLNetTypes.dll": {
-            "related": ".xml"
-          }
+          "lib/net462/SLNetTypes.dll": {}
         }
       },
       "Skyline.DataMiner.Files.SLProtoBufLibrary/10.3.3.1": {
@@ -124,79 +134,37 @@
           "lib/net462/SLProtoBufLibrary.dll": {}
         }
       },
+      "Skyline.DataMiner.Utils.InteractiveAutomationScriptToolkit/6.1.0": {
+        "type": "package",
+        "dependencies": {
+          "Skyline.DataMiner.Dev.Automation": "10.3.1"
+        },
+        "compile": {
+          "lib/net462/Skyline.DataMiner.Utils.InteractiveAutomationScriptToolkit.dll": {}
+        },
+        "runtime": {
+          "lib/net462/Skyline.DataMiner.Utils.InteractiveAutomationScriptToolkit.dll": {}
+        }
+      },
       "SLC.CLib.FlowProvisioning/1.0.2.2": {
         "type": "package",
         "dependencies": {
           "SLC.Lib.Common": "1.2.2.6"
         },
         "compile": {
-          "lib/net462/SLC.CLib.FlowProvisioning.dll": {
-            "related": ".xml"
-          }
+          "lib/net462/SLC.CLib.FlowProvisioning.dll": {}
         },
         "runtime": {
-          "lib/net462/SLC.CLib.FlowProvisioning.dll": {
-            "related": ".xml"
-          }
+          "lib/net462/SLC.CLib.FlowProvisioning.dll": {}
         }
       },
-      "SLC.CLib.IASToolkit/1.0.7.2": {
+      "SLC.Lib.Common/1.2.2.6": {
         "type": "package",
         "compile": {
-          "lib/net462/SLC.CLib.IASToolkit.dll": {}
+          "lib/net462/SLC.Lib.Common.dll": {}
         },
         "runtime": {
-          "lib/net462/SLC.CLib.IASToolkit.dll": {}
-        }
-      },
-      "SLC.CLib.Labs.API/1.0.10325.46": {
-        "type": "package",
-        "dependencies": {
-          "SLC.Lib.Common": "1.2.2.1"
-        },
-        "compile": {
-          "lib/net462/SLC.CLib.Labs.API.dll": {}
-        },
-        "runtime": {
-          "lib/net462/SLC.CLib.Labs.API.dll": {}
-        }
-      },
-      "SLC.CLib.Labs.DOM/1.0.10325.7-1.0.0.X.7": {
-        "type": "package",
-        "compile": {
-          "lib/net462/SLC.CLib.Labs.DOM.dll": {}
-        },
-        "runtime": {
-          "lib/net462/SLC.CLib.Labs.DOM.dll": {}
-        }
-      },
-      "SLC.Lib.Automation/1.3.0.2": {
-        "type": "package",
-        "dependencies": {
-          "SLC.Lib.Common": "1.3.0.2"
-        },
-        "compile": {
-          "lib/net462/SLC.Lib.Automation.dll": {
-            "related": ".xml"
-          }
-        },
-        "runtime": {
-          "lib/net462/SLC.Lib.Automation.dll": {
-            "related": ".xml"
-          }
-        }
-      },
-      "SLC.Lib.Common/1.3.0.2": {
-        "type": "package",
-        "compile": {
-          "lib/net462/SLC.Lib.Common.dll": {
-            "related": ".xml"
-          }
-        },
-        "runtime": {
-          "lib/net462/SLC.Lib.Common.dll": {
-            "related": ".xml"
-          }
+          "lib/net462/SLC.Lib.Common.dll": {}
         }
       },
       "StyleCop.Analyzers/1.1.118": {
@@ -207,27 +175,45 @@
       "Newtonsoft.Json/13.0.3": {
         "type": "package",
         "compile": {
-          "lib/net45/Newtonsoft.Json.dll": {
-            "related": ".xml"
-          }
+          "lib/net45/Newtonsoft.Json.dll": {}
         },
         "runtime": {
-          "lib/net45/Newtonsoft.Json.dll": {
-            "related": ".xml"
-          }
+          "lib/net45/Newtonsoft.Json.dll": {}
         }
       },
       "SharpZipLib/1.3.3": {
         "type": "package",
         "compile": {
-          "lib/net45/_._": {
-            "related": ".pdb;.xml"
-          }
+          "lib/net45/_._": {}
         },
         "runtime": {
-          "lib/net45/ICSharpCode.SharpZipLib.dll": {
-            "related": ".pdb;.xml"
-          }
+          "lib/net45/ICSharpCode.SharpZipLib.dll": {}
+        }
+      },
+      "Skyline.DataMiner.Core.DataMinerSystem.Automation/1.1.0.5": {
+        "type": "package",
+        "dependencies": {
+          "Skyline.DataMiner.Core.DataMinerSystem.Common": "1.1.0.5",
+          "Skyline.DataMiner.Dev.Automation": "10.1.11"
+        },
+        "compile": {
+          "lib/net462/Skyline.DataMiner.Core.DataMinerSystem.Automation.dll": {}
+        },
+        "runtime": {
+          "lib/net462/Skyline.DataMiner.Core.DataMinerSystem.Automation.dll": {}
+        }
+      },
+      "Skyline.DataMiner.Core.DataMinerSystem.Common/1.1.0.5": {
+        "type": "package",
+        "dependencies": {
+          "Newtonsoft.Json": "13.0.2",
+          "Skyline.DataMiner.Dev.Common": "10.1.11"
+        },
+        "compile": {
+          "lib/net462/Skyline.DataMiner.Core.DataMinerSystem.Common.dll": {}
+        },
+        "runtime": {
+          "lib/net462/Skyline.DataMiner.Core.DataMinerSystem.Common.dll": {}
         }
       },
       "Skyline.DataMiner.Dev.Automation/10.3.3.1": {
@@ -294,27 +280,19 @@
       "Skyline.DataMiner.Files.SLManagedAutomation/10.3.3.1": {
         "type": "package",
         "compile": {
-          "lib/net462/SLManagedAutomation.dll": {
-            "related": ".xml"
-          }
+          "lib/net462/SLManagedAutomation.dll": {}
         },
         "runtime": {
-          "lib/net462/SLManagedAutomation.dll": {
-            "related": ".xml"
-          }
+          "lib/net462/SLManagedAutomation.dll": {}
         }
       },
       "Skyline.DataMiner.Files.SLNetTypes/10.3.3.1": {
         "type": "package",
         "compile": {
-          "ref/net462/SLNetTypes.dll": {
-            "related": ".xml"
-          }
+          "ref/net462/SLNetTypes.dll": {}
         },
         "runtime": {
-          "lib/net462/SLNetTypes.dll": {
-            "related": ".xml"
-          }
+          "lib/net462/SLNetTypes.dll": {}
         }
       },
       "Skyline.DataMiner.Files.SLProtoBufLibrary/10.3.3.1": {
@@ -326,79 +304,37 @@
           "lib/net462/SLProtoBufLibrary.dll": {}
         }
       },
+      "Skyline.DataMiner.Utils.InteractiveAutomationScriptToolkit/6.1.0": {
+        "type": "package",
+        "dependencies": {
+          "Skyline.DataMiner.Dev.Automation": "10.3.1"
+        },
+        "compile": {
+          "lib/net462/Skyline.DataMiner.Utils.InteractiveAutomationScriptToolkit.dll": {}
+        },
+        "runtime": {
+          "lib/net462/Skyline.DataMiner.Utils.InteractiveAutomationScriptToolkit.dll": {}
+        }
+      },
       "SLC.CLib.FlowProvisioning/1.0.2.2": {
         "type": "package",
         "dependencies": {
           "SLC.Lib.Common": "1.2.2.6"
         },
         "compile": {
-          "lib/net462/SLC.CLib.FlowProvisioning.dll": {
-            "related": ".xml"
-          }
+          "lib/net462/SLC.CLib.FlowProvisioning.dll": {}
         },
         "runtime": {
-          "lib/net462/SLC.CLib.FlowProvisioning.dll": {
-            "related": ".xml"
-          }
+          "lib/net462/SLC.CLib.FlowProvisioning.dll": {}
         }
       },
-      "SLC.CLib.IASToolkit/1.0.7.2": {
+      "SLC.Lib.Common/1.2.2.6": {
         "type": "package",
         "compile": {
-          "lib/net462/SLC.CLib.IASToolkit.dll": {}
+          "lib/net462/SLC.Lib.Common.dll": {}
         },
         "runtime": {
-          "lib/net462/SLC.CLib.IASToolkit.dll": {}
-        }
-      },
-      "SLC.CLib.Labs.API/1.0.10325.46": {
-        "type": "package",
-        "dependencies": {
-          "SLC.Lib.Common": "1.2.2.1"
-        },
-        "compile": {
-          "lib/net462/SLC.CLib.Labs.API.dll": {}
-        },
-        "runtime": {
-          "lib/net462/SLC.CLib.Labs.API.dll": {}
-        }
-      },
-      "SLC.CLib.Labs.DOM/1.0.10325.7-1.0.0.X.7": {
-        "type": "package",
-        "compile": {
-          "lib/net462/SLC.CLib.Labs.DOM.dll": {}
-        },
-        "runtime": {
-          "lib/net462/SLC.CLib.Labs.DOM.dll": {}
-        }
-      },
-      "SLC.Lib.Automation/1.3.0.2": {
-        "type": "package",
-        "dependencies": {
-          "SLC.Lib.Common": "1.3.0.2"
-        },
-        "compile": {
-          "lib/net462/SLC.Lib.Automation.dll": {
-            "related": ".xml"
-          }
-        },
-        "runtime": {
-          "lib/net462/SLC.Lib.Automation.dll": {
-            "related": ".xml"
-          }
-        }
-      },
-      "SLC.Lib.Common/1.3.0.2": {
-        "type": "package",
-        "compile": {
-          "lib/net462/SLC.Lib.Common.dll": {
-            "related": ".xml"
-          }
-        },
-        "runtime": {
-          "lib/net462/SLC.Lib.Common.dll": {
-            "related": ".xml"
-          }
+          "lib/net462/SLC.Lib.Common.dll": {}
         }
       },
       "StyleCop.Analyzers/1.1.118": {
@@ -409,27 +345,45 @@
       "Newtonsoft.Json/13.0.3": {
         "type": "package",
         "compile": {
-          "lib/net45/Newtonsoft.Json.dll": {
-            "related": ".xml"
-          }
+          "lib/net45/Newtonsoft.Json.dll": {}
         },
         "runtime": {
-          "lib/net45/Newtonsoft.Json.dll": {
-            "related": ".xml"
-          }
+          "lib/net45/Newtonsoft.Json.dll": {}
         }
       },
       "SharpZipLib/1.3.3": {
         "type": "package",
         "compile": {
-          "lib/net45/_._": {
-            "related": ".pdb;.xml"
-          }
+          "lib/net45/_._": {}
         },
         "runtime": {
-          "lib/net45/ICSharpCode.SharpZipLib.dll": {
-            "related": ".pdb;.xml"
-          }
+          "lib/net45/ICSharpCode.SharpZipLib.dll": {}
+        }
+      },
+      "Skyline.DataMiner.Core.DataMinerSystem.Automation/1.1.0.5": {
+        "type": "package",
+        "dependencies": {
+          "Skyline.DataMiner.Core.DataMinerSystem.Common": "1.1.0.5",
+          "Skyline.DataMiner.Dev.Automation": "10.1.11"
+        },
+        "compile": {
+          "lib/net462/Skyline.DataMiner.Core.DataMinerSystem.Automation.dll": {}
+        },
+        "runtime": {
+          "lib/net462/Skyline.DataMiner.Core.DataMinerSystem.Automation.dll": {}
+        }
+      },
+      "Skyline.DataMiner.Core.DataMinerSystem.Common/1.1.0.5": {
+        "type": "package",
+        "dependencies": {
+          "Newtonsoft.Json": "13.0.2",
+          "Skyline.DataMiner.Dev.Common": "10.1.11"
+        },
+        "compile": {
+          "lib/net462/Skyline.DataMiner.Core.DataMinerSystem.Common.dll": {}
+        },
+        "runtime": {
+          "lib/net462/Skyline.DataMiner.Core.DataMinerSystem.Common.dll": {}
         }
       },
       "Skyline.DataMiner.Dev.Automation/10.3.3.1": {
@@ -496,27 +450,19 @@
       "Skyline.DataMiner.Files.SLManagedAutomation/10.3.3.1": {
         "type": "package",
         "compile": {
-          "lib/net462/SLManagedAutomation.dll": {
-            "related": ".xml"
-          }
+          "lib/net462/SLManagedAutomation.dll": {}
         },
         "runtime": {
-          "lib/net462/SLManagedAutomation.dll": {
-            "related": ".xml"
-          }
+          "lib/net462/SLManagedAutomation.dll": {}
         }
       },
       "Skyline.DataMiner.Files.SLNetTypes/10.3.3.1": {
         "type": "package",
         "compile": {
-          "ref/net462/SLNetTypes.dll": {
-            "related": ".xml"
-          }
+          "ref/net462/SLNetTypes.dll": {}
         },
         "runtime": {
-          "lib/net462/SLNetTypes.dll": {
-            "related": ".xml"
-          }
+          "lib/net462/SLNetTypes.dll": {}
         }
       },
       "Skyline.DataMiner.Files.SLProtoBufLibrary/10.3.3.1": {
@@ -528,79 +474,37 @@
           "lib/net462/SLProtoBufLibrary.dll": {}
         }
       },
+      "Skyline.DataMiner.Utils.InteractiveAutomationScriptToolkit/6.1.0": {
+        "type": "package",
+        "dependencies": {
+          "Skyline.DataMiner.Dev.Automation": "10.3.1"
+        },
+        "compile": {
+          "lib/net462/Skyline.DataMiner.Utils.InteractiveAutomationScriptToolkit.dll": {}
+        },
+        "runtime": {
+          "lib/net462/Skyline.DataMiner.Utils.InteractiveAutomationScriptToolkit.dll": {}
+        }
+      },
       "SLC.CLib.FlowProvisioning/1.0.2.2": {
         "type": "package",
         "dependencies": {
           "SLC.Lib.Common": "1.2.2.6"
         },
         "compile": {
-          "lib/net462/SLC.CLib.FlowProvisioning.dll": {
-            "related": ".xml"
-          }
+          "lib/net462/SLC.CLib.FlowProvisioning.dll": {}
         },
         "runtime": {
-          "lib/net462/SLC.CLib.FlowProvisioning.dll": {
-            "related": ".xml"
-          }
+          "lib/net462/SLC.CLib.FlowProvisioning.dll": {}
         }
       },
-      "SLC.CLib.IASToolkit/1.0.7.2": {
+      "SLC.Lib.Common/1.2.2.6": {
         "type": "package",
         "compile": {
-          "lib/net462/SLC.CLib.IASToolkit.dll": {}
+          "lib/net462/SLC.Lib.Common.dll": {}
         },
         "runtime": {
-          "lib/net462/SLC.CLib.IASToolkit.dll": {}
-        }
-      },
-      "SLC.CLib.Labs.API/1.0.10325.46": {
-        "type": "package",
-        "dependencies": {
-          "SLC.Lib.Common": "1.2.2.1"
-        },
-        "compile": {
-          "lib/net462/SLC.CLib.Labs.API.dll": {}
-        },
-        "runtime": {
-          "lib/net462/SLC.CLib.Labs.API.dll": {}
-        }
-      },
-      "SLC.CLib.Labs.DOM/1.0.10325.7-1.0.0.X.7": {
-        "type": "package",
-        "compile": {
-          "lib/net462/SLC.CLib.Labs.DOM.dll": {}
-        },
-        "runtime": {
-          "lib/net462/SLC.CLib.Labs.DOM.dll": {}
-        }
-      },
-      "SLC.Lib.Automation/1.3.0.2": {
-        "type": "package",
-        "dependencies": {
-          "SLC.Lib.Common": "1.3.0.2"
-        },
-        "compile": {
-          "lib/net462/SLC.Lib.Automation.dll": {
-            "related": ".xml"
-          }
-        },
-        "runtime": {
-          "lib/net462/SLC.Lib.Automation.dll": {
-            "related": ".xml"
-          }
-        }
-      },
-      "SLC.Lib.Common/1.3.0.2": {
-        "type": "package",
-        "compile": {
-          "lib/net462/SLC.Lib.Common.dll": {
-            "related": ".xml"
-          }
-        },
-        "runtime": {
-          "lib/net462/SLC.Lib.Common.dll": {
-            "related": ".xml"
-          }
+          "lib/net462/SLC.Lib.Common.dll": {}
         }
       },
       "StyleCop.Analyzers/1.1.118": {
@@ -611,27 +515,45 @@
       "Newtonsoft.Json/13.0.3": {
         "type": "package",
         "compile": {
-          "lib/net45/Newtonsoft.Json.dll": {
-            "related": ".xml"
-          }
+          "lib/net45/Newtonsoft.Json.dll": {}
         },
         "runtime": {
-          "lib/net45/Newtonsoft.Json.dll": {
-            "related": ".xml"
-          }
+          "lib/net45/Newtonsoft.Json.dll": {}
         }
       },
       "SharpZipLib/1.3.3": {
         "type": "package",
         "compile": {
-          "lib/net45/_._": {
-            "related": ".pdb;.xml"
-          }
+          "lib/net45/_._": {}
         },
         "runtime": {
-          "lib/net45/ICSharpCode.SharpZipLib.dll": {
-            "related": ".pdb;.xml"
-          }
+          "lib/net45/ICSharpCode.SharpZipLib.dll": {}
+        }
+      },
+      "Skyline.DataMiner.Core.DataMinerSystem.Automation/1.1.0.5": {
+        "type": "package",
+        "dependencies": {
+          "Skyline.DataMiner.Core.DataMinerSystem.Common": "1.1.0.5",
+          "Skyline.DataMiner.Dev.Automation": "10.1.11"
+        },
+        "compile": {
+          "lib/net462/Skyline.DataMiner.Core.DataMinerSystem.Automation.dll": {}
+        },
+        "runtime": {
+          "lib/net462/Skyline.DataMiner.Core.DataMinerSystem.Automation.dll": {}
+        }
+      },
+      "Skyline.DataMiner.Core.DataMinerSystem.Common/1.1.0.5": {
+        "type": "package",
+        "dependencies": {
+          "Newtonsoft.Json": "13.0.2",
+          "Skyline.DataMiner.Dev.Common": "10.1.11"
+        },
+        "compile": {
+          "lib/net462/Skyline.DataMiner.Core.DataMinerSystem.Common.dll": {}
+        },
+        "runtime": {
+          "lib/net462/Skyline.DataMiner.Core.DataMinerSystem.Common.dll": {}
         }
       },
       "Skyline.DataMiner.Dev.Automation/10.3.3.1": {
@@ -698,27 +620,19 @@
       "Skyline.DataMiner.Files.SLManagedAutomation/10.3.3.1": {
         "type": "package",
         "compile": {
-          "lib/net462/SLManagedAutomation.dll": {
-            "related": ".xml"
-          }
+          "lib/net462/SLManagedAutomation.dll": {}
         },
         "runtime": {
-          "lib/net462/SLManagedAutomation.dll": {
-            "related": ".xml"
-          }
+          "lib/net462/SLManagedAutomation.dll": {}
         }
       },
       "Skyline.DataMiner.Files.SLNetTypes/10.3.3.1": {
         "type": "package",
         "compile": {
-          "ref/net462/SLNetTypes.dll": {
-            "related": ".xml"
-          }
+          "ref/net462/SLNetTypes.dll": {}
         },
         "runtime": {
-          "lib/net462/SLNetTypes.dll": {
-            "related": ".xml"
-          }
+          "lib/net462/SLNetTypes.dll": {}
         }
       },
       "Skyline.DataMiner.Files.SLProtoBufLibrary/10.3.3.1": {
@@ -730,79 +644,37 @@
           "lib/net462/SLProtoBufLibrary.dll": {}
         }
       },
+      "Skyline.DataMiner.Utils.InteractiveAutomationScriptToolkit/6.1.0": {
+        "type": "package",
+        "dependencies": {
+          "Skyline.DataMiner.Dev.Automation": "10.3.1"
+        },
+        "compile": {
+          "lib/net462/Skyline.DataMiner.Utils.InteractiveAutomationScriptToolkit.dll": {}
+        },
+        "runtime": {
+          "lib/net462/Skyline.DataMiner.Utils.InteractiveAutomationScriptToolkit.dll": {}
+        }
+      },
       "SLC.CLib.FlowProvisioning/1.0.2.2": {
         "type": "package",
         "dependencies": {
           "SLC.Lib.Common": "1.2.2.6"
         },
         "compile": {
-          "lib/net462/SLC.CLib.FlowProvisioning.dll": {
-            "related": ".xml"
-          }
+          "lib/net462/SLC.CLib.FlowProvisioning.dll": {}
         },
         "runtime": {
-          "lib/net462/SLC.CLib.FlowProvisioning.dll": {
-            "related": ".xml"
-          }
+          "lib/net462/SLC.CLib.FlowProvisioning.dll": {}
         }
       },
-      "SLC.CLib.IASToolkit/1.0.7.2": {
+      "SLC.Lib.Common/1.2.2.6": {
         "type": "package",
         "compile": {
-          "lib/net462/SLC.CLib.IASToolkit.dll": {}
+          "lib/net462/SLC.Lib.Common.dll": {}
         },
         "runtime": {
-          "lib/net462/SLC.CLib.IASToolkit.dll": {}
-        }
-      },
-      "SLC.CLib.Labs.API/1.0.10325.46": {
-        "type": "package",
-        "dependencies": {
-          "SLC.Lib.Common": "1.2.2.1"
-        },
-        "compile": {
-          "lib/net462/SLC.CLib.Labs.API.dll": {}
-        },
-        "runtime": {
-          "lib/net462/SLC.CLib.Labs.API.dll": {}
-        }
-      },
-      "SLC.CLib.Labs.DOM/1.0.10325.7-1.0.0.X.7": {
-        "type": "package",
-        "compile": {
-          "lib/net462/SLC.CLib.Labs.DOM.dll": {}
-        },
-        "runtime": {
-          "lib/net462/SLC.CLib.Labs.DOM.dll": {}
-        }
-      },
-      "SLC.Lib.Automation/1.3.0.2": {
-        "type": "package",
-        "dependencies": {
-          "SLC.Lib.Common": "1.3.0.2"
-        },
-        "compile": {
-          "lib/net462/SLC.Lib.Automation.dll": {
-            "related": ".xml"
-          }
-        },
-        "runtime": {
-          "lib/net462/SLC.Lib.Automation.dll": {
-            "related": ".xml"
-          }
-        }
-      },
-      "SLC.Lib.Common/1.3.0.2": {
-        "type": "package",
-        "compile": {
-          "lib/net462/SLC.Lib.Common.dll": {
-            "related": ".xml"
-          }
-        },
-        "runtime": {
-          "lib/net462/SLC.Lib.Common.dll": {
-            "related": ".xml"
-          }
+          "lib/net462/SLC.Lib.Common.dll": {}
         }
       },
       "StyleCop.Analyzers/1.1.118": {
@@ -860,6 +732,38 @@
         "lib/netstandard2.1/ICSharpCode.SharpZipLib.xml",
         "sharpziplib.1.3.3.nupkg.sha512",
         "sharpziplib.nuspec"
+      ]
+    },
+    "Skyline.DataMiner.Core.DataMinerSystem.Automation/1.1.0.5": {
+      "sha512": "ZKcfPyu/kioRIq+sfS3Z0ee+VXGIuCb12cmTclSYJt4AY3KQCsftQhlgKL7p6ayBMosuXLFb5uUK4X7N352+9g==",
+      "type": "package",
+      "path": "skyline.dataminer.core.dataminersystem.automation/1.1.0.5",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "Icon.png",
+        "LICENSE.txt",
+        "README.md",
+        "lib/net462/Skyline.DataMiner.Core.DataMinerSystem.Automation.dll",
+        "lib/net462/Skyline.DataMiner.Core.DataMinerSystem.Automation.xml",
+        "skyline.dataminer.core.dataminersystem.automation.1.1.0.5.nupkg.sha512",
+        "skyline.dataminer.core.dataminersystem.automation.nuspec"
+      ]
+    },
+    "Skyline.DataMiner.Core.DataMinerSystem.Common/1.1.0.5": {
+      "sha512": "S86cHDTDa57ukDSwaIvn/HvDawk1dJpyoGH5RmoAguaEOK9t1onB5B8cX4ShtFePGR1tBzbBmKDrEQjgWjwekw==",
+      "type": "package",
+      "path": "skyline.dataminer.core.dataminersystem.common/1.1.0.5",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "Icon.png",
+        "LICENSE.txt",
+        "README.md",
+        "lib/net462/Skyline.DataMiner.Core.DataMinerSystem.Common.dll",
+        "lib/net462/Skyline.DataMiner.Core.DataMinerSystem.Common.xml",
+        "skyline.dataminer.core.dataminersystem.common.1.1.0.5.nupkg.sha512",
+        "skyline.dataminer.core.dataminersystem.common.nuspec"
       ]
     },
     "Skyline.DataMiner.Dev.Automation/10.3.3.1": {
@@ -1001,6 +905,22 @@
         "skyline.dataminer.files.slprotobuflibrary.nuspec"
       ]
     },
+    "Skyline.DataMiner.Utils.InteractiveAutomationScriptToolkit/6.1.0": {
+      "sha512": "+BB+Jd8xz4+5QFO7XXiqFn6wOn7ac8q+enKo6qjy7HDcLHvASwimpGW6MU+g+qGaWJ3JHv4kOkUTTfWZ0wIM9A==",
+      "type": "package",
+      "path": "skyline.dataminer.utils.interactiveautomationscripttoolkit/6.1.0",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "Icon.png",
+        "LICENSE.txt",
+        "README.md",
+        "lib/net462/Skyline.DataMiner.Utils.InteractiveAutomationScriptToolkit.dll",
+        "lib/net462/Skyline.DataMiner.Utils.InteractiveAutomationScriptToolkit.xml",
+        "skyline.dataminer.utils.interactiveautomationscripttoolkit.6.1.0.nupkg.sha512",
+        "skyline.dataminer.utils.interactiveautomationscripttoolkit.nuspec"
+      ]
+    },
     "SLC.CLib.FlowProvisioning/1.0.2.2": {
       "sha512": "h+8Gdwu7pZlOQ0ih8LFppZV/u1xTlBSXqrOWeCRTZGTynJepZ1Il4zzV6DOuOZkcZ5e9lGmMPnb9Y4Fp2QjnDg==",
       "type": "package",
@@ -1014,63 +934,16 @@
         "slc.clib.flowprovisioning.nuspec"
       ]
     },
-    "SLC.CLib.IASToolkit/1.0.7.2": {
-      "sha512": "wKyxHNayBV3ZUTiQAM08S0AezoOdKcQbwZq0LxF//ggSISzU0RgD5ZoCwns1pYMxFA9HEk+lgIXWmFahEYxgNA==",
+    "SLC.Lib.Common/1.2.2.6": {
+      "sha512": "KoecFzS6tt1AuzwNeMVmE217wwOdHsQRcyXACo7OjJw9Bg1iszmAzIW2dfXklmhCyhFRR7cIu83QnD28mfddVA==",
       "type": "package",
-      "path": "slc.clib.iastoolkit/1.0.7.2",
-      "files": [
-        ".nupkg.metadata",
-        ".signature.p7s",
-        "lib/net462/SLC.CLib.IASToolkit.dll",
-        "slc.clib.iastoolkit.1.0.7.2.nupkg.sha512",
-        "slc.clib.iastoolkit.nuspec"
-      ]
-    },
-    "SLC.CLib.Labs.API/1.0.10325.46": {
-      "sha512": "AgmY4yyFS6RcagZrmMZG5j/6aLe9ZJC3y7qB09qPTr4LSBltgLYF12YGbkBI0HFi6iMyzraAAmZmZYSoYKu/Nw==",
-      "type": "package",
-      "path": "slc.clib.labs.api/1.0.10325.46",
-      "files": [
-        ".nupkg.metadata",
-        "lib/net462/SLC.CLib.Labs.API.dll",
-        "slc.clib.labs.api.1.0.10325.46.nupkg.sha512",
-        "slc.clib.labs.api.nuspec"
-      ]
-    },
-    "SLC.CLib.Labs.DOM/1.0.10325.7-1.0.0.X.7": {
-      "sha512": "qM+xiHmZiFG5RU6bhP2ptHMcvGvUxwAEiZ8mQgkDzeww6ktKWaTiwoKhft07NEfYSYuCfqAGWXtgjQKKsB4YzQ==",
-      "type": "package",
-      "path": "slc.clib.labs.dom/1.0.10325.7-1.0.0.x.7",
-      "files": [
-        ".nupkg.metadata",
-        "lib/net462/SLC.CLib.Labs.DOM.dll",
-        "slc.clib.labs.dom.1.0.10325.7-1.0.0.x.7.nupkg.sha512",
-        "slc.clib.labs.dom.nuspec"
-      ]
-    },
-    "SLC.Lib.Automation/1.3.0.2": {
-      "sha512": "OjavQTwXZVY5ECFnoGaa7WQeXdgj6Q+RK6Qv/6DygC9GMfCPStlvW5W9Ztt9G290Icfxu9NgkTIZ4JJKbrkJXw==",
-      "type": "package",
-      "path": "slc.lib.automation/1.3.0.2",
-      "files": [
-        ".nupkg.metadata",
-        ".signature.p7s",
-        "lib/net462/SLC.Lib.Automation.dll",
-        "lib/net462/SLC.Lib.Automation.xml",
-        "slc.lib.automation.1.3.0.2.nupkg.sha512",
-        "slc.lib.automation.nuspec"
-      ]
-    },
-    "SLC.Lib.Common/1.3.0.2": {
-      "sha512": "akN9b1Ohqhyns1Sukb0QMKqRqjzLR5SZG8mCE3qALNY37W2I10k42LWGvAMJbL8jHyIXkezRz8ONTQ9O4i+sQQ==",
-      "type": "package",
-      "path": "slc.lib.common/1.3.0.2",
+      "path": "slc.lib.common/1.2.2.6",
       "files": [
         ".nupkg.metadata",
         ".signature.p7s",
         "lib/net462/SLC.Lib.Common.dll",
         "lib/net462/SLC.Lib.Common.xml",
-        "slc.lib.common.1.3.0.2.nupkg.sha512",
+        "slc.lib.common.1.2.2.6.nupkg.sha512",
         "slc.lib.common.nuspec"
       ]
     },
@@ -1104,32 +977,32 @@
     ".NETFramework,Version=v4.6.2": [
       "Newtonsoft.Json >= 13.0.3",
       "SLC.CLib.FlowProvisioning >= 1.0.2.2",
-      "SLC.CLib.IASToolkit >= 1.0.7.2",
-      "SLC.CLib.Labs.API >= 1.0.10325.46",
-      "SLC.CLib.Labs.DOM >= 1.0.10325.7-1.0.0.X.7",
-      "SLC.Lib.Automation >= 1.3.0.2",
-      "SLC.Lib.Common >= 1.3.0.2",
+      "Skyline.DataMiner.Core.DataMinerSystem.Automation >= 1.1.0.5",
       "Skyline.DataMiner.Dev.Automation >= 10.3.3.1",
-      "Skyline.DataMiner.Files.SLNetTypes >= 10.3.3.1",
-      "Skyline.DataMiner.Files.Skyline.DataMiner.Storage.Types >= 10.3.3.1",
+      "Skyline.DataMiner.Utils.InteractiveAutomationScriptToolkit >= 6.1.0",
       "StyleCop.Analyzers >= 1.1.118"
     ]
   },
   "packageFolders": {
-    "C:\\Users\\joaosv\\.nuget\\packages\\": {}
+    "C:\\Users\\FlavioME\\.nuget\\packages\\": {},
+    "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\joaosv\\Source\\Repos\\SkylineCommunications\\NimbraVisionScripts\\DomInterfaceSelection_1\\DomInterfaceSelection_1.csproj",
+      "projectUniqueName": "C:\\GITHUB\\NIS-AS-NimbraVisionScripts\\DomInterfaceSelection_1\\DomInterfaceSelection_1.csproj",
       "projectName": "DomInterfaceSelection_1",
-      "projectPath": "C:\\Users\\joaosv\\Source\\Repos\\SkylineCommunications\\NimbraVisionScripts\\DomInterfaceSelection_1\\DomInterfaceSelection_1.csproj",
-      "packagesPath": "C:\\Users\\joaosv\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\joaosv\\Source\\Repos\\SkylineCommunications\\NimbraVisionScripts\\DomInterfaceSelection_1\\obj\\",
+      "projectPath": "C:\\GITHUB\\NIS-AS-NimbraVisionScripts\\DomInterfaceSelection_1\\DomInterfaceSelection_1.csproj",
+      "packagesPath": "C:\\Users\\FlavioME\\.nuget\\packages\\",
+      "outputPath": "C:\\GITHUB\\NIS-AS-NimbraVisionScripts\\DomInterfaceSelection_1\\obj\\",
       "projectStyle": "PackageReference",
       "skipContentFileWrite": true,
+      "fallbackFolders": [
+        "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
+      ],
       "configFilePaths": [
-        "C:\\Users\\joaosv\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Users\\FlavioME\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
       "originalTargetFrameworks": [
@@ -1157,37 +1030,17 @@
             "target": "Package",
             "version": "[1.0.2.2, )"
           },
-          "SLC.CLib.IASToolkit": {
+          "Skyline.DataMiner.Core.DataMinerSystem.Automation": {
             "target": "Package",
-            "version": "[1.0.7.2, )"
-          },
-          "SLC.CLib.Labs.API": {
-            "target": "Package",
-            "version": "[1.0.10325.46, )"
-          },
-          "SLC.CLib.Labs.DOM": {
-            "target": "Package",
-            "version": "[1.0.10325.7-1.0.0.X.7, )"
-          },
-          "SLC.Lib.Automation": {
-            "target": "Package",
-            "version": "[1.3.0.2, )"
-          },
-          "SLC.Lib.Common": {
-            "target": "Package",
-            "version": "[1.3.0.2, )"
+            "version": "[1.1.0.5, )"
           },
           "Skyline.DataMiner.Dev.Automation": {
             "target": "Package",
             "version": "[10.3.3.1, )"
           },
-          "Skyline.DataMiner.Files.SLNetTypes": {
+          "Skyline.DataMiner.Utils.InteractiveAutomationScriptToolkit": {
             "target": "Package",
-            "version": "[10.3.3.1, )"
-          },
-          "Skyline.DataMiner.Files.Skyline.DataMiner.Storage.Types": {
-            "target": "Package",
-            "version": "[10.3.3.1, )"
+            "version": "[6.1.0, )"
           },
           "StyleCop.Analyzers": {
             "include": "Runtime, Build, Native, ContentFiles, Analyzers, BuildTransitive",
@@ -1209,13 +1062,5 @@
         "#import": []
       }
     }
-  },
-  "logs": [
-    {
-      "code": "NU1803",
-      "level": "Warning",
-      "warningLevel": 1,
-      "message": "You are running the 'restore' operation with an 'HTTP' source, 'http://devcore3:81/nuget'. Non-HTTPS access will be removed in a future version. Consider migrating to an 'HTTPS' source."
-    }
-  ]
+  }
 }

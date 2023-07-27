@@ -4,34 +4,70 @@
 	using System.Collections.Generic;
 	using System.Linq;
 	using Skyline.DataMiner.Automation;
-	using Skyline.DataMiner.Library.Automation;
-	using Skyline.DataMiner.Library.Common;
+	using Skyline.DataMiner.Core.DataMinerSystem.Automation;
+	using Skyline.DataMiner.Core.DataMinerSystem.Common;
 	using Skyline.DataMiner.Net.Helper;
+
+	public class Interface
+	{
+		public string Capabilities { get; set; }
+
+		public string CircuitCreationInterfaceName { get; set; }
+
+		public string InterfaceName { get; set; }
+
+		public string NodeName { get; set; }
+	}
 
 	public class Model
 	{
 		public Model(Engine engine)
 		{
-			var dms = engine.GetDms() ?? throw new NullReferenceException("dms");
-			NimbraVisionElement = dms.GetElements().FirstOrDefault(
-				elem => elem.Protocol.Name == "NetInsight Nimbra Vision" && elem.Protocol.Version == "Production") ?? throw new NullReferenceException("Nimbra Vision");
-
+			NimbraVisionElement = ValidateElementParam(engine);
 			Interfaces = LoadInterfacesFromElement(NimbraVisionElement);
 		}
 
-		public string Source { get; set; }
+		public int Capacity { get; set; }
 
 		public string Destination { get; set; }
 
-		public int Capacity { get; set; }
+		public List<Interface> Interfaces { get; }
+
+		public IDmsElement NimbraVisionElement { get; }
+
+		public string Source { get; set; }
 
 		public DateTime StartTime { get; set; }
 
 		public DateTime StopTime { get; set; }
 
-		public List<Interface> Interfaces { get; }
+		private static string ParseParamValue(string paramValueRaw)
+		{
+			// Checking first characters
+			var firstCharacters = "[\"";
+			var paramValue = (paramValueRaw.Substring(0, 2) == firstCharacters) ?
+				paramValueRaw.Substring(2, paramValueRaw.Length - 4) :
+				paramValueRaw;
 
-		public IDmsElement NimbraVisionElement { get; }
+			return paramValue;
+		}
+
+		private static IDmsElement ValidateElementParam(IEngine engine)
+		{
+			var paramValueRaw = engine.GetScriptParam("ElementName").Value;
+			var elementName = ParseParamValue(paramValueRaw);
+
+			var dms = engine.GetDms() ?? throw new NullReferenceException("dms");
+
+			var element = dms.GetElement(elementName);
+
+			if (element.State == ElementState.Active)
+			{
+				engine.ExitFail($"{element.Name} element is not active!");
+			}
+
+			return element;
+		}
 
 		private List<Interface> LoadInterfacesFromElement(IDmsElement nimbraVisionElement)
 		{
@@ -99,16 +135,5 @@
 
 			return interfaces;
 		}
-	}
-
-	public class Interface
-	{
-		public string InterfaceName { get; set; }
-
-		public string NodeName { get; set; }
-
-		public string Capabilities { get; set; }
-
-		public string CircuitCreationInterfaceName { get; set; }
 	}
 }

@@ -51,17 +51,13 @@ dd/mm/2023	1.0.0.1		XXX, Skyline	Initial version
 
 using System;
 using System.Collections.Generic;
-using System.Globalization;
-using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading;
-using Newtonsoft.Json;
 using Skyline.DataMiner.Automation;
-using Skyline.DataMiner.Library.Automation;
-using Skyline.DataMiner.Library.Common;
+using Skyline.DataMiner.Core.DataMinerSystem.Automation;
+using Skyline.DataMiner.Core.DataMinerSystem.Common;
 using Skyline.DataMiner.Net.Helper;
-using Skyline.DataMiner.Net.Messages;
 
 /// <summary>
 /// DataMiner Script Class.

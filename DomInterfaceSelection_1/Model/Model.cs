@@ -4,18 +4,17 @@
 	using System.Collections.Generic;
 	using System.Linq;
 	using Skyline.DataMiner.Automation;
-	using Skyline.DataMiner.Library.Automation;
-	using Skyline.DataMiner.Library.Common;
+	using Skyline.DataMiner.Core.DataMinerSystem.Automation;
+	using Skyline.DataMiner.Core.DataMinerSystem.Common;
 	using Skyline.DataMiner.Net.Apps.DataMinerObjectModel;
 	using Skyline.DataMiner.Net.Helper;
 
 	public class Model
 	{
-		public Model(IEngine engine, DomInstance domInstance, DomHelper domHelper, string transitionId)
+		public Model(IEngine engine, DomInstance domInstance, DomHelper domHelper, string transitionId, string nimbraVisionElementName)
 		{
 			var dms = engine.GetDms() ?? throw new NullReferenceException("dms");
-			NimbraVisionElement = dms.GetElements().FirstOrDefault(
-				elem => elem.Protocol.Name == "NetInsight Nimbra Vision" && elem.Protocol.Version == "Production") ?? throw new NullReferenceException("Nimbra Vision");
+			NimbraVisionElement = dms.GetElement(nimbraVisionElementName);
 
 			Interfaces = LoadInterfacesFromElement(NimbraVisionElement);
 

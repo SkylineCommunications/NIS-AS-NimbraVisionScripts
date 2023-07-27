@@ -5,7 +5,7 @@
 	<Type>Automation</Type>
 	<Author>SKYLINE2\JoaoSV</Author>
 	<CheckSets>FALSE</CheckSets>
-	<Folder>NimbraOrch</Folder>
+	<Folder>NimbraOrchestration</Folder>
 
 	<Protocols>
 	</Protocols>
@@ -16,6 +16,9 @@
 	<Parameters>
 		<ScriptParameter id="2" type="string" values="">
 			<Description>Interface Name</Description>
+		</ScriptParameter>
+		<ScriptParameter id="10" type="string" values="">
+			<Description>ElementName</Description>
 		</ScriptParameter>
 	</Parameters>
 

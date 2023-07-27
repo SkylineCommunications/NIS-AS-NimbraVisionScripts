@@ -49,18 +49,12 @@ dd/mm/2023	1.0.0.1		XXX, Skyline	Initial version
 ****************************************************************************
 */
 
-using System;
-using System.Collections.Generic;
-using System.Globalization;
-using System.Linq;
-using System.Text;
 using Skyline.Automation.CircuitCreation;
 using Skyline.Automation.CircuitCreation.Model;
 using Skyline.Automation.CircuitCreation.Presenter;
 using Skyline.Automation.CircuitCreation.View;
 using Skyline.DataMiner.Automation;
-using Skyline.DataMiner.DeveloperCommunityLibrary.InteractiveAutomationToolkit;
-using Skyline.DataMiner.Net.ReportsAndDashboards;
+using Skyline.DataMiner.Utils.InteractiveAutomationScript;
 
 /// <summary>
 /// DataMiner Script Class.

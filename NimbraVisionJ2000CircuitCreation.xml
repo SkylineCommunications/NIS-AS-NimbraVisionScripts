@@ -5,7 +5,7 @@
 	<Type>Automation</Type>
 	<Author>SKYLINE2\JoaoSV</Author>
 	<CheckSets>FALSE</CheckSets>
-	<Folder>NimbraOrch</Folder>
+	<Folder>NimbraOrchestration</Folder>
 
 	<Protocols>
 	</Protocols>
@@ -32,10 +32,13 @@
 		<ScriptParameter id="7" type="string" values="">
 			<Description>1+1</Description>
 		</ScriptParameter>
+		<ScriptParameter id="10" type="string" values="">
+			<Description>ElementName</Description>
+		</ScriptParameter>
 	</Parameters>
 
 	<Script>
-		<Exe id="8" type="csharp">
+		<Exe id="1" type="csharp">
 			<Value><![CDATA[[Project:NimbraVisionJ2000CircuitCreation_1]]]></Value>
 			<!--<Param type="debug">true</Param>-->
 			<Message></Message>

@@ -56,13 +56,10 @@ namespace Scheduler_DOM_CRUD_1
 	using System.Text.RegularExpressions;
 	using Skyline.Automation.CircuitCreation;
 	using Skyline.DataMiner.Automation;
-	using Skyline.DataMiner.Library.Automation;
+	using Skyline.DataMiner.Core.DataMinerSystem.Automation;
 	using Skyline.DataMiner.Library.Common;
 	using Skyline.DataMiner.Library.Common.InterAppCalls.CallBulk;
 	using Skyline.DataMiner.Net.Apps.DataMinerObjectModel;
-	using Skyline.DataMiner.Net.Apps.DataMinerObjectModel.Actions;
-	using Skyline.DataMiner.Net.History;
-	using Skyline.DataMiner.Net.ManagerStore;
 	using Skyline.DataMiner.Net.Messages.SLDataGateway;
 	using Skyline.DataMiner.Net.Sections;
 	using static Skyline.Automation.CircuitCreation.Utils;
@@ -72,6 +69,8 @@ namespace Scheduler_DOM_CRUD_1
 	/// </summary>
 	public class Script
 	{
+		public const string NimbraVisionElementName = "Nimbra Vision";
+
 		/// <summary>
 		/// The script entry point.
 		/// </summary>
@@ -110,8 +109,7 @@ namespace Scheduler_DOM_CRUD_1
 			}
 
 			var dms = engine.GetDms() ?? throw new NullReferenceException("dms");
-			var nimbraElement = dms.GetElements()
-							 .FirstOrDefault(elem => elem.Protocol.Name == "NetInsight Nimbra Vision" && elem.Protocol.Version == "Production") ?? throw new NullReferenceException("Nimbra Vision");
+			var nimbraElement = dms.GetElement(NimbraVisionElementName);
 
 			var circuitTable = nimbraElement.GetTable((int)Pids.CircuitTable);
 
