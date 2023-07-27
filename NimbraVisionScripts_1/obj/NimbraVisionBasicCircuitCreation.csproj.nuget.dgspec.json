@@ -1,25 +1,21 @@
 {
   "format": 1,
   "restore": {
-    "C:\\GITHUB\\NIS-AS-NimbraVisionScripts\\NimbraVisionScripts_1\\NimbraVisionBasicCircuitCreation.csproj": {}
+    "C:\\Users\\joaosv\\Source\\Repos\\SkylineCommunications\\NimbraVisionScripts\\NimbraVisionScripts_1\\NimbraVisionBasicCircuitCreation.csproj": {}
   },
   "projects": {
-    "C:\\GITHUB\\NIS-AS-NimbraVisionScripts\\NimbraVisionScripts_1\\NimbraVisionBasicCircuitCreation.csproj": {
+    "C:\\Users\\joaosv\\Source\\Repos\\SkylineCommunications\\NimbraVisionScripts\\NimbraVisionScripts_1\\NimbraVisionBasicCircuitCreation.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\GITHUB\\NIS-AS-NimbraVisionScripts\\NimbraVisionScripts_1\\NimbraVisionBasicCircuitCreation.csproj",
-        "projectName": "NimbraVisionBasicCircuitCreation",
-        "projectPath": "C:\\GITHUB\\NIS-AS-NimbraVisionScripts\\NimbraVisionScripts_1\\NimbraVisionBasicCircuitCreation.csproj",
-        "packagesPath": "C:\\Users\\FlavioME\\.nuget\\packages\\",
-        "outputPath": "C:\\GITHUB\\NIS-AS-NimbraVisionScripts\\NimbraVisionScripts_1\\obj\\",
+        "projectUniqueName": "C:\\Users\\joaosv\\Source\\Repos\\SkylineCommunications\\NimbraVisionScripts\\NimbraVisionScripts_1\\NimbraVisionBasicCircuitCreation.csproj",
+        "projectName": "NimbraVisionScripts_1",
+        "projectPath": "C:\\Users\\joaosv\\Source\\Repos\\SkylineCommunications\\NimbraVisionScripts\\NimbraVisionScripts_1\\NimbraVisionBasicCircuitCreation.csproj",
+        "packagesPath": "C:\\Users\\joaosv\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\joaosv\\Source\\Repos\\SkylineCommunications\\NimbraVisionScripts\\NimbraVisionScripts_1\\obj\\",
         "projectStyle": "PackageReference",
         "skipContentFileWrite": true,
-        "fallbackFolders": [
-          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
-        ],
         "configFilePaths": [
-          "C:\\Users\\FlavioME\\AppData\\Roaming\\NuGet\\NuGet.Config",
-          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
+          "C:\\Users\\joaosv\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
@@ -41,11 +37,11 @@
           "dependencies": {
             "Newtonsoft.Json": {
               "target": "Package",
-              "version": "[13.0.2, )"
+              "version": "[13.0.3, )"
             },
             "Skyline.DataMiner.Dev.Automation": {
               "target": "Package",
-              "version": "[10.0.0.5, )"
+              "version": "[10.3.6, )"
             },
             "StyleCop.Analyzers": {
               "include": "Runtime, Build, Native, ContentFiles, Analyzers, BuildTransitive",
@@ -58,6 +54,9 @@
       },
       "runtimes": {
         "win": {
+          "#import": []
+        },
+        "win-arm64": {
           "#import": []
         },
         "win-x64": {

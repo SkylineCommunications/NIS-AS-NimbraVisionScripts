@@ -54,10 +54,9 @@ using System.Collections.Generic;
 using System.Text.RegularExpressions;
 using System.Threading;
 using Skyline.DataMiner.Automation;
-using Skyline.DataMiner.CommunityLibrary.FlowProvisioning.Info;
 using Skyline.DataMiner.Core.DataMinerSystem.Automation;
-using Skyline.DataMiner.Library.Common.InterAppCalls.CallBulk;
-using Skyline.DataMiner.Library.Common.InterAppCalls.CallSingle;
+using Skyline.DataMiner.Core.InterAppCalls.Common.CallBulk;
+using Skyline.DataMiner.Core.InterAppCalls.Common.CallSingle;
 
 public class DeleteCircuitMessage : Message
 {
@@ -69,7 +68,7 @@ public class DeleteCircuitMessage : Message
 /// </summary>
 public class Script
 {
-	private static readonly List<Type> KnownTypes = new List<Type> { typeof(FlowInfoMessage), typeof(DeleteCircuitMessage) };
+	private static readonly List<Type> KnownTypes = new List<Type> { typeof(DeleteCircuitMessage) };
 
 	public enum Pids
 	{

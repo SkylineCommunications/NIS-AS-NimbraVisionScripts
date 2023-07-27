@@ -56,11 +56,10 @@ using System.Threading;
 using QAPortalAPI.APIHelper;
 using QAPortalAPI.Models.ReportingModels;
 using Skyline.DataMiner.Automation;
-using Skyline.DataMiner.CommunityLibrary.FlowProvisioning.Info;
 using Skyline.DataMiner.Core.DataMinerSystem.Automation;
 using Skyline.DataMiner.Core.DataMinerSystem.Common;
-using Skyline.DataMiner.Library.Common.InterAppCalls.CallBulk;
-using Skyline.DataMiner.Library.Common.InterAppCalls.CallSingle;
+using Skyline.DataMiner.Core.InterAppCalls.Common.CallBulk;
+using Skyline.DataMiner.Core.InterAppCalls.Common.CallSingle;
 using Skyline.DataMiner.Net.Helper;
 
 /// <summary>
@@ -76,7 +75,7 @@ public class Script
 	private List<CircuitTableData> circuitData = new List<CircuitTableData>();
 	private DateTime startTimeDateTime = DateTime.UtcNow.AddDays(1);
 	private string startTime = String.Empty;
-	private static readonly List<Type> KnownTypes = new List<Type> { typeof(FlowInfoMessage), typeof(DeleteCircuitMessage) };
+	private static readonly List<Type> KnownTypes = new List<Type> {typeof(DeleteCircuitMessage) };
 
 	public enum TableIds
 	{
@@ -107,6 +106,7 @@ public class Script
 		{
 			engine.GenerateInformation("Nimbra element is null or not active.");
 			engine.ExitFail("Nimbra element is null or not active.");
+			return;
 		}
 
 		if (!LoadTableData(nimbraElement))

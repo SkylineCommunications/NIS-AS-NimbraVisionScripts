@@ -59,8 +59,7 @@ using Skyline.Automation.CircuitCreation.Presenter;
 using Skyline.Automation.CircuitCreation.View;
 using Skyline.DataMiner.Automation;
 using Skyline.DataMiner.Core.DataMinerSystem.Automation;
-using Skyline.DataMiner.Library.Common;
-using Skyline.DataMiner.Library.Common.InterAppCalls.CallBulk;
+using Skyline.DataMiner.Core.InterAppCalls.Common.CallBulk;
 using Skyline.DataMiner.Net.Apps.DataMinerObjectModel;
 using Skyline.DataMiner.Net.Apps.DataMinerObjectModel.Actions;
 using Skyline.DataMiner.Net.ManagerStore;
@@ -140,7 +139,7 @@ public class Script
 		}
 
 		DomHelper = new DomHelper(engine.SendSLNetMessages, instanceId.ModuleId);
-		string transitionId = string.Empty;
+		string transitionId = String.Empty;
 		DomInstance domInstance = Utils.GetDomInstance(DomHelper, instanceId);
 		var sectionDefinitionLinks = domInstance.GetDomDefinition().SectionDefinitionLinks;
 		FilterElement<SectionDefinition> sectionDefintionfilter = SectionDefinitionExposers.ID.Equal(sectionDefinitionLinks.First().SectionDefinitionID);
@@ -219,7 +218,7 @@ public class Script
 				throw new InvalidOperationException($"Action {action} not supported.");
 		}
 
-		if (!string.IsNullOrEmpty(transitionId))
+		if (!String.IsNullOrEmpty(transitionId))
 		{
 			DomHelper.DomInstances.DoStatusTransition(instanceId, transitionId);
 		}

@@ -131,12 +131,6 @@ C:\Users\joaosv\Source\Repos\SkylineCommunications\NimbraVisionScripts\DomInterf
 C:\Users\joaosv\Source\Repos\SkylineCommunications\NimbraVisionScripts\DomInterfaceSelection_1\bin\Debug\SLManagedAutomation.dll
 C:\Users\joaosv\Source\Repos\SkylineCommunications\NimbraVisionScripts\DomInterfaceSelection_1\bin\Debug\SLNetTypes.dll
 C:\Users\joaosv\Source\Repos\SkylineCommunications\NimbraVisionScripts\DomInterfaceSelection_1\bin\Debug\SLProtoBufLibrary.dll
-C:\Users\joaosv\Source\Repos\SkylineCommunications\NimbraVisionScripts\DomInterfaceSelection_1\bin\Debug\SLC.CLib.FlowProvisioning.dll
-C:\Users\joaosv\Source\Repos\SkylineCommunications\NimbraVisionScripts\DomInterfaceSelection_1\bin\Debug\SLC.CLib.IASToolkit.dll
-C:\Users\joaosv\Source\Repos\SkylineCommunications\NimbraVisionScripts\DomInterfaceSelection_1\bin\Debug\SLC.CLib.Labs.API.dll
-C:\Users\joaosv\Source\Repos\SkylineCommunications\NimbraVisionScripts\DomInterfaceSelection_1\bin\Debug\SLC.CLib.Labs.DOM.dll
-C:\Users\joaosv\Source\Repos\SkylineCommunications\NimbraVisionScripts\DomInterfaceSelection_1\bin\Debug\SLC.Lib.Automation.dll
-C:\Users\joaosv\Source\Repos\SkylineCommunications\NimbraVisionScripts\DomInterfaceSelection_1\bin\Debug\SLC.Lib.Common.dll
 C:\Users\joaosv\Source\Repos\SkylineCommunications\NimbraVisionScripts\DomInterfaceSelection_1\bin\Debug\System.Runtime.InteropServices.RuntimeInformation.dll
 C:\Users\joaosv\Source\Repos\SkylineCommunications\NimbraVisionScripts\DomInterfaceSelection_1\bin\Debug\Microsoft.Win32.Primitives.dll
 C:\Users\joaosv\Source\Repos\SkylineCommunications\NimbraVisionScripts\DomInterfaceSelection_1\bin\Debug\netstandard.dll
@@ -356,3 +350,7 @@ C:\GITHUB\NIS-AS-NimbraVisionScripts\DomInterfaceSelection_1\obj\Debug\DomInterf
 C:\GITHUB\NIS-AS-NimbraVisionScripts\DomInterfaceSelection_1\obj\Debug\DomInterfaceSelection_1.csproj.CopyComplete
 C:\GITHUB\NIS-AS-NimbraVisionScripts\DomInterfaceSelection_1\obj\Debug\DomInterfaceSelection_1.dll
 C:\GITHUB\NIS-AS-NimbraVisionScripts\DomInterfaceSelection_1\obj\Debug\DomInterfaceSelection_1.pdb
+C:\Users\joaosv\Source\Repos\SkylineCommunications\NimbraVisionScripts\DomInterfaceSelection_1\bin\Debug\Skyline.DataMiner.Core.DataMinerSystem.Automation.dll
+C:\Users\joaosv\Source\Repos\SkylineCommunications\NimbraVisionScripts\DomInterfaceSelection_1\bin\Debug\Skyline.DataMiner.Core.DataMinerSystem.Common.dll
+C:\Users\joaosv\Source\Repos\SkylineCommunications\NimbraVisionScripts\DomInterfaceSelection_1\bin\Debug\Skyline.DataMiner.Utils.InteractiveAutomationScriptToolkit.dll
+C:\Users\joaosv\Source\Repos\SkylineCommunications\NimbraVisionScripts\DomInterfaceSelection_1\bin\Debug\Skyline.DataMiner.Core.InterAppCalls.Common.dll

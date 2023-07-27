@@ -57,8 +57,7 @@ namespace Scheduler_DOM_CRUD_1
 	using Skyline.Automation.CircuitCreation;
 	using Skyline.DataMiner.Automation;
 	using Skyline.DataMiner.Core.DataMinerSystem.Automation;
-	using Skyline.DataMiner.Library.Common;
-	using Skyline.DataMiner.Library.Common.InterAppCalls.CallBulk;
+	using Skyline.DataMiner.Core.InterAppCalls.Common.CallBulk;
 	using Skyline.DataMiner.Net.Apps.DataMinerObjectModel;
 	using Skyline.DataMiner.Net.Messages.SLDataGateway;
 	using Skyline.DataMiner.Net.Sections;
@@ -132,8 +131,7 @@ namespace Skyline.Automation.CircuitCreation
 	using System;
 	using System.Collections.Generic;
 	using System.Linq;
-	using Skyline.DataMiner.CommunityLibrary.FlowProvisioning.Info;
-	using Skyline.DataMiner.Library.Common.InterAppCalls.CallSingle;
+	using Skyline.DataMiner.Core.InterAppCalls.Common.CallSingle;
 	using Skyline.DataMiner.Net.Apps.DataMinerObjectModel;
 	using Skyline.DataMiner.Net.Messages.SLDataGateway;
 	using Skyline.DataMiner.Net.Sections;
@@ -144,7 +142,7 @@ namespace Skyline.Automation.CircuitCreation
 
 		public static readonly int SleepTime = 1000;
 
-		public static readonly List<Type> KnownTypes = new List<Type> { typeof(FlowInfoMessage), typeof(DeleteCircuitMessage) };
+		public static readonly List<Type> KnownTypes = new List<Type> { typeof(DeleteCircuitMessage) };
 
 		public enum InterfaceType
 		{
@@ -191,7 +189,7 @@ namespace Skyline.Automation.CircuitCreation
 				return false;
 			}
 
-			if (string.IsNullOrEmpty(scriptParamValue))
+			if (String.IsNullOrEmpty(scriptParamValue))
 			{
 				return false;
 			}
