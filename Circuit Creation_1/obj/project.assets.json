@@ -2,7 +2,7 @@
   "version": 3,
   "targets": {
     ".NETFramework,Version=v4.6.2": {
-      "Newtonsoft.Json/13.0.3": {
+      "Newtonsoft.Json/13.0.2": {
         "type": "package",
         "compile": {
           "lib/net45/Newtonsoft.Json.dll": {
@@ -179,7 +179,7 @@
       }
     },
     ".NETFramework,Version=v4.6.2/win": {
-      "Newtonsoft.Json/13.0.3": {
+      "Newtonsoft.Json/13.0.2": {
         "type": "package",
         "compile": {
           "lib/net45/Newtonsoft.Json.dll": {
@@ -356,7 +356,7 @@
       }
     },
     ".NETFramework,Version=v4.6.2/win-arm64": {
-      "Newtonsoft.Json/13.0.3": {
+      "Newtonsoft.Json/13.0.2": {
         "type": "package",
         "compile": {
           "lib/net45/Newtonsoft.Json.dll": {
@@ -533,7 +533,7 @@
       }
     },
     ".NETFramework,Version=v4.6.2/win-x64": {
-      "Newtonsoft.Json/13.0.3": {
+      "Newtonsoft.Json/13.0.2": {
         "type": "package",
         "compile": {
           "lib/net45/Newtonsoft.Json.dll": {
@@ -710,7 +710,7 @@
       }
     },
     ".NETFramework,Version=v4.6.2/win-x86": {
-      "Newtonsoft.Json/13.0.3": {
+      "Newtonsoft.Json/13.0.2": {
         "type": "package",
         "compile": {
           "lib/net45/Newtonsoft.Json.dll": {
@@ -888,10 +888,10 @@
     }
   },
   "libraries": {
-    "Newtonsoft.Json/13.0.3": {
-      "sha512": "HrC5BXdl00IP9zeV+0Z848QWPAoCr9P3bDEZguI+gkLcBKAOxix/tLEAAHC+UvDNPv4a2d18lOReHMOagPa+zQ==",
+    "Newtonsoft.Json/13.0.2": {
+      "sha512": "R2pZ3B0UjeyHShm9vG+Tu0EBb2lC8b0dFzV9gVn50ofHXh9Smjk6kTn7A/FdAsC8B5cKib1OnGYOXxRBz5XQDg==",
       "type": "package",
-      "path": "newtonsoft.json/13.0.3",
+      "path": "newtonsoft.json/13.0.2",
       "files": [
         ".nupkg.metadata",
         ".signature.p7s",
@@ -913,7 +913,7 @@
         "lib/netstandard1.3/Newtonsoft.Json.xml",
         "lib/netstandard2.0/Newtonsoft.Json.dll",
         "lib/netstandard2.0/Newtonsoft.Json.xml",
-        "newtonsoft.json.13.0.3.nupkg.sha512",
+        "newtonsoft.json.13.0.2.nupkg.sha512",
         "newtonsoft.json.nuspec",
         "packageIcon.png"
       ]
@@ -1154,7 +1154,6 @@
   },
   "projectFileDependencyGroups": {
     ".NETFramework,Version=v4.6.2": [
-      "Newtonsoft.Json >= 13.0.3",
       "Skyline.DataMiner.Core.DataMinerSystem.Automation >= 1.1.0.5",
       "Skyline.DataMiner.Dev.Automation >= 10.3.6",
       "Skyline.DataMiner.Utils.InteractiveAutomationScriptToolkit >= 6.1.0",
@@ -1195,10 +1194,6 @@
     "frameworks": {
       "net462": {
         "dependencies": {
-          "Newtonsoft.Json": {
-            "target": "Package",
-            "version": "[13.0.3, )"
-          },
           "Skyline.DataMiner.Core.DataMinerSystem.Automation": {
             "target": "Package",
             "version": "[1.1.0.5, )"

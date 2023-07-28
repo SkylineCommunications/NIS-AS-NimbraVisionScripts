@@ -17,22 +17,6 @@ C:\Users\joaosv\Source\Repos\SkylineCommunications\NimbraVisionScripts\CircuitCr
 C:\Users\joaosv\Source\Repos\SkylineCommunications\NimbraVisionScripts\CircuitCreationScripts\Circuit Creation_1\obj\Debug\Circuit Creation_1.csproj.CopyComplete
 C:\Users\joaosv\Source\Repos\SkylineCommunications\NimbraVisionScripts\CircuitCreationScripts\Circuit Creation_1\obj\Debug\Circuit Creation_1.dll
 C:\Users\joaosv\Source\Repos\SkylineCommunications\NimbraVisionScripts\CircuitCreationScripts\Circuit Creation_1\obj\Debug\Circuit Creation_1.pdb
-C:\Users\joaosv\Source\Repos\SkylineCommunications\NimbraVisionScripts\Circuit Creation_1\bin\Debug\Circuit Creation_1.xml
-C:\Users\joaosv\Source\Repos\SkylineCommunications\NimbraVisionScripts\Circuit Creation_1\bin\Debug\Circuit Creation_1.dll
-C:\Users\joaosv\Source\Repos\SkylineCommunications\NimbraVisionScripts\Circuit Creation_1\bin\Debug\Circuit Creation_1.pdb
-C:\Users\joaosv\Source\Repos\SkylineCommunications\NimbraVisionScripts\Circuit Creation_1\bin\Debug\Newtonsoft.Json.dll
-C:\Users\joaosv\Source\Repos\SkylineCommunications\NimbraVisionScripts\Circuit Creation_1\bin\Debug\ICSharpCode.SharpZipLib.dll
-C:\Users\joaosv\Source\Repos\SkylineCommunications\NimbraVisionScripts\Circuit Creation_1\bin\Debug\protobuf-net.dll
-C:\Users\joaosv\Source\Repos\SkylineCommunications\NimbraVisionScripts\Circuit Creation_1\bin\Debug\SLAnalyticsTypes.dll
-C:\Users\joaosv\Source\Repos\SkylineCommunications\NimbraVisionScripts\Circuit Creation_1\bin\Debug\SLLoggerUtil.dll
-C:\Users\joaosv\Source\Repos\SkylineCommunications\NimbraVisionScripts\Circuit Creation_1\bin\Debug\SLManagedAutomation.dll
-C:\Users\joaosv\Source\Repos\SkylineCommunications\NimbraVisionScripts\Circuit Creation_1\bin\Debug\SLNetTypes.dll
-C:\Users\joaosv\Source\Repos\SkylineCommunications\NimbraVisionScripts\Circuit Creation_1\bin\Debug\SLProtoBufLibrary.dll
-C:\Users\joaosv\Source\Repos\SkylineCommunications\NimbraVisionScripts\Circuit Creation_1\obj\Debug\Circuit Creation_1.csproj.AssemblyReference.cache
-C:\Users\joaosv\Source\Repos\SkylineCommunications\NimbraVisionScripts\Circuit Creation_1\obj\Debug\Circuit Creation_1.csproj.CoreCompileInputs.cache
-C:\Users\joaosv\Source\Repos\SkylineCommunications\NimbraVisionScripts\Circuit Creation_1\obj\Debug\Circuit Creation_1.csproj.CopyComplete
-C:\Users\joaosv\Source\Repos\SkylineCommunications\NimbraVisionScripts\Circuit Creation_1\obj\Debug\Circuit Creation_1.dll
-C:\Users\joaosv\Source\Repos\SkylineCommunications\NimbraVisionScripts\Circuit Creation_1\obj\Debug\Circuit Creation_1.pdb
 C:\GITHUB\NIS-AS-NimbraVisionScripts\Circuit Creation_1\bin\Debug\Circuit Creation_1.xml
 C:\GITHUB\NIS-AS-NimbraVisionScripts\Circuit Creation_1\bin\Debug\Circuit Creation_1.dll
 C:\GITHUB\NIS-AS-NimbraVisionScripts\Circuit Creation_1\bin\Debug\Circuit Creation_1.pdb
@@ -149,10 +133,21 @@ C:\GITHUB\NIS-AS-NimbraVisionScripts\Circuit Creation_1\obj\Debug\Circuit Creati
 C:\GITHUB\NIS-AS-NimbraVisionScripts\Circuit Creation_1\obj\Debug\Circuit Creation_1.csproj.CopyComplete
 C:\GITHUB\NIS-AS-NimbraVisionScripts\Circuit Creation_1\obj\Debug\Circuit Creation_1.dll
 C:\GITHUB\NIS-AS-NimbraVisionScripts\Circuit Creation_1\obj\Debug\Circuit Creation_1.pdb
+C:\Users\joaosv\Source\Repos\SkylineCommunications\NimbraVisionScripts\Circuit Creation_1\bin\Debug\Circuit Creation_1.xml
+C:\Users\joaosv\Source\Repos\SkylineCommunications\NimbraVisionScripts\Circuit Creation_1\bin\Debug\Circuit Creation_1.dll
+C:\Users\joaosv\Source\Repos\SkylineCommunications\NimbraVisionScripts\Circuit Creation_1\bin\Debug\Circuit Creation_1.pdb
+C:\Users\joaosv\Source\Repos\SkylineCommunications\NimbraVisionScripts\Circuit Creation_1\bin\Debug\Newtonsoft.Json.dll
+C:\Users\joaosv\Source\Repos\SkylineCommunications\NimbraVisionScripts\Circuit Creation_1\bin\Debug\ICSharpCode.SharpZipLib.dll
 C:\Users\joaosv\Source\Repos\SkylineCommunications\NimbraVisionScripts\Circuit Creation_1\bin\Debug\ICSharpCode.SharpZipLib.pdb
 C:\Users\joaosv\Source\Repos\SkylineCommunications\NimbraVisionScripts\Circuit Creation_1\bin\Debug\Skyline.DataMiner.Core.DataMinerSystem.Automation.dll
 C:\Users\joaosv\Source\Repos\SkylineCommunications\NimbraVisionScripts\Circuit Creation_1\bin\Debug\Skyline.DataMiner.Core.DataMinerSystem.Common.dll
+C:\Users\joaosv\Source\Repos\SkylineCommunications\NimbraVisionScripts\Circuit Creation_1\bin\Debug\protobuf-net.dll
 C:\Users\joaosv\Source\Repos\SkylineCommunications\NimbraVisionScripts\Circuit Creation_1\bin\Debug\Skyline.DataMiner.Storage.Types.dll
+C:\Users\joaosv\Source\Repos\SkylineCommunications\NimbraVisionScripts\Circuit Creation_1\bin\Debug\SLAnalyticsTypes.dll
+C:\Users\joaosv\Source\Repos\SkylineCommunications\NimbraVisionScripts\Circuit Creation_1\bin\Debug\SLLoggerUtil.dll
+C:\Users\joaosv\Source\Repos\SkylineCommunications\NimbraVisionScripts\Circuit Creation_1\bin\Debug\SLManagedAutomation.dll
+C:\Users\joaosv\Source\Repos\SkylineCommunications\NimbraVisionScripts\Circuit Creation_1\bin\Debug\SLNetTypes.dll
+C:\Users\joaosv\Source\Repos\SkylineCommunications\NimbraVisionScripts\Circuit Creation_1\bin\Debug\SLProtoBufLibrary.dll
 C:\Users\joaosv\Source\Repos\SkylineCommunications\NimbraVisionScripts\Circuit Creation_1\bin\Debug\Skyline.DataMiner.Utils.InteractiveAutomationScriptToolkit.dll
 C:\Users\joaosv\Source\Repos\SkylineCommunications\NimbraVisionScripts\Circuit Creation_1\bin\Debug\System.Runtime.InteropServices.RuntimeInformation.dll
 C:\Users\joaosv\Source\Repos\SkylineCommunications\NimbraVisionScripts\Circuit Creation_1\bin\Debug\Microsoft.Win32.Primitives.dll
@@ -250,3 +245,8 @@ C:\Users\joaosv\Source\Repos\SkylineCommunications\NimbraVisionScripts\Circuit C
 C:\Users\joaosv\Source\Repos\SkylineCommunications\NimbraVisionScripts\Circuit Creation_1\bin\Debug\System.Xml.XmlSerializer.dll
 C:\Users\joaosv\Source\Repos\SkylineCommunications\NimbraVisionScripts\Circuit Creation_1\bin\Debug\System.Xml.XPath.dll
 C:\Users\joaosv\Source\Repos\SkylineCommunications\NimbraVisionScripts\Circuit Creation_1\bin\Debug\System.Xml.XPath.XDocument.dll
+C:\Users\joaosv\Source\Repos\SkylineCommunications\NimbraVisionScripts\Circuit Creation_1\obj\Debug\Circuit Creation_1.csproj.AssemblyReference.cache
+C:\Users\joaosv\Source\Repos\SkylineCommunications\NimbraVisionScripts\Circuit Creation_1\obj\Debug\Circuit Creation_1.csproj.CoreCompileInputs.cache
+C:\Users\joaosv\Source\Repos\SkylineCommunications\NimbraVisionScripts\Circuit Creation_1\obj\Debug\Circuit Creation_1.csproj.CopyComplete
+C:\Users\joaosv\Source\Repos\SkylineCommunications\NimbraVisionScripts\Circuit Creation_1\obj\Debug\Circuit Creation_1.dll
+C:\Users\joaosv\Source\Repos\SkylineCommunications\NimbraVisionScripts\Circuit Creation_1\obj\Debug\Circuit Creation_1.pdb
