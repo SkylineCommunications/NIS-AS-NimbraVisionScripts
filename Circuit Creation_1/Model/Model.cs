@@ -61,7 +61,7 @@
 
 			var element = dms.GetElement(elementName);
 
-			if (element.State == ElementState.Active)
+			if (element.State != ElementState.Active)
 			{
 				engine.ExitFail($"{element.Name} element is not active!");
 			}
