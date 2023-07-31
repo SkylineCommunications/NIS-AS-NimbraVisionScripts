@@ -247,3 +247,4 @@ C:\Users\joaosv\Source\Repos\SkylineCommunications\NimbraVisionScripts\VisionToE
 C:\Users\joaosv\Source\Repos\SkylineCommunications\NimbraVisionScripts\VisionToEdgeOrchestration_1\obj\Debug\VisionToEdgeOrchestration_1.csproj.CopyComplete
 C:\Users\joaosv\Source\Repos\SkylineCommunications\NimbraVisionScripts\VisionToEdgeOrchestration_1\obj\Debug\VisionToEdgeOrchestration_1.dll
 C:\Users\joaosv\Source\Repos\SkylineCommunications\NimbraVisionScripts\VisionToEdgeOrchestration_1\obj\Debug\VisionToEdgeOrchestration_1.pdb
+C:\GITHUB\NIS-AS-NimbraVisionScripts\VisionToEdgeOrchestration_1\obj\Debug\VisionToEdgeOrchestration_1.csproj.AssemblyReference.cache

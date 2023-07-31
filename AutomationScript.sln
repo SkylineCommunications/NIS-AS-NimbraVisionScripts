@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 17
-VisualStudioVersion = 17.4.33103.184
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.33529.622
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Internal", "Internal", "{1DDBC1B1-88EC-4D58-A539-72FBE745E60D}"
 EndProject
@@ -113,6 +113,24 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Actions", "Actions", "{C7CC
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Scheduler DOM CRUD_1", "Scheduler DOM CRUD_1\Scheduler DOM CRUD_1.csproj", "{FC2EDE2D-37B9-4543-8B8D-339C6A9FCCDB}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "CustomOperator-IgnoreDuplicates", "CustomOperator-IgnoreDuplicates", "{47D67F2D-EC23-4510-92B5-936F688F9421}"
+	ProjectSection(SolutionItems) = preProject
+		CustomOperator-IgnoreDuplicates.xml = CustomOperator-IgnoreDuplicates.xml
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Actions", "Actions", "{18458C2E-4472-4E59-B0FB-E6129F91D262}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CustomOperator-IgnoreDuplicates_1", "CustomOperator-IgnoreDuplicates_1\CustomOperator-IgnoreDuplicates_1.csproj", "{4DD81BEF-BDDB-42A7-B739-E8EA034BDF16}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "CustomOperator-StringToBoolean", "CustomOperator-StringToBoolean", "{7CD5C0D8-0E30-4DD6-9A24-9DE90F9B828D}"
+	ProjectSection(SolutionItems) = preProject
+		CustomOperator-StringToBoolean.xml = CustomOperator-StringToBoolean.xml
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Actions", "Actions", "{B8FEC4E0-AC66-42CE-A3C3-5A4E45246FAB}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CustomOperator-StringToBoolean_1", "CustomOperator-StringToBoolean_1\CustomOperator-StringToBoolean_1.csproj", "{E02F93B9-AD15-4E66-A605-C8A0FFFC4A39}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -159,6 +177,14 @@ Global
 		{FC2EDE2D-37B9-4543-8B8D-339C6A9FCCDB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FC2EDE2D-37B9-4543-8B8D-339C6A9FCCDB}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FC2EDE2D-37B9-4543-8B8D-339C6A9FCCDB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4DD81BEF-BDDB-42A7-B739-E8EA034BDF16}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4DD81BEF-BDDB-42A7-B739-E8EA034BDF16}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4DD81BEF-BDDB-42A7-B739-E8EA034BDF16}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4DD81BEF-BDDB-42A7-B739-E8EA034BDF16}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E02F93B9-AD15-4E66-A605-C8A0FFFC4A39}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E02F93B9-AD15-4E66-A605-C8A0FFFC4A39}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E02F93B9-AD15-4E66-A605-C8A0FFFC4A39}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E02F93B9-AD15-4E66-A605-C8A0FFFC4A39}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -195,6 +221,12 @@ Global
 		{E5FBC06E-80BC-4F04-9CA7-EC9E04C8F269} = {16B0F393-674A-4B6C-91CB-CF687FEFAC83}
 		{C7CC3495-FC10-4A73-ACA8-293B9E64C6BA} = {E5FBC06E-80BC-4F04-9CA7-EC9E04C8F269}
 		{FC2EDE2D-37B9-4543-8B8D-339C6A9FCCDB} = {C7CC3495-FC10-4A73-ACA8-293B9E64C6BA}
+		{47D67F2D-EC23-4510-92B5-936F688F9421} = {16B0F393-674A-4B6C-91CB-CF687FEFAC83}
+		{18458C2E-4472-4E59-B0FB-E6129F91D262} = {47D67F2D-EC23-4510-92B5-936F688F9421}
+		{4DD81BEF-BDDB-42A7-B739-E8EA034BDF16} = {18458C2E-4472-4E59-B0FB-E6129F91D262}
+		{7CD5C0D8-0E30-4DD6-9A24-9DE90F9B828D} = {16B0F393-674A-4B6C-91CB-CF687FEFAC83}
+		{B8FEC4E0-AC66-42CE-A3C3-5A4E45246FAB} = {7CD5C0D8-0E30-4DD6-9A24-9DE90F9B828D}
+		{E02F93B9-AD15-4E66-A605-C8A0FFFC4A39} = {B8FEC4E0-AC66-42CE-A3C3-5A4E45246FAB}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {DB43C6F2-5491-4648-AD2C-ACEE95415159}

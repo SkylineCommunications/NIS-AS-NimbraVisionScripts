@@ -16,8 +16,6 @@ C:\GITHUB\NIS-AS-NimbraVisionScripts\CircuitCreationIntegrationTest_1\bin\Debug\
 C:\GITHUB\NIS-AS-NimbraVisionScripts\CircuitCreationIntegrationTest_1\bin\Debug\SLNetTypes.dll
 C:\GITHUB\NIS-AS-NimbraVisionScripts\CircuitCreationIntegrationTest_1\bin\Debug\SLProtoBufLibrary.dll
 C:\GITHUB\NIS-AS-NimbraVisionScripts\CircuitCreationIntegrationTest_1\bin\Debug\Skyline.DataMiner.Utils.QAPortalAPI.dll
-C:\GITHUB\NIS-AS-NimbraVisionScripts\CircuitCreationIntegrationTest_1\bin\Debug\SLC.CLib.FlowProvisioning.dll
-C:\GITHUB\NIS-AS-NimbraVisionScripts\CircuitCreationIntegrationTest_1\bin\Debug\SLC.Lib.Common.dll
 C:\GITHUB\NIS-AS-NimbraVisionScripts\CircuitCreationIntegrationTest_1\bin\Debug\System.ComponentModel.Annotations.dll
 C:\GITHUB\NIS-AS-NimbraVisionScripts\CircuitCreationIntegrationTest_1\bin\Debug\System.Runtime.InteropServices.RuntimeInformation.dll
 C:\GITHUB\NIS-AS-NimbraVisionScripts\CircuitCreationIntegrationTest_1\bin\Debug\Microsoft.Win32.Primitives.dll
@@ -239,3 +237,4 @@ C:\Users\joaosv\Source\Repos\SkylineCommunications\NimbraVisionScripts\CircuitCr
 C:\Users\joaosv\Source\Repos\SkylineCommunications\NimbraVisionScripts\CircuitCreationIntegrationTest_1\obj\Debug\CircuitCreationIntegrationTest_1.csproj.CopyComplete
 C:\Users\joaosv\Source\Repos\SkylineCommunications\NimbraVisionScripts\CircuitCreationIntegrationTest_1\obj\Debug\CircuitCreationIntegrationTest_1.dll
 C:\Users\joaosv\Source\Repos\SkylineCommunications\NimbraVisionScripts\CircuitCreationIntegrationTest_1\obj\Debug\CircuitCreationIntegrationTest_1.pdb
+C:\GITHUB\NIS-AS-NimbraVisionScripts\CircuitCreationIntegrationTest_1\bin\Debug\Skyline.DataMiner.Core.InterAppCalls.Common.dll

@@ -1,21 +1,25 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\joaosv\\Source\\Repos\\SkylineCommunications\\NimbraVisionScripts\\DomInterfaceSelection_1\\DomInterfaceSelection_1.csproj": {}
+    "C:\\GITHUB\\NIS-AS-NimbraVisionScripts\\DomInterfaceSelection_1\\DomInterfaceSelection_1.csproj": {}
   },
   "projects": {
-    "C:\\Users\\joaosv\\Source\\Repos\\SkylineCommunications\\NimbraVisionScripts\\DomInterfaceSelection_1\\DomInterfaceSelection_1.csproj": {
+    "C:\\GITHUB\\NIS-AS-NimbraVisionScripts\\DomInterfaceSelection_1\\DomInterfaceSelection_1.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\joaosv\\Source\\Repos\\SkylineCommunications\\NimbraVisionScripts\\DomInterfaceSelection_1\\DomInterfaceSelection_1.csproj",
+        "projectUniqueName": "C:\\GITHUB\\NIS-AS-NimbraVisionScripts\\DomInterfaceSelection_1\\DomInterfaceSelection_1.csproj",
         "projectName": "DomInterfaceSelection_1",
-        "projectPath": "C:\\Users\\joaosv\\Source\\Repos\\SkylineCommunications\\NimbraVisionScripts\\DomInterfaceSelection_1\\DomInterfaceSelection_1.csproj",
-        "packagesPath": "C:\\Users\\joaosv\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\joaosv\\Source\\Repos\\SkylineCommunications\\NimbraVisionScripts\\DomInterfaceSelection_1\\obj\\",
+        "projectPath": "C:\\GITHUB\\NIS-AS-NimbraVisionScripts\\DomInterfaceSelection_1\\DomInterfaceSelection_1.csproj",
+        "packagesPath": "C:\\Users\\FlavioME\\.nuget\\packages\\",
+        "outputPath": "C:\\GITHUB\\NIS-AS-NimbraVisionScripts\\DomInterfaceSelection_1\\obj\\",
         "projectStyle": "PackageReference",
         "skipContentFileWrite": true,
+        "fallbackFolders": [
+          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
+        ],
         "configFilePaths": [
-          "C:\\Users\\joaosv\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\FlavioME\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
@@ -62,9 +66,6 @@
       },
       "runtimes": {
         "win": {
-          "#import": []
-        },
-        "win-arm64": {
           "#import": []
         },
         "win-x64": {

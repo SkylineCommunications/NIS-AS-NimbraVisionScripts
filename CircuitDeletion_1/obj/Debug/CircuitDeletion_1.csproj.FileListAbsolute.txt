@@ -32,8 +32,6 @@ C:\GITHUB\NIS-AS-NimbraVisionScripts\CircuitDeletion_1\bin\Debug\SLLoggerUtil.dl
 C:\GITHUB\NIS-AS-NimbraVisionScripts\CircuitDeletion_1\bin\Debug\SLManagedAutomation.dll
 C:\GITHUB\NIS-AS-NimbraVisionScripts\CircuitDeletion_1\bin\Debug\SLNetTypes.dll
 C:\GITHUB\NIS-AS-NimbraVisionScripts\CircuitDeletion_1\bin\Debug\SLProtoBufLibrary.dll
-C:\GITHUB\NIS-AS-NimbraVisionScripts\CircuitDeletion_1\bin\Debug\SLC.CLib.FlowProvisioning.dll
-C:\GITHUB\NIS-AS-NimbraVisionScripts\CircuitDeletion_1\bin\Debug\SLC.Lib.Common.dll
 C:\GITHUB\NIS-AS-NimbraVisionScripts\CircuitDeletion_1\bin\Debug\System.Runtime.InteropServices.RuntimeInformation.dll
 C:\GITHUB\NIS-AS-NimbraVisionScripts\CircuitDeletion_1\bin\Debug\Microsoft.Win32.Primitives.dll
 C:\GITHUB\NIS-AS-NimbraVisionScripts\CircuitDeletion_1\bin\Debug\netstandard.dll
@@ -251,3 +249,5 @@ C:\Users\joaosv\Source\Repos\SkylineCommunications\NimbraVisionScripts\CircuitDe
 C:\Users\joaosv\Source\Repos\SkylineCommunications\NimbraVisionScripts\CircuitDeletion_1\obj\Debug\CircuitDeletion_1.csproj.CopyComplete
 C:\Users\joaosv\Source\Repos\SkylineCommunications\NimbraVisionScripts\CircuitDeletion_1\obj\Debug\CircuitDeletion_1.dll
 C:\Users\joaosv\Source\Repos\SkylineCommunications\NimbraVisionScripts\CircuitDeletion_1\obj\Debug\CircuitDeletion_1.pdb
+C:\GITHUB\NIS-AS-NimbraVisionScripts\CircuitDeletion_1\bin\Debug\Skyline.DataMiner.Core.InterAppCalls.Common.dll
+C:\GITHUB\NIS-AS-NimbraVisionScripts\CircuitDeletion_1\obj\Debug\CircuitDeletion_1.csproj.AssemblyReference.cache
