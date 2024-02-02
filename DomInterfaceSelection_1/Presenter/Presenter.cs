@@ -58,6 +58,11 @@
 							return intf.Capabilities.Contains("jxse");
 
 						return intf.Capabilities.Contains("jxsd");
+					case "SDI SRT":
+						if (inOrOut == Utils.InterfaceType.Source)
+							return intf.Capabilities.Equals("6");
+
+						return intf.Capabilities.Equals("7");
 					default:
 						return false;
 				}

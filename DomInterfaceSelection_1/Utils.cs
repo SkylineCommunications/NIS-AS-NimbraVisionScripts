@@ -30,6 +30,7 @@
 			EtsInterfaceTable = 1900,
 			EtsInterfaceCircuitNaming = 1924,
 			EtsInterfaceNodeName = 1922,
+			VAResourceTable = 2200,
 		}
 
 		public enum Idx
@@ -39,6 +40,10 @@
 			ItsInterfaceName = 4,
 			EtsInterfaceNodeName = 21,
 			EtsInterfaceCircuitNaming = 23,
+			VAInterfaceCircuitNaming =16,
+			VAInterfaceNodeName = 2,
+			VAInterfaceType = 3,
+			VAInterfaceMode = 6,
 			CircuitServiceId = 2,
 			CircuitSourceIntf = 8,
 			CircuitDestIntf = 9,
@@ -52,6 +57,7 @@
 			J2kHitless = 2,
 			Jxs = 3,
 			JxsHitless = 4,
+			SdiSrt = 5,
 		}
 
 		public static bool ValidateArguments(DomInstanceId domInstanceId, string scriptParamValue)
@@ -128,6 +134,14 @@
 			var interfaceNumbering = splittedInterfaceName[1].Split('-')[1];
 			return String.Join("_", interfaceNumbering, node);
 		}
+
+		public static string GetCircuitNamedVAInterface(string interfaceName)
+		{
+			var splittedInterfaceName = interfaceName.Split('_');
+			var node = splittedInterfaceName[0];
+			var interfaceNumbering = splittedInterfaceName[1].Replace("av", String.Empty);
+			return String.Join("_", interfaceNumbering, node);
+		}
 	}
 
 	public class Settings
@@ -140,6 +154,7 @@
 			"JPEG 2000 1+1 Hitless",
 			"JPEG-XS",
 			"JPEG-XS 1+1 Hitless",
+			"SDI SRT",
 		};
 
 		private readonly int labelWidth = 250;

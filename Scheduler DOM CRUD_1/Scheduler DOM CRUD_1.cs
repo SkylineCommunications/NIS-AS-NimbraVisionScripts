@@ -68,7 +68,7 @@ namespace Scheduler_DOM_CRUD_1
 	/// </summary>
 	public class Script
 	{
-		public const string NimbraVisionElementName = "Nimbra Vision";
+		public const string NimbraVisionElementName = "NetInsight Nimbra Vision";
 
 		/// <summary>
 		/// The script entry point.
@@ -100,6 +100,11 @@ namespace Scheduler_DOM_CRUD_1
 			{
 				translatedDestinationIntf = GetCircuitNamedEtsInterface(Convert.ToString(destinationInterface));
 				translatedSourceIntf = GetCircuitNamedEtsInterface(Convert.ToString(sourceInterface));
+			}
+			else if (circuitType == CircuitType.SdiSrt)
+			{
+				translatedDestinationIntf = GetCircuitNamedVAInterface(Convert.ToString(destinationInterface));
+				translatedSourceIntf = GetCircuitNamedVAInterface(Convert.ToString(sourceInterface));
 			}
 			else
 			{
@@ -158,6 +163,7 @@ namespace Skyline.Automation.CircuitCreation
 			EtsInterfaceTable = 1900,
 			EtsInterfaceCircuitNaming = 1924,
 			EtsInterfaceNodeName = 1922,
+			VAResourceTable = 2200,
 		}
 
 		public enum Idx
@@ -180,6 +186,7 @@ namespace Skyline.Automation.CircuitCreation
 			J2kHitless = 2,
 			Jxs = 3,
 			JxsHitless = 4,
+			SdiSrt = 5,
 		}
 
 		public static bool ValidateArguments(DomInstanceId domInstanceId, string scriptParamValue)
@@ -256,6 +263,14 @@ namespace Skyline.Automation.CircuitCreation
 			var interfaceNumbering = splittedInterfaceName[1].Split('-')[1];
 			return String.Join("_", interfaceNumbering, node);
 		}
+
+		public static string GetCircuitNamedVAInterface(string interfaceName)
+		{
+			var splittedInterfaceName = interfaceName.Split('_');
+			var node = splittedInterfaceName[0];
+			var interfaceNumbering = splittedInterfaceName[1].Replace("av", String.Empty);
+			return String.Join("_", interfaceNumbering, node);
+		}
 	}
 
 	public class Settings
@@ -268,6 +283,7 @@ namespace Skyline.Automation.CircuitCreation
 			"JPEG 2000 1+1 Hitless",
 			"JPEG-XS",
 			"JPEG-XS 1+1 Hitless",
+			"SDI SRT",
 		};
 
 		private readonly int labelWidth = 250;

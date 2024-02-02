@@ -73,7 +73,7 @@ using static Skyline.Automation.CircuitCreation.Utils;
 /// </summary>
 public class Script
 {
-	public const string NimbraVisionElementName = "Nimbra Vision";
+	public const string NimbraVisionElementName = "NetInsight Nimbra Vision";
 
 	public SectionDefinition SectionDefinition { get; set; }
 
@@ -175,7 +175,7 @@ public class Script
 						Row = 0,
 						RowSpan = 1,
 						Type = UIBlockType.StaticText,
-						Text = "Circuit Creation wasn't succssful" + "\r\n",
+						Text = "Circuit Creation wasn't successful" + "\r\n",
 					});
 
 					ui.AppendBlock(new UIBlockDefinition
@@ -309,6 +309,31 @@ public class Script
 		}
 	}
 
+	private static bool CreateSRTCircuit(IEngine engine, DateTime startTime, DateTime endTime, string sourceIntf, string destinationIntf, long newCapacity, long port)
+	{
+		try
+		{
+			var now = DateTime.Now;
+			var subscriptSRT = engine.PrepareSubScript("NimbraVisionSdiSrtCircuitCreation");
+			subscriptSRT.SelectScriptParam("Capacity", newCapacity.ToString());
+			subscriptSRT.SelectScriptParam("Start Time", startTime < now ? "-1" : startTime.ToString("yyyy-MM-ddTHH:mm:ssZ", CultureInfo.InvariantCulture));
+			subscriptSRT.SelectScriptParam("End Time", endTime.ToString("yyyy-MM-ddTHH:mm:ssZ", CultureInfo.InvariantCulture));
+			subscriptSRT.SelectScriptParam("Source", GetCircuitNamedVAInterface(sourceIntf));
+			subscriptSRT.SelectScriptParam("Destination", GetCircuitNamedVAInterface(destinationIntf));
+			subscriptSRT.SelectScriptParam("ElementName", NimbraVisionElementName);
+			subscriptSRT.SelectScriptParam("Port", port.ToString());
+			subscriptSRT.SelectScriptParam("Mode", "push");
+			subscriptSRT.SelectScriptParam("Password", "-1");
+			subscriptSRT.StartScript();
+
+			return ValidateCircuitCreation(engine, CircuitType.SdiSrt, sourceIntf, destinationIntf);
+		}
+		catch
+		{
+			return false;
+		}
+	}
+
 	private static bool ValidateCircuitCreation(IEngine engine, CircuitType circuitType, string sourceIntf, string destinationIntf)
 	{
 		var dms = engine.GetDms() ?? throw new NullReferenceException("dms");
@@ -322,6 +347,11 @@ public class Script
 		{
 			translatedDestinationIntf = GetCircuitNamedEtsInterface(Convert.ToString(destinationIntf));
 			translatedSourceIntf = GetCircuitNamedEtsInterface(Convert.ToString(sourceIntf));
+		}
+		else if (circuitType == CircuitType.SdiSrt)
+		{
+			translatedDestinationIntf = GetCircuitNamedVAInterface(Convert.ToString(destinationIntf));
+			translatedSourceIntf = GetCircuitNamedVAInterface(Convert.ToString(sourceIntf));
 		}
 		else
 		{
@@ -351,6 +381,7 @@ public class Script
 		var sourceIntf = Convert.ToString(GetFieldValue(domInstance, "Source Interface"));
 		var destinationIntf = Convert.ToString(GetFieldValue(domInstance, "Destination Interface"));
 		long capacity = Convert.ToInt64(GetFieldValue(domInstance, "Capacity"));
+		var port = Convert.ToInt64(GetFieldValue(domInstance, "Port"));
 
 		var now = DateTime.UtcNow;
 
@@ -387,6 +418,13 @@ public class Script
 				}
 
 				return false;
+			case CircuitType.SdiSrt:
+				if (CreateSRTCircuit(engine, startTime, endTime, sourceIntf, destinationIntf, capacity, port))
+				{
+					return true;
+				}
+
+				return false;
 
 			default:
 				engine.GenerateInformation($"Circuit type {circuitType} not supported.");
@@ -408,6 +446,11 @@ public class Script
 			{
 				translatedDestinationIntf = GetCircuitNamedEtsInterface(Convert.ToString(destinationInterface));
 				translatedSourceIntf = GetCircuitNamedEtsInterface(Convert.ToString(sourceInterface));
+			}
+			else if (circuitType == CircuitType.SdiSrt)
+			{
+				translatedDestinationIntf = GetCircuitNamedVAInterface(Convert.ToString(destinationInterface));
+				translatedSourceIntf = GetCircuitNamedVAInterface(Convert.ToString(sourceInterface));
 			}
 			else
 			{

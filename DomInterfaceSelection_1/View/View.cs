@@ -34,6 +34,9 @@
 				case Utils.CircuitType.JxsHitless:
 					circuitTypeStr = "JPEG-XS 1+1 Hitless";
 					break;
+				case Utils.CircuitType.SdiSrt:
+					circuitTypeStr = "SDI SRT";
+					break;
 				default:
 					circuitTypeStr = "E-Line";
 					break;

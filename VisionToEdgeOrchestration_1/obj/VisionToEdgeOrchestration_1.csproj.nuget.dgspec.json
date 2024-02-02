@@ -1,25 +1,21 @@
 {
   "format": 1,
   "restore": {
-    "C:\\GITHUB\\NIS-AS-NimbraVisionScripts\\VisionToEdgeOrchestration_1\\VisionToEdgeOrchestration_1.csproj": {}
+    "C:\\Users\\CarolinaCO\\Source\\Repos\\NIS-AS-NimbraVisionScripts\\VisionToEdgeOrchestration_1\\VisionToEdgeOrchestration_1.csproj": {}
   },
   "projects": {
-    "C:\\GITHUB\\NIS-AS-NimbraVisionScripts\\VisionToEdgeOrchestration_1\\VisionToEdgeOrchestration_1.csproj": {
+    "C:\\Users\\CarolinaCO\\Source\\Repos\\NIS-AS-NimbraVisionScripts\\VisionToEdgeOrchestration_1\\VisionToEdgeOrchestration_1.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\GITHUB\\NIS-AS-NimbraVisionScripts\\VisionToEdgeOrchestration_1\\VisionToEdgeOrchestration_1.csproj",
+        "projectUniqueName": "C:\\Users\\CarolinaCO\\Source\\Repos\\NIS-AS-NimbraVisionScripts\\VisionToEdgeOrchestration_1\\VisionToEdgeOrchestration_1.csproj",
         "projectName": "VisionToEdgeOrchestration_1",
-        "projectPath": "C:\\GITHUB\\NIS-AS-NimbraVisionScripts\\VisionToEdgeOrchestration_1\\VisionToEdgeOrchestration_1.csproj",
-        "packagesPath": "C:\\Users\\FlavioME\\.nuget\\packages\\",
-        "outputPath": "C:\\GITHUB\\NIS-AS-NimbraVisionScripts\\VisionToEdgeOrchestration_1\\obj\\",
+        "projectPath": "C:\\Users\\CarolinaCO\\Source\\Repos\\NIS-AS-NimbraVisionScripts\\VisionToEdgeOrchestration_1\\VisionToEdgeOrchestration_1.csproj",
+        "packagesPath": "C:\\Users\\CarolinaCO\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\CarolinaCO\\Source\\Repos\\NIS-AS-NimbraVisionScripts\\VisionToEdgeOrchestration_1\\obj\\",
         "projectStyle": "PackageReference",
         "skipContentFileWrite": true,
-        "fallbackFolders": [
-          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
-        ],
         "configFilePaths": [
-          "C:\\Users\\FlavioME\\AppData\\Roaming\\NuGet\\NuGet.Config",
-          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
+          "C:\\Users\\CarolinaCO\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
@@ -62,6 +58,9 @@
       },
       "runtimes": {
         "win": {
+          "#import": []
+        },
+        "win-arm64": {
           "#import": []
         },
         "win-x64": {

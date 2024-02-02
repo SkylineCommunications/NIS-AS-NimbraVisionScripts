@@ -16,7 +16,7 @@
 			var dms = engine.GetDms() ?? throw new NullReferenceException("dms");
 			NimbraVisionElement = dms.GetElement(nimbraVisionElementName);
 
-			Interfaces = LoadInterfacesFromElement(NimbraVisionElement);
+			Interfaces = LoadInterfacesFromElement(engine, NimbraVisionElement);
 
 			DomInstance = domInstance;
 			DomHelper = domHelper;
@@ -43,12 +43,13 @@
 
 		public IDmsElement NimbraVisionElement { get; }
 
-		private List<Interface> LoadInterfacesFromElement(IDmsElement nimbraVisionElement)
+		private List<Interface> LoadInterfacesFromElement(IEngine engine, IDmsElement nimbraVisionElement)
 		{
 			List<Interface> interfaces = new List<Interface>();
 			var etsIntfTable = nimbraVisionElement.GetTable((int)Utils.Pids.EtsInterfaceTable);
 			var itsIntfTable = nimbraVisionElement.GetTable((int)Utils.Pids.ItsInterfaceTable);
 			var circuitsTable = nimbraVisionElement.GetTable((int)Utils.Pids.CircuitTable);
+			var vaResourcesTable = nimbraVisionElement.GetTable((int)Utils.Pids.VAResourceTable);
 
 			var circuitRows = circuitsTable.GetRows();
 			HashSet<string> j2kInterfacesInUse = new HashSet<string>();
@@ -69,6 +70,16 @@
 				jxsInterfacesInUse.Add(Convert.ToString(row[(int)Utils.Idx.CircuitDestIntf]));
 			}
 
+			HashSet<string> srtInterfacesInUse = new HashSet<string>();
+			foreach (var row in from row in circuitRows
+								where Convert.ToString(row[(int)Utils.Idx.CircuitServiceId]).Contains("VA-SRT")
+								select row)
+			{
+				srtInterfacesInUse.Add(Convert.ToString(row[(int)Utils.Idx.CircuitSourceIntf]));
+				srtInterfacesInUse.Add(Convert.ToString(row[(int)Utils.Idx.CircuitDestIntf]));
+			}
+
+			// ETS
 			var etsRows = etsIntfTable.GetRows();
 			foreach (var etsRow in etsRows)
 			{
@@ -81,6 +92,7 @@
 				});
 			}
 
+			// ITS
 			var itsRows = itsIntfTable.GetRows();
 			string capabilities;
 
@@ -104,6 +116,32 @@
 					CircuitCreationInterfaceName = circuitCreationInterfaceName,
 					InterfaceName = Convert.ToString(itsRow[0]),
 					NodeName = Convert.ToString(itsRow[(int)Utils.Idx.ItsInterfaceNodeName]),
+				});
+			}
+
+			// VA
+			var vaRows = vaResourcesTable.GetRows();
+			foreach (var vaRow in vaRows)
+			{
+				var typeVA = Convert.ToString(vaRow[(int)Utils.Idx.VAInterfaceType]);
+				if (typeVA != "0")
+					continue;
+
+				var modeVA = Convert.ToString(vaRow[(int)Utils.Idx.VAInterfaceMode]);
+				if (modeVA != "6" && modeVA != "7")
+					continue;
+
+				var circuitCreationInterfaceNameVA = Convert.ToString(vaRow[(int)Utils.Idx.VAInterfaceCircuitNaming]);
+				if (srtInterfacesInUse.Contains(circuitCreationInterfaceNameVA))
+					continue;
+
+				interfaces.Add(new Interface
+				{
+					// In this case capabilities are not used. We use Mode on VA Resource Table instead.
+					Capabilities = modeVA,
+					CircuitCreationInterfaceName = circuitCreationInterfaceNameVA,
+					InterfaceName = Convert.ToString(vaRow[0]),
+					NodeName = Convert.ToString(vaRow[(int)Utils.Idx.VAInterfaceNodeName]),
 				});
 			}
 

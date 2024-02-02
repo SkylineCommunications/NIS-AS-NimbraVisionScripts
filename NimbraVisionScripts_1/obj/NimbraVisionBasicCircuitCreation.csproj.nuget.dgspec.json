@@ -1,25 +1,21 @@
 {
   "format": 1,
   "restore": {
-    "C:\\GITHUB\\NIS-AS-NimbraVisionScripts\\NimbraVisionScripts_1\\NimbraVisionBasicCircuitCreation.csproj": {}
+    "C:\\Users\\CarolinaCO\\Source\\Repos\\NIS-AS-NimbraVisionScripts\\NimbraVisionScripts_1\\NimbraVisionBasicCircuitCreation.csproj": {}
   },
   "projects": {
-    "C:\\GITHUB\\NIS-AS-NimbraVisionScripts\\NimbraVisionScripts_1\\NimbraVisionBasicCircuitCreation.csproj": {
+    "C:\\Users\\CarolinaCO\\Source\\Repos\\NIS-AS-NimbraVisionScripts\\NimbraVisionScripts_1\\NimbraVisionBasicCircuitCreation.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\GITHUB\\NIS-AS-NimbraVisionScripts\\NimbraVisionScripts_1\\NimbraVisionBasicCircuitCreation.csproj",
-        "projectName": "NimbraVisionBasicCircuitCreation",
-        "projectPath": "C:\\GITHUB\\NIS-AS-NimbraVisionScripts\\NimbraVisionScripts_1\\NimbraVisionBasicCircuitCreation.csproj",
-        "packagesPath": "C:\\Users\\FlavioME\\.nuget\\packages\\",
-        "outputPath": "C:\\GITHUB\\NIS-AS-NimbraVisionScripts\\NimbraVisionScripts_1\\obj\\",
+        "projectUniqueName": "C:\\Users\\CarolinaCO\\Source\\Repos\\NIS-AS-NimbraVisionScripts\\NimbraVisionScripts_1\\NimbraVisionBasicCircuitCreation.csproj",
+        "projectName": "NimbraVisionScripts_1",
+        "projectPath": "C:\\Users\\CarolinaCO\\Source\\Repos\\NIS-AS-NimbraVisionScripts\\NimbraVisionScripts_1\\NimbraVisionBasicCircuitCreation.csproj",
+        "packagesPath": "C:\\Users\\CarolinaCO\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\CarolinaCO\\Source\\Repos\\NIS-AS-NimbraVisionScripts\\NimbraVisionScripts_1\\obj\\",
         "projectStyle": "PackageReference",
         "skipContentFileWrite": true,
-        "fallbackFolders": [
-          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
-        ],
         "configFilePaths": [
-          "C:\\Users\\FlavioME\\AppData\\Roaming\\NuGet\\NuGet.Config",
-          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
+          "C:\\Users\\CarolinaCO\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
@@ -58,6 +54,9 @@
       },
       "runtimes": {
         "win": {
+          "#import": []
+        },
+        "win-arm64": {
           "#import": []
         },
         "win-x64": {
