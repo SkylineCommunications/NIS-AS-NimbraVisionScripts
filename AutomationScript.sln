@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
-VisualStudioVersion = 16.0.33529.622
+# Visual Studio Version 17
+VisualStudioVersion = 17.6.33815.320
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Internal", "Internal", "{1DDBC1B1-88EC-4D58-A539-72FBE745E60D}"
 EndProject
@@ -131,6 +131,15 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Actions", "Actions", "{B8FE
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CustomOperator-StringToBoolean_1", "CustomOperator-StringToBoolean_1\CustomOperator-StringToBoolean_1.csproj", "{E02F93B9-AD15-4E66-A605-C8A0FFFC4A39}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "NimbraVisionSdiSrtCircuitCreation", "NimbraVisionSdiSrtCircuitCreation", "{FAF0F7FD-E774-416C-A682-D1414CF4E878}"
+	ProjectSection(SolutionItems) = preProject
+		NimbraVisionSdiSrtCircuitCreation.xml = NimbraVisionSdiSrtCircuitCreation.xml
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Actions", "Actions", "{65403983-D11D-4DA1-9542-688F5062BD1C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NimbraVisionSdiSrtCircuitCreation_1", "NimbraVisionSdiSrtCircuitCreation_1\NimbraVisionSdiSrtCircuitCreation_1.csproj", "{652D99E6-05AB-4D33-B2A2-4711E20FBBB2}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -185,6 +194,10 @@ Global
 		{E02F93B9-AD15-4E66-A605-C8A0FFFC4A39}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E02F93B9-AD15-4E66-A605-C8A0FFFC4A39}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E02F93B9-AD15-4E66-A605-C8A0FFFC4A39}.Release|Any CPU.Build.0 = Release|Any CPU
+		{652D99E6-05AB-4D33-B2A2-4711E20FBBB2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{652D99E6-05AB-4D33-B2A2-4711E20FBBB2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{652D99E6-05AB-4D33-B2A2-4711E20FBBB2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{652D99E6-05AB-4D33-B2A2-4711E20FBBB2}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -227,6 +240,9 @@ Global
 		{7CD5C0D8-0E30-4DD6-9A24-9DE90F9B828D} = {16B0F393-674A-4B6C-91CB-CF687FEFAC83}
 		{B8FEC4E0-AC66-42CE-A3C3-5A4E45246FAB} = {7CD5C0D8-0E30-4DD6-9A24-9DE90F9B828D}
 		{E02F93B9-AD15-4E66-A605-C8A0FFFC4A39} = {B8FEC4E0-AC66-42CE-A3C3-5A4E45246FAB}
+		{FAF0F7FD-E774-416C-A682-D1414CF4E878} = {16B0F393-674A-4B6C-91CB-CF687FEFAC83}
+		{65403983-D11D-4DA1-9542-688F5062BD1C} = {FAF0F7FD-E774-416C-A682-D1414CF4E878}
+		{652D99E6-05AB-4D33-B2A2-4711E20FBBB2} = {65403983-D11D-4DA1-9542-688F5062BD1C}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {DB43C6F2-5491-4648-AD2C-ACEE95415159}

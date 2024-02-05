@@ -75,6 +75,7 @@
 			var etsIntfTable = nimbraVisionElement.GetTable((int)Utils.Pids.EtsInterfaceTable);
 			var itsIntfTable = nimbraVisionElement.GetTable((int)Utils.Pids.ItsInterfaceTable);
 			var circuitsTable = nimbraVisionElement.GetTable((int)Utils.Pids.CircuitTable);
+			var vaResourcesTable = nimbraVisionElement.GetTable((int)Utils.Pids.VaResourcesTable);
 
 			var circuitRows = circuitsTable.GetRows();
 			HashSet<string> j2kInterfacesInUse = new HashSet<string>();
@@ -130,6 +131,23 @@
 					CircuitCreationInterfaceName = circuitCreationInterfaceName,
 					InterfaceName = Convert.ToString(itsRow[0]),
 					NodeName = Convert.ToString(itsRow[(int)Utils.Idx.ItsInterfaceNodeName]),
+				});
+			}
+
+			var varesoucesRows = vaResourcesTable.GetRows();
+			foreach (var row in varesoucesRows)
+			{
+				if (Convert.ToInt32(row[(int)Utils.Idx.VaResourcesType]) != (int)Utils.VaResourceType.VaInterface)
+				{
+					continue;
+				}
+
+				interfaces.Add(new Interface
+				{
+					Capabilities = "SDI SRT",
+					CircuitCreationInterfaceName = Convert.ToString(row[(int)Utils.Idx.VaResourcesCircuitNaming]),
+					InterfaceName = Convert.ToString(row[0]),
+					NodeName = Convert.ToString(row[(int)Utils.Idx.VaResourcesNodeName]),
 				});
 			}
 

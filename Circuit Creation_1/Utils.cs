@@ -11,6 +11,14 @@
 			Destination = 1,
 		}
 
+		public enum VaResourceType
+		{
+			NA = -1,
+			VaInterface = 0,
+			VaEncoderPipe = 1,
+			VaDecoderPipe = 2,
+		}
+
 		public enum Pids
 		{
 			ItsInterfaceTable = 1600,
@@ -19,6 +27,9 @@
 			EtsInterfaceCircuitNaming = 1924,
 			EtsInterfaceNodeName = 1922,
 			CircuitTable = 1800,
+			VaResourcesTable = 2200,
+			VaResourcesNodeName = 2203,
+			VaResourcesCircuitNaming = 2217,
 		}
 
 		public enum Idx
@@ -31,6 +42,9 @@
 			CircuitServiceId = 2,
 			CircuitSourceIntf = 8,
 			CircuitDestIntf = 9,
+			VaResourcesNodeName = 2,
+			VaResourcesType = 3,
+			VaResourcesCircuitNaming = 16,
 		}
 
 		public static string GetCircuitNamedEtsInterface(string interfaceName)
@@ -60,6 +74,14 @@
 			"JPEG 2000 1+1 Hitless",
 			"JPEG-XS",
 			"JPEG-XS 1+1 Hitless",
+			"SDI SRT",
+		};
+
+		private readonly Dictionary<string, string> supportedSrtModes = new Dictionary<string, string>
+		{
+			{"Caller -> Listener", "push" },
+			{"Listener -> Caller", "pull" },
+			{"Rendezvous -> Rendezvous", "rendezvous" },
 		};
 
 		private readonly int labelWidth = 160;
@@ -73,5 +95,7 @@
 		public int ButtonHeight => buttonHeight;
 
 		public List<string> SupportedCircuitTypes => supportedCircuitTypes;
+
+		public Dictionary<string, string> SupportedSrtModes => supportedSrtModes;
 	}
 }

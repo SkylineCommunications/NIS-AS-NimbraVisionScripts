@@ -29,6 +29,9 @@
 			NoEndTime = new CheckBox("Undefined") { Width = _settings.ComponentWidth };
 			NoStartTime = new CheckBox("Now") { Width = _settings.ComponentWidth };
 			ErrorLabel = new Label(String.Empty);
+			StreamPort = new Numeric(1000) { Width = _settings.ComponentWidth, Decimals = 0, Minimum = 1000, Maximum = 65535, ValidationText = "Invalid Range" };
+			Passphrase = new TextBox { Width = _settings.ComponentWidth };
+			SrtMode = new DropDown(_settings.SupportedSrtModes.Keys) { Width= _settings.ComponentWidth };
 
 			SharedInitialiation();
 
@@ -66,6 +69,12 @@
 
 		public CheckBox NoStartTime { get; set; }
 
+		public Numeric StreamPort { get; set; }
+
+		public TextBox Passphrase { get; set; }
+
+		public DropDown SrtMode { get; set; }
+
 		internal void RestartUI()
 		{
 			StopTime.IsEnabled = !NoEndTime.IsChecked;
@@ -78,6 +87,21 @@
 				AddWidget(FormName, RowCount, 2, 1, 1);
 				AddWidget(new Label("VLAN") { Width = _settings.LabelWidth, Style = TextStyle.Bold }, RowCount + 1, 1);
 				AddWidget(Vlan, RowCount, 2, 1, 1);
+			}
+			else if (CircuitTypeSelector.Selected == "SDI SRT")
+			{
+				AddWidget(new Label("Form Name") { Width = _settings.LabelWidth, Style = TextStyle.Bold }, RowCount + 1, 1);
+				AddWidget(FormName, RowCount, 2, 1, 1);
+				AddWidget(new Label("Mode") { Width = _settings.LabelWidth, Style = TextStyle.Bold }, RowCount + 1, 1);
+				AddWidget(SrtMode, RowCount, 2, 1, 1);
+				AddWidget(new Label("Stream Port") { Width = _settings.LabelWidth, Style = TextStyle.Bold }, RowCount + 1, 1);
+				AddWidget(StreamPort, RowCount, 2, 1, 1);
+				AddWidget(new Label("Passphrase") { Width = _settings.LabelWidth, Style = TextStyle.Bold }, RowCount + 1, 1);
+				AddWidget(Passphrase, RowCount, 2, 1, 1);
+			}
+			else
+			{
+				// Do nothing
 			}
 
 			AddWidget(new WhiteSpace(),RowCount + 1, 1);

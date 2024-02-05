@@ -14,11 +14,13 @@
 	{
 		private readonly View view;
 		private readonly Model model;
+		private readonly Settings settings;
 
-		public Presenter(View view, Model model)
+		public Presenter(View view, Model model, Settings settings)
 		{
 			this.view = view ?? throw new ArgumentNullException("view");
 			this.model = model ?? throw new ArgumentNullException("model");
+			this.settings = settings ?? throw new ArgumentNullException("settings");
 			SelectCircuitConstructor = new Dictionary<string, Func<bool>>
 			{
 				{ "E-Line", CreateELineCircuit() },
@@ -27,6 +29,7 @@
 				{ "JPEG 2000 1+1 Hitless", CreateJ2KCircuit() },
 				{ "JPEG-XS", CreateJxsCircuit() },
 				{ "JPEG-XS 1+1 Hitless", CreateJxsCircuit() },
+				{ "SDI SRT", CreateSdiSrtCircuit() },
 			};
 
 			view.CircuitTypeSelector.Changed += UpdateUI;
@@ -69,6 +72,8 @@
 							return intf.Capabilities.Contains("jxse");
 
 						return intf.Capabilities.Contains("jxsd");
+					case "SDI SRT":
+						return intf.Capabilities == "SDI SRT";
 
 					default:
 						return false;
@@ -96,9 +101,15 @@
 			string result;
 			view.Engine.GenerateInformation("Create Circuit");
 
-			if (view.SourceNode.Selected == view.DestinationNode.Selected)
+			if (view.CircuitTypeSelector.Selected != "SDI SRT" && view.SourceNode.Selected == view.DestinationNode.Selected)
 			{
 				view.ErrorLabel.Text = "Nodes can't be the same!";
+				return;
+			}
+
+			if (view.CircuitTypeSelector.Selected == "SDI SRT" && !String.IsNullOrWhiteSpace(view.Passphrase.Text) && view.Passphrase.Text.Length < 10)
+			{
+				view.ErrorLabel.Text = "Passpharse must be at least 10 characters.";
 				return;
 			}
 
@@ -252,6 +263,53 @@
 							{
 								FormName = view.FormName.Text,
 								VLAN = Convert.ToInt32(view.Vlan.Value),
+							},
+						},
+					};
+
+					view.Engine.FindElement(model.NimbraVisionElement.Name).SetParameter(
+						125,
+						JsonConvert.SerializeObject(
+							createFields,
+							Formatting.Indented,
+							new JsonSerializerSettings
+							{
+								NullValueHandling = NullValueHandling.Ignore,
+								Culture = CultureInfo.InvariantCulture,
+								DateTimeZoneHandling = DateTimeZoneHandling.Utc,
+							}));
+
+					return true;
+				}
+				catch
+				{
+					return false;
+				}
+			};
+		}
+
+		private Func<bool> CreateSdiSrtCircuit()
+		{
+			return () =>
+			{
+				try
+				{
+					var createFields = new SdiSrtRequestModel
+					{
+						ServiceId = "VA-SRT",
+						Capacity = Convert.ToInt32(view.Capacity.Value),
+						Destination = model.Interfaces.First(intf => intf.InterfaceName == view.DestinationInterface.Selected).CircuitCreationInterfaceName,
+						Source = model.Interfaces.First(intf => intf.InterfaceName == view.SourceInterface.Selected).CircuitCreationInterfaceName,
+						StartTime = view.NoStartTime.IsChecked ? DateTime.MinValue : view.StartTime.DateTime,
+						EndTime = view.NoEndTime.IsChecked ? DateTime.MinValue : view.StopTime.DateTime,
+						ExtraInfo = new SdiSrtRequestModel.Extra
+						{
+							Common = new SdiSrtRequestModel.Common
+							{
+								FormName = view.FormName.Text,
+								Port = Convert.ToInt32(view.StreamPort.Value),
+								Passphrase = view.Passphrase.Text,
+								Mode = settings.SupportedSrtModes[view.SrtMode.Selected],
 							},
 						},
 					};
