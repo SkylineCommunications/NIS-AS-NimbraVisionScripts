@@ -24,7 +24,7 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <CodeAnalysisRuleSet>..\Internal\Code Analysis\qaction-debug.ruleset</CodeAnalysisRuleSet>
-    <DocumentationFile>bin\Debug\NimbraVisionSrtCircuitCreation_1.xml</DocumentationFile>
+    <DocumentationFile>bin\Debug\NimbraVisionSdiSrtCircuitCreation_1.xml</DocumentationFile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -34,7 +34,7 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <CodeAnalysisRuleSet>..\Internal\Code Analysis\qaction-release.ruleset</CodeAnalysisRuleSet>
-    <DocumentationFile>bin\Release\NimbraVisionSrtCircuitCreation_1.xml</DocumentationFile>
+    <DocumentationFile>bin\Release\NimbraVisionSdiSrtCircuitCreation_1.xml</DocumentationFile>
   </PropertyGroup>
   <PropertyGroup>
     <ResolveAssemblyWarnOrErrorOnTargetArchitectureMismatch>None</ResolveAssemblyWarnOrErrorOnTargetArchitectureMismatch>
@@ -54,6 +54,14 @@
     </PackageReference>
     <PackageReference Include="Skyline.DataMiner.Dev.Automation">
       <Version>10.3.6</Version>
+    </PackageReference>
+    <PackageReference Include="Skyline.DataMiner.Utils.ConnectorAPI.NetInsight.Nimbra.Vision">
+      <Version>1.0.1-prerelease3</Version>
+    </PackageReference>
+    <PackageReference Include="Skyline.DataMiner.Utils.SecureCoding.Analyzers">
+      <Version>2.0.3</Version>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+      <PrivateAssets>all</PrivateAssets>
     </PackageReference>
     <PackageReference Include="StyleCop.Analyzers">
       <Version>1.1.118</Version>
