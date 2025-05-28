@@ -56,7 +56,7 @@
       <Version>10.3.6</Version>
     </PackageReference>
     <PackageReference Include="Skyline.DataMiner.Utils.ConnectorAPI.NetInsight.Nimbra.Vision">
-      <Version>1.0.1-prerelease3</Version>
+      <Version>1.0.1-prerelease8</Version>
     </PackageReference>
     <PackageReference Include="Skyline.DataMiner.Utils.SecureCoding.Analyzers">
       <Version>2.0.3</Version>
@@ -72,7 +72,7 @@
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <ProjectExtensions>
     <VisualStudio>
-      <UserProperties DisLinkedXmlFile="..\NimbraVisionJxsCircuitCreation.xml" DisProjectType="automationScriptProject" DisLinkId="1" />
+      <UserProperties DisLinkId="1" DisProjectType="automationScriptProject" DisLinkedXmlFile="..\NimbraVisionJxsCircuitCreation.xml" />
     </VisualStudio>
   </ProjectExtensions>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

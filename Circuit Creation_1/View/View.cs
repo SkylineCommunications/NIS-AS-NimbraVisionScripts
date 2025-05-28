@@ -15,8 +15,8 @@
 			this._settings = settings;
 			AllowOverlappingWidgets = true;
 
-			StartTime = new DateTimePicker(DateTime.Now) { Width = _settings.ComponentWidth, Minimum = DateTime.Now};
-			StopTime = new DateTimePicker(DateTime.Now.AddDays(1)) { Width = _settings.ComponentWidth, Minimum = DateTime.Now };
+			StartTime = new DateTimePicker(DateTime.Now) { Width = 305, Minimum = DateTime.Now};
+			StopTime = new DateTimePicker(DateTime.Now.AddDays(1)) { Width = 305, Minimum = DateTime.Now };
 			CircuitTypeSelector = new DropDown(_settings.SupportedCircuitTypes) { Width = _settings.ComponentWidth };
 			Capacity = new Numeric(1) { Width = _settings.ComponentWidth, Decimals = 0, Minimum = 1, Maximum = 1000, Tooltip = "Capacity in Mbps", ValidationText = "Invalid Range" };
 			SourceNode = new DropDown { Width = _settings.ComponentWidth };
@@ -118,18 +118,18 @@
 			AddWidget(Capacity, 1, 2, 1, 1);
 			AddWidget(new Label("Source Node") { Width = _settings.LabelWidth, Style = TextStyle.Bold }, 2, 1);
 			AddWidget(SourceNode, 2, 2, 1, 1);
-			AddWidget(new Label("Source Interface") { Width = _settings.LabelWidth, Style = TextStyle.Bold }, 2, 3, HorizontalAlignment.Right);
+			AddWidget(new Label("Source Interface") { Width = _settings.LabelWidth, Style = TextStyle.Bold }, 2, 3, HorizontalAlignment.Left);
 			AddWidget(SourceInterface, 2, 4, 1, 1);
 			AddWidget(new Label("Destination Node") { Width = _settings.LabelWidth, Style = TextStyle.Bold }, 3, 1);
 			AddWidget(DestinationNode, 3, 2, 1, 1);
-			AddWidget(new Label("Destination Interface") { Width = _settings.LabelWidth, Style = TextStyle.Bold }, 3, 3, HorizontalAlignment.Right);
+			AddWidget(new Label("Destination Interface") { Width = _settings.LabelWidth + 45, Style = TextStyle.Bold }, 3, 3, HorizontalAlignment.Left);
 			AddWidget(DestinationInterface, 3, 4, 1, 1);
 			AddWidget(new Label("Start Time") { Width = _settings.LabelWidth, Style = TextStyle.Bold }, 4, 1);
-			AddWidget(StartTime, 4, 2, 1, 1);
-			AddWidget(NoStartTime, 4, 3);
+			AddWidget(StartTime, 4, 2, 1, 2);
+			AddWidget(NoStartTime, 4, 4);
 			AddWidget(new Label("Stop time") { Width = _settings.LabelWidth, Style = TextStyle.Bold }, 5, 1);
-			AddWidget(StopTime, 5, 2, 1, 1);
-			AddWidget(NoEndTime, 5, 3);
+			AddWidget(StopTime, 5, 2, 1, 2);
+			AddWidget(NoEndTime, 5, 4);
 		}
 	}
 }

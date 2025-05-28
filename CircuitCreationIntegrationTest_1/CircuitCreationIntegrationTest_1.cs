@@ -46,6 +46,7 @@ Revision History:
 DATE		VERSION		AUTHOR			COMMENTS
 
 dd/mm/2023	1.0.0.1		XXX, Skyline	Initial version
+28/05/2025	1.0.0.2		SDT, Skyline	Added support for Nimbra Vision InterApp.
 ****************************************************************************
 */
 
@@ -53,29 +54,31 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
+
 using QAPortalAPI.APIHelper;
 using QAPortalAPI.Models.ReportingModels;
+
 using Skyline.DataMiner.Automation;
 using Skyline.DataMiner.Core.DataMinerSystem.Automation;
 using Skyline.DataMiner.Core.DataMinerSystem.Common;
-using Skyline.DataMiner.Core.InterAppCalls.Common.CallBulk;
 using Skyline.DataMiner.Core.InterAppCalls.Common.CallSingle;
 using Skyline.DataMiner.Net.Helper;
+using Skyline.DataMiner.Utils.ConnectorAPI.NetInsight.Nimbra.Vision.InterApp;
+using Skyline.DataMiner.Utils.ConnectorAPI.NetInsight.Nimbra.Vision.InterApp.Messages;
 
 /// <summary>
 /// DataMiner Script Class.
 /// </summary>
 public class Script
 {
+	private readonly EtsInterfaceGroup etsInterfaceData = new EtsInterfaceGroup();
+	private readonly List<CircuitTableData> circuitData = new List<CircuitTableData>();
+	private readonly DateTime startTimeDateTime = DateTime.UtcNow.AddDays(1);
 	private string sourceBasic = String.Empty;
 	private string destinationBasic = String.Empty;
 	private string sourceVlan = String.Empty;
 	private string destinationVlan = String.Empty;
-	private EtsInterfaceGroup etsInterfaceData = new EtsInterfaceGroup();
-	private List<CircuitTableData> circuitData = new List<CircuitTableData>();
-	private DateTime startTimeDateTime = DateTime.UtcNow.AddDays(1);
 	private string startTime = String.Empty;
-	private static readonly List<Type> KnownTypes = new List<Type> {typeof(DeleteCircuitMessage) };
 
 	public enum TableIds
 	{
@@ -136,10 +139,52 @@ public class Script
 
 		CreateBasicCircuit(engine);
 		CreateVlanCircuit(engine);
+		CheckCircuitCreationComplete(engine, nimbraElement, out long basicCircuitCreated, out long vlanCircuitCreated);
 
+		INimbraVisionInterAppCalls nimbraVisionInterApp = new NimbraVisionInterAppCalls(engine.GetUserConnection(), nimbraElementName);
+		List<INimbraVisionRequest> deleteMessages = new List<INimbraVisionRequest>();
+		CircuitCreationValidation(engine, testReport, basicCircuitCreated, vlanCircuitCreated, deleteMessages);
+
+		nimbraVisionInterApp.SendMessages(deleteMessages.ToArray());
+
+		QaPortalApiHelper reportHelperViaAPI = new QaPortalApiHelper(engine.GenerateInformation, "https://qaportal.skyline.local/api/public/results/addresult", "internal", "internal");
+		reportHelperViaAPI.PostResult(testReport);
+	}
+
+	private static void CircuitCreationValidation(Engine engine, TestReport testReport, long basicCircuitCreated, long vlanCircuitCreated, List<INimbraVisionRequest> deleteMessages)
+	{
+		if (basicCircuitCreated == -1)
+		{
+			engine.GenerateInformation("Basic Circuit wasn't successfully created.");
+			testReport.TryAddTestCase(TestCaseReport.GetFailTestCase("Basic Circuit", "Basic Circuit wasn't successfully created, after 3 retries separeted by 30 seconds."));
+		}
+		else
+		{
+			engine.GenerateInformation("Basic Circuit was successfully created.");
+			testReport.TryAddTestCase(TestCaseReport.GetSuccessTestCase("Basic Circuit"));
+			DeleteCircuitRequest basicCircuitDeleteMessage = new DeleteCircuitRequest { SharedId = Convert.ToString(basicCircuitCreated) };
+			deleteMessages.Add(basicCircuitDeleteMessage);
+		}
+
+		if (vlanCircuitCreated == -1)
+		{
+			engine.GenerateInformation("VLAN Circuit wasn't successfully created.");
+			testReport.TryAddTestCase(TestCaseReport.GetFailTestCase("VLAN Circuit", "VLAN Circuit wasn't successfully created, after 3 retries separeted by 30 seconds."));
+		}
+		else
+		{
+			engine.GenerateInformation("VLAN Circuit was successfully created.");
+			testReport.TryAddTestCase(TestCaseReport.GetSuccessTestCase("VLAN Circuit"));
+			DeleteCircuitRequest basicCircuitDeleteMessage = new DeleteCircuitRequest { SharedId = Convert.ToString(basicCircuitCreated) };
+			deleteMessages.Add(basicCircuitDeleteMessage);
+		}
+	}
+
+	private void CheckCircuitCreationComplete(Engine engine, IDmsElement nimbraElement, out long basicCircuitCreated, out long vlanCircuitCreated)
+	{
 		int retries = 3;
-		long basicCircuitCreated = -1;
-		long vlanCircuitCreated = -1;
+		basicCircuitCreated = -1;
+		vlanCircuitCreated = -1;
 		for (int i = 0; i < retries; i++)
 		{
 			Thread.Sleep(30000);
@@ -159,39 +204,6 @@ public class Script
 			if (basicCircuitCreated != -1 && vlanCircuitCreated != -1)
 				break;
 		}
-
-		IInterAppCall deleteCommand = InterAppCallFactory.CreateNew();
-
-		if (basicCircuitCreated == -1)
-		{
-			engine.GenerateInformation("Basic Circuit wasn't successfully created.");
-			testReport.TryAddTestCase(TestCaseReport.GetFailTestCase("Basic Circuit", "Basic Circuit wasn't successfully created, after 3 retries separeted by 30 seconds."));
-		}
-		else
-		{
-			engine.GenerateInformation("Basic Circuit was successfully created.");
-			testReport.TryAddTestCase(TestCaseReport.GetSuccessTestCase("Basic Circuit"));
-			DeleteCircuitMessage basicCircuitDeleteMessage = new DeleteCircuitMessage { SharedId = Convert.ToString(basicCircuitCreated) };
-			deleteCommand.Messages.Add(basicCircuitDeleteMessage);
-		}
-
-		if (vlanCircuitCreated == -1)
-		{
-			engine.GenerateInformation("VLAN Circuit wasn't successfully created.");
-			testReport.TryAddTestCase(TestCaseReport.GetFailTestCase("VLAN Circuit", "VLAN Circuit wasn't successfully created, after 3 retries separeted by 30 seconds."));
-		}
-		else
-		{
-			engine.GenerateInformation("VLAN Circuit was successfully created.");
-			testReport.TryAddTestCase(TestCaseReport.GetSuccessTestCase("VLAN Circuit"));
-			DeleteCircuitMessage vlanCircuitDeleteMessage = new DeleteCircuitMessage { SharedId = Convert.ToString(vlanCircuitCreated) };
-			deleteCommand.Messages.Add(vlanCircuitDeleteMessage);
-		}
-
-		deleteCommand.Send(Engine.SLNetRaw, nimbraElement.DmsElementId.AgentId, nimbraElement.DmsElementId.ElementId, 9000000, KnownTypes);
-
-		QaPortalApiHelper reportHelperViaAPI = new QaPortalApiHelper(engine.GenerateInformation, "https://qaportal.skyline.local/api/public/results/addresult", "internal", "internal");
-		reportHelperViaAPI.PostResult(testReport);
 	}
 
 	private void CreateVlanCircuit(Engine engine)

@@ -8,6 +8,8 @@
 	using Skyline.Automation.CircuitCreation.Model;
 	using Skyline.Automation.CircuitCreation.View;
 	using Skyline.DataMiner.Automation;
+	using Skyline.DataMiner.Utils.ConnectorAPI.NetInsight.Nimbra.Vision.InterApp;
+	using Skyline.DataMiner.Utils.ConnectorAPI.NetInsight.Nimbra.Vision.InterApp.Messages;
 	using Skyline.DataMiner.Utils.InteractiveAutomationScript;
 
 	public class Presenter
@@ -136,7 +138,7 @@
 				view.Engine.GenerateInformation("CreateELineCircuit");
 				try
 				{
-					var createFields = new ELineRequestModel
+					var createFields = new ELineCircuitRequest
 					{
 						ServiceId = view.CircuitTypeSelector.Selected,
 						Capacity = Convert.ToInt32(view.Capacity.Value),
@@ -146,19 +148,8 @@
 						EndTime = view.NoEndTime.IsChecked ? DateTime.MinValue : view.StopTime.DateTime,
 					};
 
-					view.Engine.FindElement(model.NimbraVisionElement.Name).SetParameter(
-						125,
-						JsonConvert.SerializeObject(
-							createFields,
-							Formatting.Indented,
-							new JsonSerializerSettings
-							{
-								NullValueHandling = NullValueHandling.Ignore,
-								Culture = CultureInfo.InvariantCulture,
-								DateTimeZoneHandling = DateTimeZoneHandling.Utc,
-							}));
-
-					return true;
+					INimbraVisionResponse nimbraVisionResponse = SendInterAppMessage(createFields);
+					return nimbraVisionResponse.Success;
 				}
 				catch
 				{
@@ -173,7 +164,7 @@
 			{
 				try
 				{
-					var createFields = new J2kRequestModel
+					var createFields = new J2KCircuitRequest
 					{
 						ServiceId = view.CircuitTypeSelector.Selected == "JPEG 2000 1+1 Hitless" ? "j2k-hitless" : "j2k",
 						Capacity = Convert.ToInt32(view.Capacity.Value),
@@ -184,19 +175,8 @@
 						ProtectionId = view.CircuitTypeSelector.Selected == "JPEG 2000 1+1 Hitless" ? 1 : -1,
 					};
 
-					view.Engine.FindElement(model.NimbraVisionElement.Name).SetParameter(
-						125,
-						JsonConvert.SerializeObject(
-							createFields,
-							Formatting.Indented,
-							new JsonSerializerSettings
-							{
-								NullValueHandling = NullValueHandling.Ignore,
-								Culture = CultureInfo.InvariantCulture,
-								DateTimeZoneHandling = DateTimeZoneHandling.Utc,
-							}));
-
-					return true;
+					INimbraVisionResponse nimbraVisionResponse = SendInterAppMessage(createFields);
+					return nimbraVisionResponse.Success;
 				}
 				catch
 				{
@@ -211,7 +191,7 @@
 			{
 				try
 				{
-					var createFields = new J2kRequestModel
+					var createFields = new J2KCircuitRequest
 					{
 						ServiceId = view.CircuitTypeSelector.Selected == "JPEG-XS 1+1 Hitless" ? "jxs-hitless" : "jxs",
 						Capacity = Convert.ToInt32(view.Capacity.Value),
@@ -222,19 +202,8 @@
 						ProtectionId = view.CircuitTypeSelector.Selected == "JPEG-XS 1+1 Hitless" ? 1 : -1,
 					};
 
-					view.Engine.FindElement(model.NimbraVisionElement.Name).SetParameter(
-						125,
-						JsonConvert.SerializeObject(
-							createFields,
-							Formatting.Indented,
-							new JsonSerializerSettings
-							{
-								NullValueHandling = NullValueHandling.Ignore,
-								Culture = CultureInfo.InvariantCulture,
-								DateTimeZoneHandling = DateTimeZoneHandling.Utc,
-							}));
-
-					return true;
+					INimbraVisionResponse nimbraVisionResponse = SendInterAppMessage(createFields);
+					return nimbraVisionResponse.Success;
 				}
 				catch
 				{
@@ -249,7 +218,7 @@
 			{
 				try
 				{
-					var createFields = new ELineVlanRequestModel
+					var createFields = new ELineVlanCircuitRequest
 					{
 						ServiceId = view.CircuitTypeSelector.Selected,
 						Capacity = Convert.ToInt32(view.Capacity.Value),
@@ -257,29 +226,18 @@
 						Source = model.Interfaces.First(intf => intf.InterfaceName == view.SourceInterface.Selected).CircuitCreationInterfaceName,
 						StartTime = view.NoStartTime.IsChecked ? DateTime.MinValue : view.StartTime.DateTime,
 						EndTime = view.NoEndTime.IsChecked ? DateTime.MinValue : view.StopTime.DateTime,
-						ExtraInfo = new ELineVlanRequestModel.Extra
+						ExtraInfo = new ELineVlanCircuitRequest.Extra
 						{
-							Common = new ELineVlanRequestModel.Common
+							Common = new ELineVlanCircuitRequest.Common
 							{
 								FormName = view.FormName.Text,
-								VLAN = Convert.ToInt32(view.Vlan.Value),
+								Vlan = Convert.ToInt32(view.Vlan.Value),
 							},
 						},
 					};
 
-					view.Engine.FindElement(model.NimbraVisionElement.Name).SetParameter(
-						125,
-						JsonConvert.SerializeObject(
-							createFields,
-							Formatting.Indented,
-							new JsonSerializerSettings
-							{
-								NullValueHandling = NullValueHandling.Ignore,
-								Culture = CultureInfo.InvariantCulture,
-								DateTimeZoneHandling = DateTimeZoneHandling.Utc,
-							}));
-
-					return true;
+					INimbraVisionResponse nimbraVisionResponse = SendInterAppMessage(createFields);
+					return nimbraVisionResponse.Success;
 				}
 				catch
 				{
@@ -294,7 +252,7 @@
 			{
 				try
 				{
-					var createFields = new SdiSrtRequestModel
+					var createFields = new SdiSrtCircuitRequest
 					{
 						ServiceId = "VA-SRT",
 						Capacity = Convert.ToInt32(view.Capacity.Value),
@@ -302,9 +260,9 @@
 						Source = model.Interfaces.First(intf => intf.InterfaceName == view.SourceInterface.Selected).CircuitCreationInterfaceName,
 						StartTime = view.NoStartTime.IsChecked ? DateTime.MinValue : view.StartTime.DateTime,
 						EndTime = view.NoEndTime.IsChecked ? DateTime.MinValue : view.StopTime.DateTime,
-						ExtraInfo = new SdiSrtRequestModel.Extra
+						ExtraInfo = new SdiSrtCircuitRequest.Extra
 						{
-							Common = new SdiSrtRequestModel.Common
+							Common = new SdiSrtCircuitRequest.Common
 							{
 								FormName = view.FormName.Text,
 								Port = Convert.ToInt32(view.StreamPort.Value),
@@ -314,19 +272,8 @@
 						},
 					};
 
-					view.Engine.FindElement(model.NimbraVisionElement.Name).SetParameter(
-						125,
-						JsonConvert.SerializeObject(
-							createFields,
-							Formatting.Indented,
-							new JsonSerializerSettings
-							{
-								NullValueHandling = NullValueHandling.Ignore,
-								Culture = CultureInfo.InvariantCulture,
-								DateTimeZoneHandling = DateTimeZoneHandling.Utc,
-							}));
-
-					return true;
+					INimbraVisionResponse nimbraVisionResponse = SendInterAppMessage(createFields);
+					return nimbraVisionResponse.Success;
 				}
 				catch
 				{
@@ -345,6 +292,14 @@
 		{
 			LoadFromModel();
 			view.RestartUI();
+		}
+
+		private INimbraVisionResponse SendInterAppMessage(INimbraVisionRequest createFields)
+		{
+			var nimbraVisionElement = new NimbraVisionInterAppCalls(view.Engine.GetUserConnection(), model.NimbraVisionElement.Name);
+
+			INimbraVisionResponse nimbraVisionResponse = nimbraVisionElement.SendSingleResponseMessage(createFields, TimeSpan.FromMinutes(1));
+			return nimbraVisionResponse;
 		}
 	}
 }

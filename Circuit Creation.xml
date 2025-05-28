@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <DMSScript options="272" xmlns="http://www.skyline.be/automation">
 	<Name>Circuit Creation</Name>
-	<Description></Description>
+	<Description>Circuit Creation 1.0.0.2</Description>
 	<Type>Automation</Type>
 	<Author>SKYLINE2\JoaoSV</Author>
 	<CheckSets>FALSE</CheckSets>
@@ -22,7 +22,6 @@
 	<Script>
 		<Exe id="1" type="csharp">
 			<Value><![CDATA[[Project:Circuit Creation_1]]]></Value>
-			<!--<Param type="debug">true</Param>-->
 			<Message></Message>
 		</Exe>
 	</Script>
