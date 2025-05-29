@@ -23,7 +23,7 @@
 			this.view = view ?? throw new ArgumentNullException("view");
 			this.model = model ?? throw new ArgumentNullException("model");
 			this.settings = settings ?? throw new ArgumentNullException("settings");
-			SelectCircuitConstructor = new Dictionary<string, Func<bool>>
+			SelectCircuitConstructor = new Dictionary<string, Func<string>>
 			{
 				{ "E-Line", CreateELineCircuit() },
 				{ "E-Line VLAN", CreateELineVlanCircuit() },
@@ -43,7 +43,7 @@
 			view.AddCircuitButton.Pressed += OnCreateResourcesPressed;
 		}
 
-		private Dictionary<string, Func<bool>> SelectCircuitConstructor { get; }
+		private Dictionary<string, Func<string>> SelectCircuitConstructor { get; }
 
 		public void LoadFromModel()
 		{
@@ -117,9 +117,7 @@
 
 			try
 			{
-				result = SelectCircuitConstructor[view.CircuitTypeSelector.Selected].Invoke()
-					? "Circuit request sent successfully."
-					: "Circuit request failed.";
+				result = SelectCircuitConstructor[view.CircuitTypeSelector.Selected].Invoke();
 			}
 			catch (Exception ex)
 			{
@@ -131,7 +129,7 @@
 			view.Engine.ExitSuccess(result);
 		}
 
-		private Func<bool> CreateELineCircuit()
+		private Func<string> CreateELineCircuit()
 		{
 			return () =>
 			{
@@ -149,16 +147,16 @@
 					};
 
 					INimbraVisionResponse nimbraVisionResponse = SendInterAppMessage(createFields);
-					return nimbraVisionResponse.Success;
+					return nimbraVisionResponse.Success ? "Circuit request sent successfully." : nimbraVisionResponse.Message;
 				}
 				catch
 				{
-					return false;
+					return "Circuit request failed.";
 				}
 			};
 		}
 
-		private Func<bool> CreateJ2KCircuit()
+		private Func<string> CreateJ2KCircuit()
 		{
 			return () =>
 			{
@@ -176,16 +174,16 @@
 					};
 
 					INimbraVisionResponse nimbraVisionResponse = SendInterAppMessage(createFields);
-					return nimbraVisionResponse.Success;
+					return nimbraVisionResponse.Success ? "Circuit request sent successfully." : nimbraVisionResponse.Message;
 				}
 				catch
 				{
-					return false;
+					return "Circuit request failed.";
 				}
 			};
 		}
 
-		private Func<bool> CreateJxsCircuit()
+		private Func<string> CreateJxsCircuit()
 		{
 			return () =>
 			{
@@ -203,16 +201,16 @@
 					};
 
 					INimbraVisionResponse nimbraVisionResponse = SendInterAppMessage(createFields);
-					return nimbraVisionResponse.Success;
+					return nimbraVisionResponse.Success ? "Circuit request sent successfully." : nimbraVisionResponse.Message;
 				}
 				catch
 				{
-					return false;
+					return "Circuit request failed.";
 				}
 			};
 		}
 
-		private Func<bool> CreateELineVlanCircuit()
+		private Func<string> CreateELineVlanCircuit()
 		{
 			return () =>
 			{
@@ -237,16 +235,16 @@
 					};
 
 					INimbraVisionResponse nimbraVisionResponse = SendInterAppMessage(createFields);
-					return nimbraVisionResponse.Success;
+					return nimbraVisionResponse.Success ? "Circuit request sent successfully." : nimbraVisionResponse.Message;
 				}
 				catch
 				{
-					return false;
+					return "Circuit request failed.";
 				}
 			};
 		}
 
-		private Func<bool> CreateSdiSrtCircuit()
+		private Func<string> CreateSdiSrtCircuit()
 		{
 			return () =>
 			{
@@ -273,11 +271,11 @@
 					};
 
 					INimbraVisionResponse nimbraVisionResponse = SendInterAppMessage(createFields);
-					return nimbraVisionResponse.Success;
+					return nimbraVisionResponse.Success ? "Circuit request sent successfully." : nimbraVisionResponse.Message;
 				}
 				catch
 				{
-					return false;
+					return "Circuit request failed.";
 				}
 			};
 		}
