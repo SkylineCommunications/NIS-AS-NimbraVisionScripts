@@ -60,11 +60,11 @@
     <PackageReference Include="Skyline.DataMiner.Core.DataMinerSystem.Automation">
       <Version>1.1.0.5</Version>
     </PackageReference>
-    <PackageReference Include="Skyline.DataMiner.Core.InterAppCalls.Common">
-      <Version>1.0.0.2</Version>
-    </PackageReference>
     <PackageReference Include="Skyline.DataMiner.Dev.Automation">
       <Version>10.3.6</Version>
+    </PackageReference>
+    <PackageReference Include="Skyline.DataMiner.Utils.ConnectorAPI.NetInsight.Nimbra.Vision">
+      <Version>1.0.1-prerelease10</Version>
     </PackageReference>
     <PackageReference Include="Skyline.DataMiner.Utils.InteractiveAutomationScriptToolkit">
       <Version>6.1.0</Version>
@@ -84,7 +84,7 @@
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <ProjectExtensions>
     <VisualStudio>
-      <UserProperties DisLinkedXmlFile="..\DomInterfaceSelection.xml" DisProjectType="automationScriptProject" DisLinkId="1" />
+      <UserProperties DisLinkId="1" DisProjectType="automationScriptProject" DisLinkedXmlFile="..\DomInterfaceSelection.xml" />
     </VisualStudio>
   </ProjectExtensions>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

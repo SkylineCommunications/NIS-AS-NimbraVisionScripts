@@ -124,7 +124,9 @@ namespace GQI_Adhoc_NimbraVision_ScheduledCircuits_1
 					return description;
 				}
 
-				return description.Substring(startIndex, endIndex - startIndex);
+				var result = description.Substring(startIndex, endIndex - startIndex);
+
+				return $"{result.Substring(0, 1).ToUpper()}{result.Substring(1)}";
 			}
 
 			var responseEdgesTable = _dms.SendMessage(new GetPartialTableMessage

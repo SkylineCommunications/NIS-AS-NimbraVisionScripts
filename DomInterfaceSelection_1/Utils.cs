@@ -3,7 +3,7 @@
 	using System;
 	using System.Collections.Generic;
 	using System.Linq;
-	using Skyline.DataMiner.Core.InterAppCalls.Common.CallSingle;
+
 	using Skyline.DataMiner.Net.Apps.DataMinerObjectModel;
 	using Skyline.DataMiner.Net.Messages.SLDataGateway;
 	using Skyline.DataMiner.Net.Sections;
@@ -13,8 +13,6 @@
 		public static readonly int NumberOfRetries = 15;
 
 		public static readonly int SleepTime = 1000;
-
-		public static readonly List<Type> KnownTypes = new List<Type> { typeof(DeleteCircuitMessage) };
 
 		public enum InterfaceType
 		{
@@ -40,7 +38,7 @@
 			ItsInterfaceName = 4,
 			EtsInterfaceNodeName = 21,
 			EtsInterfaceCircuitNaming = 23,
-			VAInterfaceCircuitNaming =16,
+			VAInterfaceCircuitNaming = 16,
 			VAInterfaceNodeName = 2,
 			VAInterfaceType = 3,
 			VAInterfaceMode = 6,
@@ -168,10 +166,5 @@
 		public int ButtonHeight => buttonHeight;
 
 		public List<string> SupportedCircuitTypes => supportedCircuitTypes;
-	}
-
-	public class DeleteCircuitMessage : Message
-	{
-		public string SharedId { get; set; }
 	}
 }

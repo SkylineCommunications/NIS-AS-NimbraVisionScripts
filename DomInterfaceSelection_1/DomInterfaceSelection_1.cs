@@ -46,6 +46,7 @@ Revision History:
 DATE		VERSION		AUTHOR			COMMENTS
 
 07/04/2023	1.0.0.1		JSV, Skyline	Initial version
+30/05/2025	1.0.0.2		SDT, Skyline	Added support for Nimbra Vision InterApp.
 ****************************************************************************
 */
 
@@ -53,19 +54,22 @@ using System;
 using System.Globalization;
 using System.Linq;
 using System.Threading;
+
 using Skyline.Automation.CircuitCreation;
 using Skyline.Automation.CircuitCreation.Model;
 using Skyline.Automation.CircuitCreation.Presenter;
 using Skyline.Automation.CircuitCreation.View;
 using Skyline.DataMiner.Automation;
 using Skyline.DataMiner.Core.DataMinerSystem.Automation;
-using Skyline.DataMiner.Core.InterAppCalls.Common.CallBulk;
 using Skyline.DataMiner.Net.Apps.DataMinerObjectModel;
 using Skyline.DataMiner.Net.Apps.DataMinerObjectModel.Actions;
 using Skyline.DataMiner.Net.ManagerStore;
 using Skyline.DataMiner.Net.Messages.SLDataGateway;
 using Skyline.DataMiner.Net.Sections;
+using Skyline.DataMiner.Utils.ConnectorAPI.NetInsight.Nimbra.Vision.InterApp;
+using Skyline.DataMiner.Utils.ConnectorAPI.NetInsight.Nimbra.Vision.InterApp.Messages;
 using Skyline.DataMiner.Utils.InteractiveAutomationScript;
+
 using static Skyline.Automation.CircuitCreation.Utils;
 
 /// <summary>
@@ -418,6 +422,7 @@ public class Script
 				}
 
 				return false;
+
 			case CircuitType.SdiSrt:
 				if (CreateSRTCircuit(engine, startTime, endTime, sourceIntf, destinationIntf, capacity, port))
 				{
@@ -466,10 +471,9 @@ public class Script
 			var rowToDelete = circuitTable.GetData()
 								.FirstOrDefault(kv => Convert.ToString(kv.Value[(int)Idx.CircuitSourceIntf]) == translatedSourceIntf && Convert.ToString(kv.Value[(int)Idx.CircuitDestIntf]) == translatedDestinationIntf);
 
-			IInterAppCall deleteCommand = InterAppCallFactory.CreateNew();
-			DeleteCircuitMessage basicCircuitDeleteMessage = new DeleteCircuitMessage { SharedId = Convert.ToString(rowToDelete.Value[(int)Utils.Idx.CircuitsSharedId]) };
-			deleteCommand.Messages.Add(basicCircuitDeleteMessage);
-			deleteCommand.Send(Engine.SLNetRaw, nimbraElement.DmsElementId.AgentId, nimbraElement.DmsElementId.ElementId, 9000000, Utils.KnownTypes);
+			INimbraVisionInterAppCalls nimbraVisionInterApp = new NimbraVisionInterAppCalls(engine.GetUserConnection(), nimbraElement.DmsElementId.AgentId, nimbraElement.DmsElementId.ElementId);
+			DeleteCircuitRequest circuitDeleteMessage = new DeleteCircuitRequest { SharedId = Convert.ToString(rowToDelete.Value[(int)Utils.Idx.CircuitsSharedId]) };
+			nimbraVisionInterApp.SendMessageNoResponse(circuitDeleteMessage);
 
 			var sectionDefinitionLinks = domInstance.GetDomDefinition().SectionDefinitionLinks;
 			FilterElement<SectionDefinition> sectionDefintionfilter = SectionDefinitionExposers.ID.Equal(sectionDefinitionLinks.First().SectionDefinitionID);
