@@ -250,7 +250,7 @@ public class Script
 		try
 		{
 			var now = DateTime.Now;
-			var subscriptJ2k = engine.PrepareSubScript("NimbraVisionJ2000CircuitCreation");
+			var subscriptJ2k = engine.PrepareSubScript("Nimbra Vision Create J2K Circuit");
 			subscriptJ2k.SelectScriptParam("Capacity", newCapacity.ToString());
 			subscriptJ2k.SelectScriptParam("Start Time", startTime < now ? "-1" : startTime.ToString("yyyy-MM-ddTHH:mm:ssZ", CultureInfo.InvariantCulture));
 			subscriptJ2k.SelectScriptParam("End Time", endTime.ToString("yyyy-MM-ddTHH:mm:ssZ", CultureInfo.InvariantCulture));
@@ -273,7 +273,7 @@ public class Script
 		try
 		{
 			var now = DateTime.Now;
-			var subscriptEline = engine.PrepareSubScript("NimbraVisionBasicCircuitCreation");
+			var subscriptEline = engine.PrepareSubScript("Nimbra Vision Create Basic Circuit");
 			subscriptEline.SelectScriptParam("Service ID", "E-Line");
 			subscriptEline.SelectScriptParam("Capacity", newCapacity.ToString());
 			subscriptEline.SelectScriptParam("Start Time", startTime < now ? "-1" : startTime.ToString("yyyy-MM-ddTHH:mm:ssZ", CultureInfo.InvariantCulture));
@@ -295,7 +295,7 @@ public class Script
 		try
 		{
 			var now = DateTime.Now;
-			var subscriptJ2k = engine.PrepareSubScript("NimbraVisionJxsCircuitCreation");
+			var subscriptJ2k = engine.PrepareSubScript("Nimbra Vision Create JXS Circuit");
 			subscriptJ2k.SelectScriptParam("Capacity", newCapacity.ToString());
 			subscriptJ2k.SelectScriptParam("Start Time", startTime < now ? "-1" : startTime.ToString("yyyy-MM-ddTHH:mm:ssZ", CultureInfo.InvariantCulture));
 			subscriptJ2k.SelectScriptParam("End Time", endTime.ToString("yyyy-MM-ddTHH:mm:ssZ", CultureInfo.InvariantCulture));
@@ -318,7 +318,7 @@ public class Script
 		try
 		{
 			var now = DateTime.Now;
-			var subscriptSRT = engine.PrepareSubScript("NimbraVisionSdiSrtCircuitCreation");
+			var subscriptSRT = engine.PrepareSubScript("Nimbra Vision Create SDI SRT Circuit");
 			subscriptSRT.SelectScriptParam("Capacity", newCapacity.ToString());
 			subscriptSRT.SelectScriptParam("Start Time", startTime < now ? "-1" : startTime.ToString("yyyy-MM-ddTHH:mm:ssZ", CultureInfo.InvariantCulture));
 			subscriptSRT.SelectScriptParam("End Time", endTime.ToString("yyyy-MM-ddTHH:mm:ssZ", CultureInfo.InvariantCulture));

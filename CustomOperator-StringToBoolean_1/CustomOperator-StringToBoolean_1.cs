@@ -52,7 +52,7 @@ dd/mm/2023	1.0.0.1		XXX, Skyline	Initial version
 using System;
 using Skyline.DataMiner.Analytics.GenericInterface;
 
-[GQIMetaData(Name = "String to Boolean")]
+[GQIMetaData(Name = "GQI Operator Nimbra Vision String to Boolean")]
 public class MyCustomOperator : IGQIColumnOperator, IGQIRowOperator, IGQIOnInit, IGQIInputArguments
 {
 	private GQIColumnDropdownArgument _firstColumnArg = new GQIColumnDropdownArgument("Input Column") { IsRequired = true, Types = new GQIColumnType[] { GQIColumnType.String } };

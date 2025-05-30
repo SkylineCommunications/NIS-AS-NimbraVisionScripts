@@ -124,7 +124,7 @@ namespace GQI_Adhoc_NimbraVision_ScheduledCircuits_1
 								new GQICell { Value = circuit.State}, // IO SRC
 								new GQICell { Value = circuit.Start}, // IO State SRC
 								new GQICell { Value = circuit.End, DisplayValue = circuit.End.ToOADate() >= 2593223 ? "Undefined" : Convert.ToString(circuit.End) }, // IO Type SRC
-								new GQICell { Value = circuit.Capacity}, // Bitrate SRC
+								new GQICell { Value = circuit.Capacity, DisplayValue = $"{circuit.Capacity} Mpbs"}, // Bitrate SRC
 								new GQICell { Value = circuit.SourceNode}, // Stream Name SRC
 								new GQICell { Value = circuit.SourceInterface}, // IO ID SRC
 								new GQICell { Value = circuit.DestinationNode}, // Edge Name SRC

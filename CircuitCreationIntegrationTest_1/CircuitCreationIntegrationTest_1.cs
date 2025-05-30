@@ -137,8 +137,8 @@ public class Script
 				break;
 		}
 
-		CreateBasicCircuit(engine);
-		CreateVlanCircuit(engine);
+		CreateBasicCircuit(engine, nimbraElement.Name);
+		CreateVlanCircuit(engine, nimbraElement.Name);
 		CheckCircuitCreationComplete(engine, nimbraElement, out long basicCircuitCreated, out long vlanCircuitCreated);
 
 		INimbraVisionInterAppCalls nimbraVisionInterApp = new NimbraVisionInterAppCalls(engine.GetUserConnection(), nimbraElementName);
@@ -206,9 +206,9 @@ public class Script
 		}
 	}
 
-	private void CreateVlanCircuit(Engine engine)
+	private void CreateVlanCircuit(Engine engine, string name)
 	{
-		var createVlanCircuit = engine.PrepareSubScript("NimbraVisionVlanCircuitCreation");
+		var createVlanCircuit = engine.PrepareSubScript("Nimbra Vision Create Vlan Circuit");
 		createVlanCircuit.SelectScriptParam("Source", sourceVlan);
 		createVlanCircuit.SelectScriptParam("Destination", destinationVlan);
 		createVlanCircuit.SelectScriptParam("Capacity", "5");
@@ -217,6 +217,7 @@ public class Script
 		createVlanCircuit.SelectScriptParam("End Time", "-1");
 		createVlanCircuit.SelectScriptParam("VLAN", "100");
 		createVlanCircuit.SelectScriptParam("Form Name", "EVP-Line");
+		createVlanCircuit.SelectScriptParam("ElementName", name);
 
 		createVlanCircuit.StartScript();
 	}
@@ -250,15 +251,16 @@ public class Script
 		return true;
 	}
 
-	private void CreateBasicCircuit(Engine engine)
+	private void CreateBasicCircuit(Engine engine, string name)
 	{
-		var createBasicCircuit = engine.PrepareSubScript("NimbraVisionBasicCircuitCreation");
+		var createBasicCircuit = engine.PrepareSubScript("Nimbra Vision Create Basic Circuit");
 		createBasicCircuit.SelectScriptParam("Source", sourceBasic);
 		createBasicCircuit.SelectScriptParam("Destination", destinationBasic);
 		createBasicCircuit.SelectScriptParam("Capacity", "5");
 		createBasicCircuit.SelectScriptParam("Service ID", "E-Line");
 		createBasicCircuit.SelectScriptParam("Start Time", startTime);
 		createBasicCircuit.SelectScriptParam("End Time", "-1");
+		createBasicCircuit.SelectScriptParam("ElementName", name);
 
 		createBasicCircuit.StartScript();
 	}

@@ -171,13 +171,14 @@ namespace CircuitEdit_1
 
 		private static string ParseParamValue(string paramValueRaw)
 		{
-			return paramValueRaw.Trim('[', '\"');
+			return paramValueRaw.Trim('[', '\"', '\"', ']');
 		}
 
 		private static Element ValidateAndReturnElement(IEngine engine)
 		{
 			var paramValueRaw = engine.GetScriptParam("ElementName").Value;
 			var elementName = ParseParamValue(paramValueRaw);
+			engine.GenerateInformation($"Element:{elementName}");
 			var element = engine.FindElement(elementName);
 
 			if (element == null)

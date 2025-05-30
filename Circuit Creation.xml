@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <DMSScript options="272" xmlns="http://www.skyline.be/automation">
-	<Name>Circuit Creation</Name>
+	<Name>Nimbra Vision Create Circuit Wizard</Name>
 	<Description>Circuit Creation 1.0.0.2</Description>
 	<Type>Automation</Type>
 	<Author>SKYLINE2\JoaoSV</Author>
