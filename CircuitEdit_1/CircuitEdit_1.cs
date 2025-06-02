@@ -145,6 +145,8 @@ namespace CircuitEdit_1
 			DeleteCircuitRequest circuitDeleteMessage = new DeleteCircuitRequest { SharedId = Convert.ToString(row[1]) };
 			var response = nimbraVisionInterAppCalls.SendSingleResponseMessage(circuitDeleteMessage);
 
+			engine.Sleep(1500);
+
 			if (response.Success)
 			{
 				engine.ExitSuccess("Circuit deleted");
@@ -159,6 +161,9 @@ namespace CircuitEdit_1
 		{
 			INimbraVisionInterAppCalls nimbraVisionInterAppCalls = new NimbraVisionInterAppCalls(engine.GetUserConnection(), element.DmaId, element.ElementId);
 			var response = nimbraVisionInterAppCalls.SendSingleResponseMessage(new EditCircuitRequest { CircuitId = circuitId, EndTime = DateTime.Now.AddMinutes(1) });
+
+			engine.Sleep(1500);
+
 			if (response.Success)
 			{
 				engine.ExitSuccess("Circuit stopped");

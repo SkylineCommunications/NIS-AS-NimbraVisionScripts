@@ -113,7 +113,7 @@ public class Script
 
 		nimbraVisionInterAppCalls.SendMessageNoResponse(deleteMessages.ToArray());
 
-		Thread.Sleep(1500);
+		engine.Sleep(1500);
 	}
 
 	private static string ParseParamValue(string paramValueRaw)

@@ -123,6 +123,8 @@ namespace NimbraVisionJxsCircuitCreation_1
 
 			var response = nimbraVisionInterAppCalls.SendSingleResponseMessage(fields);
 
+			engine.Sleep(5000);
+
 			if (response.Success)
 			{
 				engine.ExitSuccess("Circuit created");
