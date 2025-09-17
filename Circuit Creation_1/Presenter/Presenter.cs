@@ -95,6 +95,7 @@
 		private static void ShowResult(IEngine engine, string result)
 		{
 			var dialog = new MessageDialog(engine, result);
+			dialog.Title = "Circuit Creation";
 			dialog.Show();
 		}
 
@@ -142,12 +143,11 @@
 						Capacity = Convert.ToInt32(view.Capacity.Value),
 						Destination = model.Interfaces.First(intf => intf.InterfaceName == view.DestinationInterface.Selected).CircuitCreationInterfaceName,
 						Source = model.Interfaces.First(intf => intf.InterfaceName == view.SourceInterface.Selected).CircuitCreationInterfaceName,
-						StartTime = view.NoStartTime.IsChecked ? DateTime.MinValue : view.StartTime.DateTime,
-						EndTime = view.NoEndTime.IsChecked ? DateTime.MinValue : view.StopTime.DateTime,
 					};
+					AddDateTimesToRequest(createFields);
 
 					INimbraVisionResponse nimbraVisionResponse = SendInterAppMessage(createFields);
-					return nimbraVisionResponse.Success ? "Circuit request sent successfully." : nimbraVisionResponse.Message;
+					return nimbraVisionResponse.Success ? "Circuit successfully created." : nimbraVisionResponse.Message;
 				}
 				catch
 				{
@@ -168,13 +168,12 @@
 						Capacity = Convert.ToInt32(view.Capacity.Value),
 						Destination = model.Interfaces.First(intf => intf.InterfaceName == view.DestinationInterface.Selected).CircuitCreationInterfaceName,
 						Source = model.Interfaces.First(intf => intf.InterfaceName == view.SourceInterface.Selected).CircuitCreationInterfaceName,
-						StartTime = view.NoStartTime.IsChecked ? DateTime.MinValue : view.StartTime.DateTime,
-						EndTime = view.NoEndTime.IsChecked ? DateTime.MinValue : view.StopTime.DateTime,
 						ProtectionId = view.CircuitTypeSelector.Selected == "JPEG 2000 1+1 Hitless" ? 1 : -1,
 					};
+					AddDateTimesToRequest(createFields);
 
 					INimbraVisionResponse nimbraVisionResponse = SendInterAppMessage(createFields);
-					return nimbraVisionResponse.Success ? "Circuit request sent successfully." : nimbraVisionResponse.Message;
+					return nimbraVisionResponse.Success ? "Circuit successfully created." : nimbraVisionResponse.Message;
 				}
 				catch
 				{
@@ -195,13 +194,12 @@
 						Capacity = Convert.ToInt32(view.Capacity.Value),
 						Destination = model.Interfaces.First(intf => intf.InterfaceName == view.DestinationInterface.Selected).CircuitCreationInterfaceName,
 						Source = model.Interfaces.First(intf => intf.InterfaceName == view.SourceInterface.Selected).CircuitCreationInterfaceName,
-						StartTime = view.NoStartTime.IsChecked ? DateTime.MinValue : view.StartTime.DateTime,
-						EndTime = view.NoEndTime.IsChecked ? DateTime.MinValue : view.StopTime.DateTime,
 						ProtectionId = view.CircuitTypeSelector.Selected == "JPEG-XS 1+1 Hitless" ? 1 : -1,
 					};
+					AddDateTimesToRequest(createFields);
 
 					INimbraVisionResponse nimbraVisionResponse = SendInterAppMessage(createFields);
-					return nimbraVisionResponse.Success ? "Circuit request sent successfully." : nimbraVisionResponse.Message;
+					return nimbraVisionResponse.Success ? "Circuit successfully created." : nimbraVisionResponse.Message;
 				}
 				catch
 				{
@@ -222,8 +220,6 @@
 						Capacity = Convert.ToInt32(view.Capacity.Value),
 						Destination = model.Interfaces.First(intf => intf.InterfaceName == view.DestinationInterface.Selected).CircuitCreationInterfaceName,
 						Source = model.Interfaces.First(intf => intf.InterfaceName == view.SourceInterface.Selected).CircuitCreationInterfaceName,
-						StartTime = view.NoStartTime.IsChecked ? DateTime.MinValue : view.StartTime.DateTime,
-						EndTime = view.NoEndTime.IsChecked ? DateTime.MinValue : view.StopTime.DateTime,
 						ExtraInfo = new ELineVlanCircuitRequest.Extra
 						{
 							Common = new ELineVlanCircuitRequest.Common
@@ -233,9 +229,10 @@
 							},
 						},
 					};
+					AddDateTimesToRequest(createFields);
 
 					INimbraVisionResponse nimbraVisionResponse = SendInterAppMessage(createFields);
-					return nimbraVisionResponse.Success ? "Circuit request sent successfully." : nimbraVisionResponse.Message;
+					return nimbraVisionResponse.Success ? "Circuit successfully created." : nimbraVisionResponse.Message;
 				}
 				catch
 				{
@@ -256,8 +253,6 @@
 						Capacity = Convert.ToInt32(view.Capacity.Value),
 						Destination = model.Interfaces.First(intf => intf.InterfaceName == view.DestinationInterface.Selected).CircuitCreationInterfaceName,
 						Source = model.Interfaces.First(intf => intf.InterfaceName == view.SourceInterface.Selected).CircuitCreationInterfaceName,
-						StartTime = view.NoStartTime.IsChecked ? DateTime.MinValue : view.StartTime.DateTime,
-						EndTime = view.NoEndTime.IsChecked ? DateTime.MinValue : view.StopTime.DateTime,
 						ExtraInfo = new SdiSrtCircuitRequest.Extra
 						{
 							Common = new SdiSrtCircuitRequest.Common
@@ -269,15 +264,29 @@
 							},
 						},
 					};
+					AddDateTimesToRequest(createFields);
 
 					INimbraVisionResponse nimbraVisionResponse = SendInterAppMessage(createFields);
-					return nimbraVisionResponse.Success ? "Circuit request sent successfully." : nimbraVisionResponse.Message;
+					return nimbraVisionResponse.Success ? "Circuit successfully created." : nimbraVisionResponse.Message;
 				}
 				catch
 				{
 					return "Circuit request failed.";
 				}
 			};
+		}
+
+		private void AddDateTimesToRequest(BaseCircuitRequest createFields)
+		{
+			if (!view.NoStartTime.IsChecked)
+			{
+				createFields.StartTime = view.StartTime.DateTime;
+			}
+
+			if (!view.NoEndTime.IsChecked)
+			{
+				createFields.EndTime = view.StopTime.DateTime;
+			}
 		}
 
 		private void UpdateUI(object sender, DropDown.DropDownChangedEventArgs e)
