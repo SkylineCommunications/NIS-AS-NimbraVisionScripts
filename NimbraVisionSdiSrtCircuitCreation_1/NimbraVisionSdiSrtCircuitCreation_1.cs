@@ -46,18 +46,21 @@ Revision History:
 DATE		VERSION		AUTHOR			COMMENTS
 
 dd/mm/2024	1.0.0.1		XXX, Skyline	Initial version
+27/05/2025	1.0.0.2		SDT, Skyline	Added support for Nimbra Vision InterApp.
 ****************************************************************************
 */
 
 namespace NimbraVisionSrtCircuitCreation_1
 {
 	using System;
-	using System.Collections.Generic;
 	using System.Globalization;
-	using System.Text;
 	using System.Text.RegularExpressions;
+
 	using Newtonsoft.Json;
+
 	using Skyline.DataMiner.Automation;
+	using Skyline.DataMiner.Utils.ConnectorAPI.NetInsight.Nimbra.Vision.InterApp;
+	using Skyline.DataMiner.Utils.ConnectorAPI.NetInsight.Nimbra.Vision.InterApp.Messages;
 
 	/// <summary>
 	/// Represents a DataMiner Automation script.
@@ -79,7 +82,7 @@ namespace NimbraVisionSrtCircuitCreation_1
 			var mode = engine.GetScriptParam("Mode").Value;
 			var password = engine.GetScriptParam("Password").Value;
 
-			var fields = new CreateFieldsSdiSrt();
+			var fields = new SdiSrtCircuitRequest();
 
 			fields.ServiceId = "VA-SRT";
 
@@ -109,24 +112,13 @@ namespace NimbraVisionSrtCircuitCreation_1
 
 			fields.Capacity = integerCapcity;
 
-			if (!DateTime.TryParseExact(startTime, "yyyy-MM-ddTHH:mm:ssZ", CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTime startTimeDate) && startTime != "-1")
+			SetDateTimeField(engine, startTime, dt => fields.StartTime = dt, "Start Time");
+			SetDateTimeField(engine, endTime, dt => fields.EndTime = dt, "Stop Time");
+
+			fields.ExtraInfo = new SdiSrtCircuitRequest.Extra
 			{
-				engine.ExitFail("Start Time isn't in the supported format - yyyy-MM-ddTHH:mm:ssZ");
-				return;
-			}
-
-			fields.StartTime = startTime;
-
-			if (!DateTime.TryParseExact(endTime, "yyyy-MM-ddTHH:mm:ssZ", CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTime stopTimeDate) && endTime != "-1")
-			{
-				engine.ExitFail("End Time isn't in the supported format - yyyy-MM-ddTHH:mm:ssZ");
-				return;
-			}
-
-			fields.EndTime = endTime;
-
-			fields.ExtraInfo = new CreateFieldsSdiSrt.Extra();
-			fields.ExtraInfo.Common = new CreateFieldsSdiSrt.Common();
+				Common = new SdiSrtCircuitRequest.Common(),
+			};
 
 			streamPort = Regex.Replace(streamPort, @"[\[\]]", String.Empty).Split(',')[0].Replace("\"", String.Empty);
 
@@ -163,9 +155,22 @@ namespace NimbraVisionSrtCircuitCreation_1
 
 			fields.ExtraInfo.Common.FormName = "vaSdiSrt";
 
-			ValidateAndReturnElement(engine).SetParameter(125, JsonConvert.SerializeObject(fields, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore }));
+			engine.GenerateInformation(JsonConvert.SerializeObject(fields));
 
-			engine.ExitSuccess("Sent request to Nimbra Vision element.");
+			var nimbraVisionInterAppCalls = ValidateAndReturnElement(engine);
+
+			var response = nimbraVisionInterAppCalls.SendSingleResponseMessage(fields);
+
+			engine.Sleep(5000);
+
+			if (response.Success)
+			{
+				engine.ExitSuccess("Circuit created");
+			}
+			else
+			{
+				engine.ExitFail($"Fail to create circuit: {response.Message}");
+			}
 		}
 
 		private static string ParseParamValue(string paramValueRaw)
@@ -179,7 +184,7 @@ namespace NimbraVisionSrtCircuitCreation_1
 			return paramValue;
 		}
 
-		private static Element ValidateAndReturnElement(IEngine engine)
+		private static INimbraVisionInterAppCalls ValidateAndReturnElement(IEngine engine)
 		{
 			var paramValueRaw = engine.GetScriptParam("ElementName").Value;
 			var elementName = ParseParamValue(paramValueRaw);
@@ -197,60 +202,23 @@ namespace NimbraVisionSrtCircuitCreation_1
 				return null;
 			}
 
-			return element;
-		}
-	}
-
-	public class CreateFieldsSdiSrt
-	{
-		[JsonProperty("capacity")]
-		public int Capacity { get; set; }
-
-		[JsonProperty("destination")]
-		public string Destination { get; set; }
-
-		[JsonProperty("endTime")]
-		public string EndTime { get; set; }
-
-		[JsonProperty("serviceId")]
-		public string ServiceId { get; set; }
-
-		[JsonProperty("source")]
-		public string Source { get; set; }
-
-		[JsonProperty("startTime")]
-		public string StartTime { get; set; }
-
-		[JsonProperty("extra")]
-		public Extra ExtraInfo { get; set; }
-
-		public bool ShouldSerializeEndTime()
-		{
-			return EndTime != "-1";
+			return new NimbraVisionInterAppCalls(engine.GetUserConnection(), elementName);
 		}
 
-		public bool ShouldSerializeStartTime()
+		private static void SetDateTimeField(IEngine engine, string time, Action<DateTime?> setField, string fieldName)
 		{
-			return StartTime != "-1";
-		}
-
-		public class Common
-		{
-			public string FormName { get; set; }
-
-			[JsonProperty("StreamType")]
-			public string Mode { get; set; }
-
-			public string Passphrase { get; set; }
-
-			[JsonProperty("StreamPort")]
-			public int Port { get; set; }
-		}
-
-		public class Extra
-		{
-			[JsonProperty("common")]
-			public Common Common { get; set; }
+			if (time == "-1")
+			{
+				setField(null);
+			}
+			else if (DateTime.TryParseExact(time, "yyyy-MM-ddTHH:mm:ssZ", CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTime parsedDate))
+			{
+				setField(parsedDate);
+			}
+			else
+			{
+				engine.ExitFail($"{fieldName} isn't in the supported format - yyyy-MM-ddTHH:mm:ssZ");
+			}
 		}
 	}
 }

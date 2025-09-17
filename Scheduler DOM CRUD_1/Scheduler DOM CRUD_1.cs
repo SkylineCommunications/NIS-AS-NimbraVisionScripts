@@ -46,6 +46,7 @@ Revision History:
 DATE		VERSION		AUTHOR			COMMENTS
 
 dd/mm/2023	1.0.0.1		XXX, Skyline	Initial version
+30/05/2025	1.0.0.2		SDT, Skyline	Added support for Nimbra Vision InterApp.
 ****************************************************************************
 */
 
@@ -57,10 +58,12 @@ namespace Scheduler_DOM_CRUD_1
 	using Skyline.Automation.CircuitCreation;
 	using Skyline.DataMiner.Automation;
 	using Skyline.DataMiner.Core.DataMinerSystem.Automation;
-	using Skyline.DataMiner.Core.InterAppCalls.Common.CallBulk;
 	using Skyline.DataMiner.Net.Apps.DataMinerObjectModel;
 	using Skyline.DataMiner.Net.Messages.SLDataGateway;
 	using Skyline.DataMiner.Net.Sections;
+	using Skyline.DataMiner.Utils.ConnectorAPI.NetInsight.Nimbra.Vision.InterApp;
+	using Skyline.DataMiner.Utils.ConnectorAPI.NetInsight.Nimbra.Vision.InterApp.Messages;
+
 	using static Skyline.Automation.CircuitCreation.Utils;
 
 	/// <summary>
@@ -120,12 +123,9 @@ namespace Scheduler_DOM_CRUD_1
 			var rowToDelete = circuitTable.GetData()
 								.FirstOrDefault(kv => Convert.ToString(kv.Value[(int)Idx.CircuitSourceIntf]) == translatedSourceIntf && Convert.ToString(kv.Value[(int)Idx.CircuitDestIntf]) == translatedDestinationIntf);
 
-			IInterAppCall deleteCommand = InterAppCallFactory.CreateNew();
-			DeleteCircuitMessage basicCircuitDeleteMessage = new DeleteCircuitMessage { SharedId = Convert.ToString(rowToDelete.Value[(int)Utils.Idx.CircuitsSharedId]) };
-			engine.GenerateInformation("Deleting Shared Circuit ID: " + basicCircuitDeleteMessage.SharedId);
-			deleteCommand.Messages.Add(basicCircuitDeleteMessage);
-			deleteCommand.Send(Engine.SLNetRaw, nimbraElement.DmsElementId.AgentId, nimbraElement.DmsElementId.ElementId, 9000000, Utils.KnownTypes);
-
+			INimbraVisionInterAppCalls nimbraVisionInterApp = new NimbraVisionInterAppCalls(engine.GetUserConnection(), nimbraElement.DmsElementId.AgentId, nimbraElement.DmsElementId.ElementId);
+			DeleteCircuitRequest circuitDeleteMessage = new DeleteCircuitRequest { SharedId = Convert.ToString(rowToDelete.Value[(int)Utils.Idx.CircuitsSharedId]) };
+			nimbraVisionInterApp.SendMessageNoResponse(circuitDeleteMessage);
 			domHelper.DomInstances.Delete(domInstance);
 		}
 	}
@@ -136,7 +136,6 @@ namespace Skyline.Automation.CircuitCreation
 	using System;
 	using System.Collections.Generic;
 	using System.Linq;
-	using Skyline.DataMiner.Core.InterAppCalls.Common.CallSingle;
 	using Skyline.DataMiner.Net.Apps.DataMinerObjectModel;
 	using Skyline.DataMiner.Net.Messages.SLDataGateway;
 	using Skyline.DataMiner.Net.Sections;
@@ -146,8 +145,6 @@ namespace Skyline.Automation.CircuitCreation
 		public static readonly int NumberOfRetries = 60;
 
 		public static readonly int SleepTime = 1000;
-
-		public static readonly List<Type> KnownTypes = new List<Type> { typeof(DeleteCircuitMessage) };
 
 		public enum InterfaceType
 		{
@@ -297,10 +294,5 @@ namespace Skyline.Automation.CircuitCreation
 		public int ButtonHeight => buttonHeight;
 
 		public List<string> SupportedCircuitTypes => supportedCircuitTypes;
-	}
-
-	public class DeleteCircuitMessage : Message
-	{
-		public string SharedId { get; set; }
 	}
 }

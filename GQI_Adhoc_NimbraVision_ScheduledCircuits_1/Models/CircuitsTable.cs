@@ -1,6 +1,6 @@
-/*
+﻿/*
 ****************************************************************************
-*  Copyright (c) 2023,  Skyline Communications NV  All Rights Reserved.    *
+*  Copyright (c) 2025,  Skyline Communications NV  All Rights Reserved.    *
 ****************************************************************************
 
 By using this script, you expressly agree with the usage terms and
@@ -45,67 +45,36 @@ Revision History:
 
 DATE		VERSION		AUTHOR			COMMENTS
 
-dd/mm/2023	1.0.0.1		XXX, Skyline	Initial version
+dd/mm/2025	1.0.0.1		XXX, Skyline	Initial version
 ****************************************************************************
 */
 
-using System;
-using Skyline.DataMiner.Analytics.GenericInterface;
-
-[GQIMetaData(Name = "GQI Operator Nimbra Vision String to Boolean")]
-public class MyCustomOperator : IGQIColumnOperator, IGQIRowOperator, IGQIOnInit, IGQIInputArguments
+namespace GQI_Adhoc_NimbraVision_ScheduledCircuits_1
 {
-	private GQIColumnDropdownArgument _firstColumnArg = new GQIColumnDropdownArgument("Input Column") { IsRequired = true, Types = new GQIColumnType[] { GQIColumnType.String } };
-	private GQIStringArgument _nameArg1 = new GQIStringArgument("Output Column Name") { IsRequired = true };
+	using System;
 
-	private GQIColumn _value1;
-	private GQIBooleanColumn _newColumn1;
-
-	private GQIDMS _dms;
-
-	public OnInitOutputArgs OnInit(OnInitInputArgs args)
+	internal class CircuitsTable
 	{
-		_dms = args.DMS;
-		return default;
-	}
+		public int Capacity { get; set; }
 
-	public GQIArgument[] GetInputArguments()
-	{
-		return new GQIArgument[] { _firstColumnArg, _nameArg1 };
-	}
+		public string DestinationInterface { get; set; }
 
-	public OnArgumentsProcessedOutputArgs OnArgumentsProcessed(OnArgumentsProcessedInputArgs args)
-	{
-		_value1 = args.GetArgumentValue(_firstColumnArg);
-		_newColumn1 = new GQIBooleanColumn(args.GetArgumentValue(_nameArg1));
+		public string DestinationNode { get; set; }
 
-		return new OnArgumentsProcessedOutputArgs();
-	}
+		public DateTime End { get; set; }
 
-	public void HandleColumns(GQIEditableHeader header)
-	{
-		header.AddColumns(new GQIColumn[] { _newColumn1 });
-	}
+		public string Id { get; set; }
 
-	public void HandleRow(GQIEditableRow row)
-	{
-		var firstValue = "";
+		public string SourceInterface { get; set; }
 
-		try
-		{
-			firstValue = row.GetValue<string>(_value1);
-		}
-		catch
-		{
-			row.SetValue(_newColumn1, false);
-		}
+		public string SourceNode { get; set; }
 
-		bool returnValue = false;
-		if (!String.IsNullOrEmpty(firstValue))
-		{
-			returnValue = true;
-		}
+		public DateTime Start { get; set; }
 
-		row.SetValue(_newColumn1, returnValue);
+		public string State { get; set; }
+
+		public string StatusDescription { get; set; }
+
+		public string Type { get; set; }
 	}
 }

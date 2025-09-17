@@ -8,6 +8,8 @@
 	using Skyline.Automation.CircuitCreation.Model;
 	using Skyline.Automation.CircuitCreation.View;
 	using Skyline.DataMiner.Automation;
+	using Skyline.DataMiner.Utils.ConnectorAPI.NetInsight.Nimbra.Vision.InterApp;
+	using Skyline.DataMiner.Utils.ConnectorAPI.NetInsight.Nimbra.Vision.InterApp.Messages;
 	using Skyline.DataMiner.Utils.InteractiveAutomationScript;
 
 	public class Presenter
@@ -21,7 +23,7 @@
 			this.view = view ?? throw new ArgumentNullException("view");
 			this.model = model ?? throw new ArgumentNullException("model");
 			this.settings = settings ?? throw new ArgumentNullException("settings");
-			SelectCircuitConstructor = new Dictionary<string, Func<bool>>
+			SelectCircuitConstructor = new Dictionary<string, Func<string>>
 			{
 				{ "E-Line", CreateELineCircuit() },
 				{ "E-Line VLAN", CreateELineVlanCircuit() },
@@ -41,7 +43,7 @@
 			view.AddCircuitButton.Pressed += OnCreateResourcesPressed;
 		}
 
-		private Dictionary<string, Func<bool>> SelectCircuitConstructor { get; }
+		private Dictionary<string, Func<string>> SelectCircuitConstructor { get; }
 
 		public void LoadFromModel()
 		{
@@ -93,6 +95,7 @@
 		private static void ShowResult(IEngine engine, string result)
 		{
 			var dialog = new MessageDialog(engine, result);
+			dialog.Title = "Circuit Creation";
 			dialog.Show();
 		}
 
@@ -115,9 +118,7 @@
 
 			try
 			{
-				result = SelectCircuitConstructor[view.CircuitTypeSelector.Selected].Invoke()
-					? "Circuit request sent successfully."
-					: "Circuit request failed.";
+				result = SelectCircuitConstructor[view.CircuitTypeSelector.Selected].Invoke();
 			}
 			catch (Exception ex)
 			{
@@ -129,182 +130,132 @@
 			view.Engine.ExitSuccess(result);
 		}
 
-		private Func<bool> CreateELineCircuit()
+		private Func<string> CreateELineCircuit()
 		{
 			return () =>
 			{
 				view.Engine.GenerateInformation("CreateELineCircuit");
 				try
 				{
-					var createFields = new ELineRequestModel
+					var createFields = new ELineCircuitRequest
 					{
 						ServiceId = view.CircuitTypeSelector.Selected,
 						Capacity = Convert.ToInt32(view.Capacity.Value),
 						Destination = model.Interfaces.First(intf => intf.InterfaceName == view.DestinationInterface.Selected).CircuitCreationInterfaceName,
 						Source = model.Interfaces.First(intf => intf.InterfaceName == view.SourceInterface.Selected).CircuitCreationInterfaceName,
-						StartTime = view.NoStartTime.IsChecked ? DateTime.MinValue : view.StartTime.DateTime,
-						EndTime = view.NoEndTime.IsChecked ? DateTime.MinValue : view.StopTime.DateTime,
 					};
+					AddDateTimesToRequest(createFields);
 
-					view.Engine.FindElement(model.NimbraVisionElement.Name).SetParameter(
-						125,
-						JsonConvert.SerializeObject(
-							createFields,
-							Formatting.Indented,
-							new JsonSerializerSettings
-							{
-								NullValueHandling = NullValueHandling.Ignore,
-								Culture = CultureInfo.InvariantCulture,
-								DateTimeZoneHandling = DateTimeZoneHandling.Utc,
-							}));
-
-					return true;
+					INimbraVisionResponse nimbraVisionResponse = SendInterAppMessage(createFields);
+					return nimbraVisionResponse.Success ? "Circuit successfully created." : nimbraVisionResponse.Message;
 				}
 				catch
 				{
-					return false;
+					return "Circuit request failed.";
 				}
 			};
 		}
 
-		private Func<bool> CreateJ2KCircuit()
+		private Func<string> CreateJ2KCircuit()
 		{
 			return () =>
 			{
 				try
 				{
-					var createFields = new J2kRequestModel
+					var createFields = new J2KCircuitRequest
 					{
 						ServiceId = view.CircuitTypeSelector.Selected == "JPEG 2000 1+1 Hitless" ? "j2k-hitless" : "j2k",
 						Capacity = Convert.ToInt32(view.Capacity.Value),
 						Destination = model.Interfaces.First(intf => intf.InterfaceName == view.DestinationInterface.Selected).CircuitCreationInterfaceName,
 						Source = model.Interfaces.First(intf => intf.InterfaceName == view.SourceInterface.Selected).CircuitCreationInterfaceName,
-						StartTime = view.NoStartTime.IsChecked ? DateTime.MinValue : view.StartTime.DateTime,
-						EndTime = view.NoEndTime.IsChecked ? DateTime.MinValue : view.StopTime.DateTime,
 						ProtectionId = view.CircuitTypeSelector.Selected == "JPEG 2000 1+1 Hitless" ? 1 : -1,
 					};
+					AddDateTimesToRequest(createFields);
 
-					view.Engine.FindElement(model.NimbraVisionElement.Name).SetParameter(
-						125,
-						JsonConvert.SerializeObject(
-							createFields,
-							Formatting.Indented,
-							new JsonSerializerSettings
-							{
-								NullValueHandling = NullValueHandling.Ignore,
-								Culture = CultureInfo.InvariantCulture,
-								DateTimeZoneHandling = DateTimeZoneHandling.Utc,
-							}));
-
-					return true;
+					INimbraVisionResponse nimbraVisionResponse = SendInterAppMessage(createFields);
+					return nimbraVisionResponse.Success ? "Circuit successfully created." : nimbraVisionResponse.Message;
 				}
 				catch
 				{
-					return false;
+					return "Circuit request failed.";
 				}
 			};
 		}
 
-		private Func<bool> CreateJxsCircuit()
+		private Func<string> CreateJxsCircuit()
 		{
 			return () =>
 			{
 				try
 				{
-					var createFields = new J2kRequestModel
+					var createFields = new J2KCircuitRequest
 					{
 						ServiceId = view.CircuitTypeSelector.Selected == "JPEG-XS 1+1 Hitless" ? "jxs-hitless" : "jxs",
 						Capacity = Convert.ToInt32(view.Capacity.Value),
 						Destination = model.Interfaces.First(intf => intf.InterfaceName == view.DestinationInterface.Selected).CircuitCreationInterfaceName,
 						Source = model.Interfaces.First(intf => intf.InterfaceName == view.SourceInterface.Selected).CircuitCreationInterfaceName,
-						StartTime = view.NoStartTime.IsChecked ? DateTime.MinValue : view.StartTime.DateTime,
-						EndTime = view.NoEndTime.IsChecked ? DateTime.MinValue : view.StopTime.DateTime,
 						ProtectionId = view.CircuitTypeSelector.Selected == "JPEG-XS 1+1 Hitless" ? 1 : -1,
 					};
+					AddDateTimesToRequest(createFields);
 
-					view.Engine.FindElement(model.NimbraVisionElement.Name).SetParameter(
-						125,
-						JsonConvert.SerializeObject(
-							createFields,
-							Formatting.Indented,
-							new JsonSerializerSettings
-							{
-								NullValueHandling = NullValueHandling.Ignore,
-								Culture = CultureInfo.InvariantCulture,
-								DateTimeZoneHandling = DateTimeZoneHandling.Utc,
-							}));
-
-					return true;
+					INimbraVisionResponse nimbraVisionResponse = SendInterAppMessage(createFields);
+					return nimbraVisionResponse.Success ? "Circuit successfully created." : nimbraVisionResponse.Message;
 				}
 				catch
 				{
-					return false;
+					return "Circuit request failed.";
 				}
 			};
 		}
 
-		private Func<bool> CreateELineVlanCircuit()
+		private Func<string> CreateELineVlanCircuit()
 		{
 			return () =>
 			{
 				try
 				{
-					var createFields = new ELineVlanRequestModel
+					var createFields = new ELineVlanCircuitRequest
 					{
 						ServiceId = view.CircuitTypeSelector.Selected,
 						Capacity = Convert.ToInt32(view.Capacity.Value),
 						Destination = model.Interfaces.First(intf => intf.InterfaceName == view.DestinationInterface.Selected).CircuitCreationInterfaceName,
 						Source = model.Interfaces.First(intf => intf.InterfaceName == view.SourceInterface.Selected).CircuitCreationInterfaceName,
-						StartTime = view.NoStartTime.IsChecked ? DateTime.MinValue : view.StartTime.DateTime,
-						EndTime = view.NoEndTime.IsChecked ? DateTime.MinValue : view.StopTime.DateTime,
-						ExtraInfo = new ELineVlanRequestModel.Extra
+						ExtraInfo = new ELineVlanCircuitRequest.Extra
 						{
-							Common = new ELineVlanRequestModel.Common
+							Common = new ELineVlanCircuitRequest.Common
 							{
 								FormName = view.FormName.Text,
-								VLAN = Convert.ToInt32(view.Vlan.Value),
+								Vlan = Convert.ToInt32(view.Vlan.Value),
 							},
 						},
 					};
+					AddDateTimesToRequest(createFields);
 
-					view.Engine.FindElement(model.NimbraVisionElement.Name).SetParameter(
-						125,
-						JsonConvert.SerializeObject(
-							createFields,
-							Formatting.Indented,
-							new JsonSerializerSettings
-							{
-								NullValueHandling = NullValueHandling.Ignore,
-								Culture = CultureInfo.InvariantCulture,
-								DateTimeZoneHandling = DateTimeZoneHandling.Utc,
-							}));
-
-					return true;
+					INimbraVisionResponse nimbraVisionResponse = SendInterAppMessage(createFields);
+					return nimbraVisionResponse.Success ? "Circuit successfully created." : nimbraVisionResponse.Message;
 				}
 				catch
 				{
-					return false;
+					return "Circuit request failed.";
 				}
 			};
 		}
 
-		private Func<bool> CreateSdiSrtCircuit()
+		private Func<string> CreateSdiSrtCircuit()
 		{
 			return () =>
 			{
 				try
 				{
-					var createFields = new SdiSrtRequestModel
+					var createFields = new SdiSrtCircuitRequest
 					{
 						ServiceId = "VA-SRT",
 						Capacity = Convert.ToInt32(view.Capacity.Value),
 						Destination = model.Interfaces.First(intf => intf.InterfaceName == view.DestinationInterface.Selected).CircuitCreationInterfaceName,
 						Source = model.Interfaces.First(intf => intf.InterfaceName == view.SourceInterface.Selected).CircuitCreationInterfaceName,
-						StartTime = view.NoStartTime.IsChecked ? DateTime.MinValue : view.StartTime.DateTime,
-						EndTime = view.NoEndTime.IsChecked ? DateTime.MinValue : view.StopTime.DateTime,
-						ExtraInfo = new SdiSrtRequestModel.Extra
+						ExtraInfo = new SdiSrtCircuitRequest.Extra
 						{
-							Common = new SdiSrtRequestModel.Common
+							Common = new SdiSrtCircuitRequest.Common
 							{
 								FormName = view.FormName.Text,
 								Port = Convert.ToInt32(view.StreamPort.Value),
@@ -313,26 +264,29 @@
 							},
 						},
 					};
+					AddDateTimesToRequest(createFields);
 
-					view.Engine.FindElement(model.NimbraVisionElement.Name).SetParameter(
-						125,
-						JsonConvert.SerializeObject(
-							createFields,
-							Formatting.Indented,
-							new JsonSerializerSettings
-							{
-								NullValueHandling = NullValueHandling.Ignore,
-								Culture = CultureInfo.InvariantCulture,
-								DateTimeZoneHandling = DateTimeZoneHandling.Utc,
-							}));
-
-					return true;
+					INimbraVisionResponse nimbraVisionResponse = SendInterAppMessage(createFields);
+					return nimbraVisionResponse.Success ? "Circuit successfully created." : nimbraVisionResponse.Message;
 				}
 				catch
 				{
-					return false;
+					return "Circuit request failed.";
 				}
 			};
+		}
+
+		private void AddDateTimesToRequest(BaseCircuitRequest createFields)
+		{
+			if (!view.NoStartTime.IsChecked)
+			{
+				createFields.StartTime = view.StartTime.DateTime;
+			}
+
+			if (!view.NoEndTime.IsChecked)
+			{
+				createFields.EndTime = view.StopTime.DateTime;
+			}
 		}
 
 		private void UpdateUI(object sender, DropDown.DropDownChangedEventArgs e)
@@ -345,6 +299,14 @@
 		{
 			LoadFromModel();
 			view.RestartUI();
+		}
+
+		private INimbraVisionResponse SendInterAppMessage(INimbraVisionRequest createFields)
+		{
+			var nimbraVisionElement = new NimbraVisionInterAppCalls(view.Engine.GetUserConnection(), model.NimbraVisionElement.Name);
+
+			INimbraVisionResponse nimbraVisionResponse = nimbraVisionElement.SendSingleResponseMessage(createFields, TimeSpan.FromMinutes(1));
+			return nimbraVisionResponse;
 		}
 	}
 }

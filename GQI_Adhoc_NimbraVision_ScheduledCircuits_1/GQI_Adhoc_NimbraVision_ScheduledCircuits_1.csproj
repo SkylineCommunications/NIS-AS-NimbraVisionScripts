@@ -5,12 +5,12 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProductVersion>8.0.30703</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{E02F93B9-AD15-4E66-A605-C8A0FFFC4A39}</ProjectGuid>
+    <ProjectGuid>{9C479E63-08E0-4546-B246-BB2E69264D19}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>CustomOperator_StringToBoolean_1</RootNamespace>
-    <AssemblyName>CustomOperator-StringToBoolean_1</AssemblyName>
-    <TargetFrameworkVersion>v4.6.2</TargetFrameworkVersion>
+    <RootNamespace>GQI_Adhoc_NimbraVision_ScheduledCircuits_1</RootNamespace>
+    <AssemblyName>GQI_Adhoc_NimbraVision_ScheduledCircuits_1</AssemblyName>
+    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <LangVersion>
     </LangVersion>
@@ -24,7 +24,7 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <CodeAnalysisRuleSet>..\Internal\Code Analysis\qaction-debug.ruleset</CodeAnalysisRuleSet>
-    <DocumentationFile>bin\Debug\CustomOperator-StringToBoolean_1.xml</DocumentationFile>
+    <DocumentationFile>bin\Debug\GQI_Adhoc_NimbraVision_ScheduledCircuits_1.xml</DocumentationFile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -34,7 +34,7 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <CodeAnalysisRuleSet>..\Internal\Code Analysis\qaction-release.ruleset</CodeAnalysisRuleSet>
-    <DocumentationFile>bin\Release\CustomOperator-StringToBoolean_1.xml</DocumentationFile>
+    <DocumentationFile>bin\Release\GQI_Adhoc_NimbraVision_ScheduledCircuits_1.xml</DocumentationFile>
   </PropertyGroup>
   <PropertyGroup>
     <ResolveAssemblyWarnOrErrorOnTargetArchitectureMismatch>None</ResolveAssemblyWarnOrErrorOnTargetArchitectureMismatch>
@@ -45,12 +45,21 @@
     <Content Include=".editorconfig" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Models\Circuits.cs" />
+    <Compile Include="Models\CircuitsTable.cs" />
+    <Compile Include="Models\ElementCache.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="CustomOperator-StringToBoolean_1.cs" />
+    <Compile Include="GQI_Adhoc_NimbraVision_ScheduledCircuits_1.cs" />
   </ItemGroup>
   <ItemGroup>
+    <PackageReference Include="Skyline.DataMiner.Core.DataMinerSystem.Automation">
+      <Version>1.1.3.1</Version>
+    </PackageReference>
     <PackageReference Include="Skyline.DataMiner.Dev.Automation">
       <Version>10.3.6</Version>
+    </PackageReference>
+    <PackageReference Include="Skyline.DataMiner.Files.SLAnalyticsTypes">
+      <Version>10.4.5</Version>
     </PackageReference>
     <PackageReference Include="Skyline.DataMiner.Utils.SecureCoding.Analyzers">
       <Version>2.0.3</Version>
@@ -63,14 +72,15 @@
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <ProjectExtensions>
     <VisualStudio>
-      <UserProperties DisLinkedXmlFile="..\CustomOperator-StringToBoolean.xml" DisProjectType="automationScriptProject" DisLinkId="1" />
+      <UserProperties DisLinkedXmlFile="..\GQI_Adhoc_NimbraVision_ScheduledCircuits.xml" DisProjectType="automationScriptProject" DisLinkId="1" />
     </VisualStudio>
   </ProjectExtensions>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
-       Other similar extension points exist, see Microsoft.Common.targets.
+	   Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">
   </Target>
   <Target Name="AfterBuild">

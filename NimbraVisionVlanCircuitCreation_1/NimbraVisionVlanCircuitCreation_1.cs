@@ -46,6 +46,7 @@ Revision History:
 DATE		VERSION		AUTHOR			COMMENTS
 
 01/02/2023	1.0.0.1		JSV, Skyline	Initial version
+27/05/2025	1.0.0.2		SDT, Skyline	Added support for Nimbra Vision InterApp.
 ****************************************************************************
 */
 
@@ -54,6 +55,8 @@ using System.Globalization;
 using System.Text.RegularExpressions;
 using Newtonsoft.Json;
 using Skyline.DataMiner.Automation;
+using Skyline.DataMiner.Utils.ConnectorAPI.NetInsight.Nimbra.Vision.InterApp;
+using Skyline.DataMiner.Utils.ConnectorAPI.NetInsight.Nimbra.Vision.InterApp.Messages;
 
 /// <summary>
 /// DataMiner Script Class.
@@ -75,7 +78,7 @@ public class Script
 		var vlan = engine.GetScriptParam("VLAN").Value;
 		var formName = engine.GetScriptParam("Form Name").Value;
 
-		var fields = new CreateFields();
+		var fields = new ELineVlanCircuitRequest();
 
 		if (String.IsNullOrEmpty(serviceId) || String.IsNullOrWhiteSpace(serviceId))
 		{
@@ -109,21 +112,8 @@ public class Script
 
 		fields.Capacity = integerCapcity;
 
-		if (!DateTime.TryParseExact(startTime, "yyyy-MM-ddTHH:mm:ssZ", CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTime startTimeDate) && startTime != "-1")
-		{
-			engine.ExitFail("Start Time isn't in the supported format - yyyy-MM-ddTHH:mm:ssZ");
-			return;
-		}
-
-		fields.StartTime = startTime;
-
-		if (!DateTime.TryParseExact(endTime, "yyyy-MM-ddTHH:mm:ssZ", CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTime stopTimeDate) && endTime != "-1")
-		{
-			engine.ExitFail("End Time isn't in the supported format - yyyy-MM-ddTHH:mm:ssZ");
-			return;
-		}
-
-		fields.EndTime = endTime;
+		SetDateTimeField(engine, startTime, dt => fields.StartTime = dt, "Start Time");
+		SetDateTimeField(engine, endTime, dt => fields.EndTime = dt, "Stop Time");
 
 		if (!Int32.TryParse(vlan, out var integerVlan))
 		{
@@ -131,9 +121,13 @@ public class Script
 			return;
 		}
 
-		fields.ExtraInfo = new CreateFields.Extra();
-		fields.ExtraInfo.Common = new CreateFields.Common();
-		fields.ExtraInfo.Common.Vlan = integerVlan;
+		fields.ExtraInfo = new ELineVlanCircuitRequest.Extra
+		{
+			Common = new ELineVlanCircuitRequest.Common
+			{
+				Vlan = integerVlan,
+			},
+		};
 
 		if (String.IsNullOrEmpty(formName) || String.IsNullOrWhiteSpace(formName))
 		{
@@ -143,9 +137,22 @@ public class Script
 
 		fields.ExtraInfo.Common.FormName = formName;
 
-		ValidateAndReturnElement(engine).SetParameter(125, JsonConvert.SerializeObject(fields));
+		engine.GenerateInformation(JsonConvert.SerializeObject(fields));
 
-		engine.ExitSuccess("Sent request to Nimbra Vision element.");
+		var nimbraVisionInterAppCalls = ValidateAndReturnElement(engine);
+
+		var response = nimbraVisionInterAppCalls.SendSingleResponseMessage(fields);
+
+		engine.Sleep(5000);
+
+		if (response.Success)
+		{
+			engine.ExitSuccess("Circuit created");
+		}
+		else
+		{
+			engine.ExitFail($"Fail to create circuit: {response.Message}");
+		}
 	}
 
 	private static string ParseParamValue(string paramValueRaw)
@@ -159,7 +166,7 @@ public class Script
 		return paramValue;
 	}
 
-	private static Element ValidateAndReturnElement(Engine engine)
+	private static INimbraVisionInterAppCalls ValidateAndReturnElement(Engine engine)
 	{
 		var paramValueRaw = engine.GetScriptParam("ElementName").Value;
 		var elementName = ParseParamValue(paramValueRaw);
@@ -177,54 +184,22 @@ public class Script
 			return null;
 		}
 
-		return element;
+		return new NimbraVisionInterAppCalls(engine.GetUserConnection(), elementName);
 	}
 
-	public class CreateFields
+	private static void SetDateTimeField(Engine engine, string time, Action<DateTime?> setField, string fieldName)
 	{
-		[JsonProperty("capacity")]
-		public int Capacity { get; set; }
-
-		[JsonProperty("destination")]
-		public string Destination { get; set; }
-
-		[JsonProperty("endTime")]
-		public string EndTime { get; set; }
-
-		[JsonProperty("extra")]
-		public Extra ExtraInfo { get; set; }
-
-		[JsonProperty("serviceId")]
-		public string ServiceId { get; set; }
-
-		[JsonProperty("source")]
-		public string Source { get; set; }
-
-		[JsonProperty("startTime")]
-		public string StartTime { get; set; }
-
-		public bool ShouldSerializeEndTime()
+		if (time == "-1")
 		{
-			return EndTime != "-1";
+			setField(null);
 		}
-
-		public bool ShouldSerializeStartTime()
+		else if (DateTime.TryParseExact(time, "yyyy-MM-ddTHH:mm:ssZ", CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTime parsedDate))
 		{
-			return StartTime != "-1";
+			setField(parsedDate);
 		}
-
-		public class Common
+		else
 		{
-			public string FormName { get; set; }
-
-			[JsonProperty("VLANs")]
-			public int Vlan { get; set; }
-		}
-
-		public class Extra
-		{
-			[JsonProperty("common")]
-			public Common Common { get; set; }
+			engine.ExitFail($"{fieldName} isn't in the supported format - yyyy-MM-ddTHH:mm:ssZ");
 		}
 	}
 }

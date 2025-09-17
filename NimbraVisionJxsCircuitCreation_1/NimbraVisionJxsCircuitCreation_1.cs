@@ -46,6 +46,7 @@ Revision History:
 DATE		VERSION		AUTHOR			COMMENTS
 
 02/06/2023	1.0.0.1		JSV, Skyline	Initial version
+27/05/2025	1.0.0.2		SDT, Skyline	Added support for Nimbra Vision InterApp.
 ****************************************************************************
 */
 
@@ -55,42 +56,12 @@ namespace NimbraVisionJxsCircuitCreation_1
 	using System.Globalization;
 	using System.Text.RegularExpressions;
 	using System.Threading;
+
 	using Newtonsoft.Json;
+
 	using Skyline.DataMiner.Automation;
-
-	public class CreateFieldsJ2K
-	{
-		[JsonProperty("capacity")]
-		public int Capacity { get; set; }
-
-		[JsonProperty("destination")]
-		public string Destination { get; set; }
-
-		[JsonProperty("endTime")]
-		public string EndTime { get; set; }
-
-		[JsonProperty("protectionId")]
-		public int ProtectionId { get; set; }
-
-		[JsonProperty("serviceId")]
-		public string ServiceId { get; set; }
-
-		[JsonProperty("source")]
-		public string Source { get; set; }
-
-		[JsonProperty("startTime")]
-		public string StartTime { get; set; }
-
-		public bool ShouldSerializeEndTime()
-		{
-			return EndTime != "-1";
-		}
-
-		public bool ShouldSerializeStartTime()
-		{
-			return StartTime != "-1";
-		}
-	}
+	using Skyline.DataMiner.Utils.ConnectorAPI.NetInsight.Nimbra.Vision.InterApp;
+	using Skyline.DataMiner.Utils.ConnectorAPI.NetInsight.Nimbra.Vision.InterApp.Messages;
 
 	/// <summary>
 	/// Represents a DataMiner Automation script.
@@ -112,7 +83,7 @@ namespace NimbraVisionJxsCircuitCreation_1
 
 			engine.GenerateInformation("Capacity: " + capacity);
 
-			var fields = new CreateFieldsJ2K();
+			var fields = new J2KCircuitRequest();
 
 			fields.ServiceId = hitless.ToLower() == "true" || hitless.ToLower() == "enabled" ? "jxs-hitless" : "jxs";
 
@@ -141,35 +112,27 @@ namespace NimbraVisionJxsCircuitCreation_1
 			}
 
 			fields.Capacity = integerCapcity;
-
-			if (startTime != "-1" && !DateTime.TryParseExact(startTime, "yyyy-MM-ddTHH:mm:ssZ", CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTime startTimeDate))
-			{
-				engine.ExitFail("Start Time isn't in the supported format - yyyy-MM-ddTHH:mm:ssZ");
-				return;
-			}
-
-			if (startTime == "-1")
-				startTime = DateTime.UtcNow.AddMinutes(1).ToString("yyyy-MM-ddTHH:mm:ssZ");
-
-			fields.StartTime = startTime;
-
-			if (endTime != "-1" && !DateTime.TryParseExact(endTime, "yyyy-MM-ddTHH:mm:ssZ", CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTime stopTimeDate))
-			{
-				engine.ExitFail("Stop Time isn't in the supported format - yyyy-MM-ddTHH:mm:ssZ");
-				return;
-			}
-
-			fields.EndTime = endTime;
-
 			fields.ProtectionId = 1; // first circuit to be created
+
+			SetDateTimeField(engine, startTime, dt => fields.StartTime = dt, "Start Time");
+			SetDateTimeField(engine, endTime, dt => fields.EndTime = dt, "Stop Time");
 
 			engine.GenerateInformation(JsonConvert.SerializeObject(fields));
 
-			ValidateAndReturnElement(engine).SetParameter(125, JsonConvert.SerializeObject(fields));
+			var nimbraVisionInterAppCalls = ValidateAndReturnElement(engine);
 
-			Thread.Sleep(5000);
+			var response = nimbraVisionInterAppCalls.SendSingleResponseMessage(fields);
 
-			engine.ExitSuccess("Sent request to Nimbra Vision element.");
+			engine.Sleep(5000);
+
+			if (response.Success)
+			{
+				engine.ExitSuccess("Circuit created");
+			}
+			else
+			{
+				engine.ExitFail($"Fail to create circuit: {response.Message}");
+			}
 		}
 
 		private static string ParseParamValue(string paramValueRaw)
@@ -183,7 +146,7 @@ namespace NimbraVisionJxsCircuitCreation_1
 			return paramValue;
 		}
 
-		private static Element ValidateAndReturnElement(Engine engine)
+		private static INimbraVisionInterAppCalls ValidateAndReturnElement(Engine engine)
 		{
 			var paramValueRaw = engine.GetScriptParam("ElementName").Value;
 			var elementName = ParseParamValue(paramValueRaw);
@@ -201,7 +164,23 @@ namespace NimbraVisionJxsCircuitCreation_1
 				return null;
 			}
 
-			return element;
+			return new NimbraVisionInterAppCalls(engine.GetUserConnection(), elementName);
+		}
+
+		private static void SetDateTimeField(Engine engine, string time, Action<DateTime?> setField, string fieldName)
+		{
+			if (time == "-1")
+			{
+				setField(null);
+			}
+			else if (DateTime.TryParseExact(time, "yyyy-MM-ddTHH:mm:ssZ", CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTime parsedDate))
+			{
+				setField(parsedDate);
+			}
+			else
+			{
+				engine.ExitFail($"{fieldName} isn't in the supported format - yyyy-MM-ddTHH:mm:ssZ");
+			}
 		}
 	}
 }

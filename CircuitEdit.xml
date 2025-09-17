@@ -1,9 +1,9 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <DMSScript options="272" xmlns="http://www.skyline.be/automation">
-	<Name>Nimbra Vision Create Circuit Wizard</Name>
-	<Description>Circuit Creation 1.0.0.2</Description>
+	<Name>Nimbra Vision Circuit Actions</Name>
+	<Description></Description>
 	<Type>Automation</Type>
-	<Author>SKYLINE2\JoaoSV</Author>
+	<Author>SKYLINE2\SamuelDT</Author>
 	<CheckSets>FALSE</CheckSets>
 	<Folder>NimbraOrchestration</Folder>
 
@@ -14,14 +14,20 @@
 	</Memory>
 
 	<Parameters>
-		<ScriptParameter id="10" type="string" values="">
+		<ScriptParameter id="2" type="string" values="">
 			<Description>ElementName</Description>
+		</ScriptParameter>
+		<ScriptParameter id="3" type="string" values="">
+			<Description>Circuit ID</Description>
+		</ScriptParameter>
+		<ScriptParameter id="4" type="string" values="">
+			<Description>Action</Description>
 		</ScriptParameter>
 	</Parameters>
 
 	<Script>
 		<Exe id="1" type="csharp">
-			<Value><![CDATA[[Project:Circuit Creation_1]]]></Value>
+			<Value><![CDATA[[Project:CircuitEdit_1]]]></Value>
 			<Message></Message>
 		</Exe>
 	</Script>

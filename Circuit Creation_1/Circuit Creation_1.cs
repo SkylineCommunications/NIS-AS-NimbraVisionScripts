@@ -46,6 +46,7 @@ Revision History:
 DATE		VERSION		AUTHOR			COMMENTS
 
 dd/mm/2023	1.0.0.1		XXX, Skyline	Initial version
+27/05/2025	1.0.0.2		SDT, Skyline	Added support for Nimbra Vision InterApp.
 ****************************************************************************
 */
 
@@ -65,7 +66,7 @@ public class Script
 	/// The Script entry point.
 	/// </summary>
 	/// <param name="engine">Link with SLAutomation process.</param>
-	public void Run(Engine engine)
+	public static void Run(Engine engine)
 	{
 		// engine.ShowUI(); - this comment is needed for Interactive UI to work
 		var controller = new InteractiveController(engine);

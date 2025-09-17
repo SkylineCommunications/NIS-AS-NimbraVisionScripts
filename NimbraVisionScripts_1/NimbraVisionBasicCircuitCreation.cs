@@ -46,6 +46,7 @@ Revision History:
 DATE		VERSION		AUTHOR			COMMENTS
 
 25/01/2023	1.0.0.1		JSV, Skyline	Initial version
+28/05/2025	1.0.0.2		SDT, Skyline	Added support for Nimbra Vision InterApp.
 ****************************************************************************
 */
 
@@ -53,8 +54,12 @@ using System;
 using System.Globalization;
 using System.Text.RegularExpressions;
 using System.Threading;
+
 using Newtonsoft.Json;
+
 using Skyline.DataMiner.Automation;
+using Skyline.DataMiner.Utils.ConnectorAPI.NetInsight.Nimbra.Vision.InterApp;
+using Skyline.DataMiner.Utils.ConnectorAPI.NetInsight.Nimbra.Vision.InterApp.Messages;
 
 /// <summary>
 /// DataMiner Script Class.
@@ -75,7 +80,7 @@ public class Script
 		var destination = engine.GetScriptParam("Destination").Value;
 		var capacity = engine.GetScriptParam("Capacity").Value;
 
-		var fields = new CreateFields();
+		var fields = new ELineCircuitRequest();
 
 		if (String.IsNullOrEmpty(serviceId) || String.IsNullOrWhiteSpace(serviceId))
 		{
@@ -109,29 +114,25 @@ public class Script
 
 		fields.Capacity = integerCapcity;
 
-		if (startTime != "-1" && !DateTime.TryParseExact(startTime, "yyyy-MM-ddTHH:mm:ssZ", CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTime startTimeDate))
-		{
-			engine.ExitFail("Start Time isn't in the supported format - yyyy-MM-ddTHH:mm:ssZ");
-			return;
-		}
-
-		fields.StartTime = startTime;
-
-		if (endTime != "-1" && !DateTime.TryParseExact(endTime, "yyyy-MM-ddTHH:mm:ssZ", CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTime stopTimeDate))
-		{
-			engine.ExitFail("Stop Time isn't in the supported format - yyyy-MM-ddTHH:mm:ssZ");
-			return;
-		}
-
-		fields.EndTime = endTime;
+		SetDateTimeField(engine, startTime, dt => fields.StartTime = dt, "Start Time");
+		SetDateTimeField(engine, endTime, dt => fields.EndTime = dt, "Stop Time");
 
 		engine.GenerateInformation(JsonConvert.SerializeObject(fields));
 
-		ValidateAndReturnElement(engine).SetParameter(125, JsonConvert.SerializeObject(fields));
+		var nimbraVisionInterAppCalls = ValidateAndReturnElement(engine);
 
-		Thread.Sleep(5000);
+		var response = nimbraVisionInterAppCalls.SendSingleResponseMessage(fields);
 
-		engine.ExitSuccess("Sent request to Nimbra Vision element.");
+		engine.Sleep(5000);
+
+		if (response.Success)
+		{
+			engine.ExitSuccess("Circuit created");
+		}
+		else
+		{
+			engine.ExitFail($"Fail to create circuit: {response.Message}");
+		}
 	}
 
 	private static string ParseParamValue(string paramValueRaw)
@@ -145,7 +146,7 @@ public class Script
 		return paramValue;
 	}
 
-	private static Element ValidateAndReturnElement(Engine engine)
+	private static INimbraVisionInterAppCalls ValidateAndReturnElement(Engine engine)
 	{
 		var paramValueRaw = engine.GetScriptParam("ElementName").Value;
 		var elementName = ParseParamValue(paramValueRaw);
@@ -163,37 +164,22 @@ public class Script
 			return null;
 		}
 
-		return element;
+		return new NimbraVisionInterAppCalls(engine.GetUserConnection(), elementName);
 	}
 
-	public class CreateFields
+	private static void SetDateTimeField(Engine engine, string time, Action<DateTime?> setField, string fieldName)
 	{
-		[JsonProperty("capacity")]
-		public int Capacity { get; set; }
-
-		[JsonProperty("destination")]
-		public string Destination { get; set; }
-
-		[JsonProperty("endTime")]
-		public string EndTime { get; set; }
-
-		[JsonProperty("serviceId")]
-		public string ServiceId { get; set; }
-
-		[JsonProperty("source")]
-		public string Source { get; set; }
-
-		[JsonProperty("startTime")]
-		public string StartTime { get; set; }
-
-		public bool ShouldSerializeEndTime()
+		if (time == "-1")
 		{
-			return EndTime != "-1";
+			setField(null);
 		}
-
-		public bool ShouldSerializeStartTime()
+		else if (DateTime.TryParseExact(time, "yyyy-MM-ddTHH:mm:ssZ", CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTime parsedDate))
 		{
-			return StartTime != "-1";
+			setField(parsedDate);
+		}
+		else
+		{
+			engine.ExitFail($"{fieldName} isn't in the supported format - yyyy-MM-ddTHH:mm:ssZ");
 		}
 	}
 }

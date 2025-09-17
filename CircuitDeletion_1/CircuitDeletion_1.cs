@@ -46,6 +46,7 @@ Revision History:
 DATE		VERSION		AUTHOR			COMMENTS
 
 dd/mm/2023	1.0.0.1		XXX, Skyline	Initial version
+28/05/2025	1.0.0.2		SDT, Skyline	Added support for Nimbra Vision InterApp.
 ****************************************************************************
 */
 
@@ -53,23 +54,17 @@ using System;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
 using System.Threading;
+
 using Skyline.DataMiner.Automation;
 using Skyline.DataMiner.Core.DataMinerSystem.Automation;
-using Skyline.DataMiner.Core.InterAppCalls.Common.CallBulk;
-using Skyline.DataMiner.Core.InterAppCalls.Common.CallSingle;
-
-public class DeleteCircuitMessage : Message
-{
-	public string SharedId { get; set; }
-}
+using Skyline.DataMiner.Utils.ConnectorAPI.NetInsight.Nimbra.Vision.InterApp;
+using Skyline.DataMiner.Utils.ConnectorAPI.NetInsight.Nimbra.Vision.InterApp.Messages;
 
 /// <summary>
 /// DataMiner Script Class.
 /// </summary>
 public class Script
 {
-	private static readonly List<Type> KnownTypes = new List<Type> { typeof(DeleteCircuitMessage) };
-
 	public enum Pids
 	{
 		CircuitsTable = 1800,
@@ -106,18 +101,19 @@ public class Script
 			}
 		}
 
-		IInterAppCall deleteCommand = InterAppCallFactory.CreateNew();
+		INimbraVisionInterAppCalls nimbraVisionInterAppCalls = new NimbraVisionInterAppCalls(engine.GetUserConnection(), idmsElement.DmsElementId.AgentId, idmsElement.DmsElementId.ElementId);
+		List<INimbraVisionRequest> deleteMessages = new List<INimbraVisionRequest>();
 		foreach (var sharedId in sharedIds)
 		{
-			DeleteCircuitMessage basicCircuitDeleteMessage = new DeleteCircuitMessage { SharedId = Convert.ToString(sharedId) };
-			deleteCommand.Messages.Add(basicCircuitDeleteMessage);
+			DeleteCircuitRequest basicCircuitDeleteMessage = new DeleteCircuitRequest { SharedId = Convert.ToString(sharedId) };
+			deleteMessages.Add(basicCircuitDeleteMessage);
 		}
 
 		engine.GenerateInformation(String.Join(";", sharedIds));
 
-		deleteCommand.Send(Engine.SLNetRaw, idmsElement.DmsElementId.AgentId, idmsElement.DmsElementId.ElementId, 9000000, KnownTypes);
+		nimbraVisionInterAppCalls.SendMessageNoResponse(deleteMessages.ToArray());
 
-		Thread.Sleep(1500);
+		engine.Sleep(1500);
 	}
 
 	private static string ParseParamValue(string paramValueRaw)

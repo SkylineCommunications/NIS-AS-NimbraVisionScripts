@@ -52,7 +52,7 @@ dd/mm/2023	1.0.0.1		XXX, Skyline	Initial version
 using System.Collections.Generic;
 using Skyline.DataMiner.Analytics.GenericInterface;
 
-[GQIMetaData(Name = "Add Ignore to duplicates")]
+[GQIMetaData(Name = "GQI Operator Nimbra Vision Ignore Duplicates")]
 public class MyCustomOperator : IGQIColumnOperator, IGQIRowOperator, IGQIInputArguments, IGQIOnInit
 {
 	private readonly List<string> existingValues = new List<string>();

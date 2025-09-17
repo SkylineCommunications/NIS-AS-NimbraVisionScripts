@@ -233,7 +233,7 @@ public class Script
 	{
 		try
 		{
-			var subscriptJ2k = _engine.PrepareSubScript("NimbraVisionJ2000CircuitCreation");
+			var subscriptJ2k = _engine.PrepareSubScript("Nimbra Vision Create J2K Circuit");
 			subscriptJ2k.SelectScriptParam("Capacity", defaultCapacity.ToString());
 			subscriptJ2k.SelectScriptParam("Start Time", "-1");
 			subscriptJ2k.SelectScriptParam("End Time", "-1");
@@ -475,7 +475,7 @@ public class Script
 	{
 		try
 		{
-			var subscriptDelete = _engine.PrepareSubScript("CircuitDeletion");
+			var subscriptDelete = _engine.PrepareSubScript("Nimbra Vision Delete Circuit");
 			subscriptDelete.SelectScriptParam("Interface Name", visionInput);
 			subscriptDelete.StartScript();
 		}
